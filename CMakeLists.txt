@@ -28,3 +28,12 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
+
+add_executable(point_cloud_merger_node
+  src/point_cloud_merger_node.cpp
+  src/point_cloud_merger.cpp
+)
+
+target_link_libraries(point_cloud_merger_node
+  ${catkin_LIBRARIES}
+)
