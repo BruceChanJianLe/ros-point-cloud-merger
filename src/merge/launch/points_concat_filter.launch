@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!-- launch file to merge PointCloud2 topics and range to scan, respect to base_link -->
+
+<!-- E.g., roslaunch merge points_concat_filter.launch -->
+
+<!-- type is the file you want to launch in the package 
+  name is a unique identifier for your node. -->
+<launch>
+  <!-- topics of PointCloud2 to concatenate -->
+  <arg name="input_topics" default="$(optenv INPUT_TOPICS [/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points])" />
+  <!-- topic of the output merged PointCloud2 -->
+  <arg name="output_topic" default="$(optenv OUTPUT_TOPIC /points_concat)" />
+  <!-- topic of the frame to publish to -->
+  <arg name="output_frame_id" default="$(optenv OUTPUT_FRAME_ID velodyne_frame)" />
+
+  <!-- min range from base_link -->
+  <arg name="min_range" default="$(optenv MIN_RANGE 0.9)" />
+  <!-- max range from base_link -->
+  <arg name="max_range" default="$(optenv MAX_RANGE 130.0)" />
+
+  <!-- merge PointCloud2 -->
+  <node pkg="points_preprocessor" type="points_concat_filter" name="points_concat_filter" output="screen">
+    <param name="input_topics" value="$(arg input_topics)" />
+    <param name="output_frame_id" value="$(arg output_frame_id)" />
+    
+    <remap from="/points_concat" to="$(arg output_topic)" />
+  </node>
+
+  <!-- sets min_range and max_range such that robot will scan min_range < x < max_range -->
+  <!-- <node pkg="husky_description" type="vlp" name="velodyne" output="screen">
+    <arg name="min_range" value="$(arg min_range)" />
+    <arg name="max_range" value="$(arg max_range)" />
+
+    <rosparam>
+      min_range: 0.0
+      max_range: 10.0
+    </rosparam>
+  </node> -->
+
+</launch>

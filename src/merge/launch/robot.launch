@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- define defaults -->
+
+    <!-- change at empty.urdf as well to change it visually, if the input_topics is changed -->
+    <!-- replace the topics with the ones you want as input -->
+    <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
+    <!-- replace with the desired output topic -->
+    <arg name="output_topic" default="/points_concat" />
+    <!-- replace with desired output frame -->
+    <arg name="output_frame_id" default="velodyne_frame" />
+
+    <!-- replace witj desired min range from base_link -->
+    <arg name="min_range" default="0.9" />
+    <!-- replace with desired max range from base_link -->
+    <arg name="max_range" default="2.0" />
+
+    <!-- concatenate pointclouds -->
+    <include file="$(find husky_description)/launch/point_concat_filter.launch">
+        <arg name="input_topics" default="$(arg input_topics)" />
+        <arg name="output_topic" default="$(arg output_topic)" />
+        <arg name="output_frame_id" default="$(arg output_frame_id)" />
+
+        <arg name="min_range" default="$(arg min_range)" />
+        <arg name="max_range" default="$(arg max_range)" />
+    </include>
+</launch>
