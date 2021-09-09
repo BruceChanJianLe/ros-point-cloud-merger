@@ -1,8 +1,0 @@
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="example">
-
-  <xacro:arg name="min_range" default="$(optenv MIN_RANGE 0.9)" />
-  <xacro:arg name="max_range" default="$(optenv MAX_RANGE 130.0)" />
-
-  <!-- add velodyne -->
-  <xacro:include filename="$(find husky_description)/urdf/accessories/vlp.urdf.xacro" />
-</robot>
