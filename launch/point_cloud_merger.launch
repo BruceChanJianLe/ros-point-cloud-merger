@@ -28,7 +28,11 @@
   <!-- replace with desired max range from base_link -->
   <arg name="max_range" default="2.0" />
   
+<<<<<<< HEAD
   <node name="points_concat_filter" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
+=======
+  <node name="points_concat_filter" output="screen" pkg="points_preprocessor" type="points_concat_filter">
+>>>>>>> b342f26404885876b8ea2fa9dfd9e533dafe65ab
     <param name="output_frame_id" value="$(arg output_frame_id)"/>
     <param name="input_topics" value="$(arg input_topics)"/>
 

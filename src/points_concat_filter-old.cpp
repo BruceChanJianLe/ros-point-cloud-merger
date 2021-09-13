@@ -54,7 +54,6 @@ private:
   std::string input_topics_;
   std::string output_frame_id_;
 
-<<<<<<< HEAD
   std::string min_range = "0.9";
   std::string max_range = "2.0";
 
@@ -68,12 +67,6 @@ private:
                            const PointCloudMsgT::Ptr &msg3, const PointCloudMsgT::Ptr &msg4,
                            const PointCloudMsgT::Ptr &msg5, const PointCloudMsgT::Ptr &msg6,
                            const PointCloudMsgT::Ptr &msg7, const PointCloudMsgT::Ptr &msg8);
-=======
-  void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                           const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                           const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                           const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
->>>>>>> b342f26404885876b8ea2fa9dfd9e533dafe65ab
 };
 
 PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_("~"), tf_listener_()
@@ -109,7 +102,6 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
   cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>("/points_concat", 1);
 }
 
-
 /* void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                              const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
                                              const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
@@ -123,7 +115,6 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
 
   PointCloudMsgT::Ptr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
   /* PointCloudMsgT::ConstPtr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
-
   PointCloudT::Ptr cloud_sources[8];
   PointCloudT::Ptr cloud_concatenated(new PointCloudT);
 
@@ -140,7 +131,6 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
         shared pointer to the copy of the cloud */
       cloud_sources[i] = PointCloudT().makeShared();
 
-
       // PointCloudMsgT::ConstPtr for msgs[i]
       /* int total = msgs[i]->data.size(); */
       int total = (msgs[i]->row_step) * (msgs[i]->height);
@@ -149,8 +139,7 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
         if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
         /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
         {
-          msgs[i]->data[j] = 0;
-          ROS_INFO("Debug");
+          (*msgs[i])->data[j] = 0;
         }
       }
 
@@ -161,15 +150,14 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
         cloud – the resultant pcl::PointCloud<T> */
       pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
 
-
-      /* int total = msgs[i]->data.size();
+      int total = msgs[i]->data.size();
       for (int j = 0; j < total; j++)
       {
         if (msgs[i]->data[j] > stoi(max_range) || msgs[i]->data[j] < stoi(min_range))
         {
           msgs[i]->data[j] = 0;
         }
-      } */
+      }
 
       /* Block until a transform is possible or it times out
         Parameters:
