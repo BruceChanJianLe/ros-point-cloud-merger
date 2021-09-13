@@ -12,7 +12,7 @@ namespace ros_util
     class point_cloud_merger
     {
     private:
-        /// ROS node private and globla handle
+        /// ROS node private and global handle
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
 
