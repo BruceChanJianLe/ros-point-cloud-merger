@@ -139,7 +139,7 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
         if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
         /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
         {
-          (*msgs[i])->data[j] = 0;
+          msgs[i]->data[j] = 0;
         }
       }
 
@@ -222,5 +222,6 @@ int main(int argc, char **argv)
     is any executable code that is passed as an argument to other code; that 
     other code is expected to call back (execute) the argument at a given time. */
   ros::spin();
+  
   return 0;
 }

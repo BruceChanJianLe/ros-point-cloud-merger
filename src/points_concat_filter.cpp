@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018-2019 Autoware Foundation. All rights reserved.
  *
@@ -15,70 +14,11 @@
  * limitations under the License.
  */
 
-#include <message_filters/subscriber.h>
-#include <message_filters/sync_policies/approximate_time.h>
-#include <message_filters/synchronizer.h>
-#include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl_ros/transforms.h>
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <tf/tf.h>
-#include <tf/transform_listener.h>
-#include <velodyne_pointcloud/point_types.h>
-#include <yaml-cpp/yaml.h>
-
-class PointsConcatFilter
-{
-public:
-  PointsConcatFilter();
-
-private:
-  typedef pcl::PointXYZI PointT;
-  typedef pcl::PointCloud<PointT> PointCloudT;
-  typedef sensor_msgs::PointCloud2 PointCloudMsgT;
-  typedef message_filters::sync_policies::ApproximateTime<PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                          PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                          PointCloudMsgT, PointCloudMsgT>
-      SyncPolicyT;
-
-  ros::NodeHandle node_handle_, private_node_handle_;
-  message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
-  message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
-  ros::Subscriber config_subscriber_;
-  ros::Publisher cloud_publisher_;
-  tf::TransformListener tf_listener_;
-
-  size_t input_topics_size_;
-  std::string input_topics_;
-  std::string output_frame_id_;
-
-<<<<<<< HEAD
-  std::string min_range = "0.9";
-  std::string max_range = "2.0";
-
-  /* ConstPtr: shared pointer to a constant message */
-
-  /* void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                           const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                           const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                           const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8); */
-  void pointcloud_callback(const PointCloudMsgT::Ptr &msg1, const PointCloudMsgT::Ptr &msg2,
-                           const PointCloudMsgT::Ptr &msg3, const PointCloudMsgT::Ptr &msg4,
-                           const PointCloudMsgT::Ptr &msg5, const PointCloudMsgT::Ptr &msg6,
-                           const PointCloudMsgT::Ptr &msg7, const PointCloudMsgT::Ptr &msg8);
-=======
-  void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                           const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                           const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                           const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
->>>>>>> b342f26404885876b8ea2fa9dfd9e533dafe65ab
-};
+#include "ros-point-cloud-merger/points_concat_filter.hpp"
 
 PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_("~"), tf_listener_()
 {
-  private_node_handle_.param("input_topics", input_topics_, std::string("[/points_alpha, /points_beta]"));
+  private_node_handle_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
   private_node_handle_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
 
   YAML::Node topics = YAML::Load(input_topics_);
@@ -109,21 +49,14 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
   cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>("/points_concat", 1);
 }
 
-
-/* void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
+void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                              const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
                                              const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                                             const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8) */
-void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, const PointCloudMsgT::Ptr &msg2,
-                                             const PointCloudMsgT::Ptr &msg3, const PointCloudMsgT::Ptr &msg4,
-                                             const PointCloudMsgT::Ptr &msg5, const PointCloudMsgT::Ptr &msg6,
-                                             const PointCloudMsgT::Ptr &msg7, const PointCloudMsgT::Ptr &msg8)
+                                             const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8)
 {
   assert(2 <= input_topics_size_ && input_topics_size_ <= 8);
 
-  PointCloudMsgT::Ptr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-  /* PointCloudMsgT::ConstPtr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
-
+  PointCloudMsgT::ConstPtr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
   PointCloudT::Ptr cloud_sources[8];
   PointCloudT::Ptr cloud_concatenated(new PointCloudT);
 
@@ -140,36 +73,12 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
         shared pointer to the copy of the cloud */
       cloud_sources[i] = PointCloudT().makeShared();
 
-
-      // PointCloudMsgT::ConstPtr for msgs[i]
-      /* int total = msgs[i]->data.size(); */
-      int total = (msgs[i]->row_step) * (msgs[i]->height);
-      for (int j = 0; j < total; j++)
-      {
-        if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
-        /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
-        {
-          msgs[i]->data[j] = 0;
-          ROS_INFO("Debug");
-        }
-      }
-
       /*
         Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
         Parameters:
         msg – the PCLPointCloud2 binary blob
         cloud – the resultant pcl::PointCloud<T> */
       pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-
-
-      /* int total = msgs[i]->data.size();
-      for (int j = 0; j < total; j++)
-      {
-        if (msgs[i]->data[j] > stoi(max_range) || msgs[i]->data[j] < stoi(min_range))
-        {
-          msgs[i]->data[j] = 0;
-        }
-      } */
 
       /* Block until a transform is possible or it times out
         Parameters:
@@ -209,30 +118,4 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::Ptr &msg1, co
   cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
   cloud_concatenated->header.frame_id = output_frame_id_;
   cloud_publisher_.publish(cloud_concatenated);
-}
-
-int main(int argc, char **argv)
-{
-  /* provides command line arguments to ROS, 
-    and allows you to name your node and specify other options */
-  /* Before calling any other roscpp functions in a node 
-    must call one of the ros::init() functions. */
-  /* argc and argv ROS uses these to parse remapping arguments from the command line. */
-  /* points_concat_filter = node name */
-  ros::init(argc, argv, "points_concat_filter");
-
-  // launch node
-  PointsConcatFilter node;
-
-  // processes messages from the callback queue
-  /* Instead of exiting, a loop continuously runs to allow the callbacks 
-    to be called when a new message arrives. */
-  /*In this application all user callbacks will be called from within 
-    the ros::spin() call. ros::spin() will not return until the node 
-    has been shutdown, either through a call to ros::shutdown() or a Ctrl-C.*/
-  /* In computer programming, a callback, also known as a "call-after" function, 
-    is any executable code that is passed as an argument to other code; that 
-    other code is expected to call back (execute) the argument at a given time. */
-  ros::spin();
-  return 0;
 }
