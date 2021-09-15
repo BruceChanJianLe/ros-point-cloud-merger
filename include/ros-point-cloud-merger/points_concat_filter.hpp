@@ -30,6 +30,7 @@ private:
       SyncPolicyT;
 
   ros::NodeHandle node_handle_, private_node_handle_;
+
   message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
   message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
   ros::Subscriber config_subscriber_;
@@ -40,9 +41,13 @@ private:
   std::string input_topics_;
   std::string output_frame_id_;
 
-  /* std::string min_range;
-  std::string max_range; */
+  std::string min_range;
+  std::string max_range;
 
+  /* void pointcloud_callback(PointCloudMsgT::Ptr &msg1, PointCloudMsgT::Ptr &msg2,
+                           PointCloudMsgT::Ptr &msg3, PointCloudMsgT::Ptr &msg4,
+                           PointCloudMsgT::Ptr &msg5, PointCloudMsgT::Ptr &msg6,
+                           PointCloudMsgT::Ptr &msg7, PointCloudMsgT::Ptr &msg8); */
   void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                            const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
                            const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,

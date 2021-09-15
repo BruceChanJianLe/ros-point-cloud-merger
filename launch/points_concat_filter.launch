@@ -16,17 +16,17 @@
   <!-- max range from base_link -->
   <!-- <arg name="max_range" default="$(optenv MAX_RANGE 130.0)" /> -->
 
-  <!-- replace the topics with the ones you want as input -->
+  <!-- replace with the desired input topics -->
   <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
   <!-- replace with the desired output topic -->
   <arg name="output_topic" default="/points_concat" />
-  <!-- replace with desired output frame -->
+  <!-- replace with the desired output frame -->
   <arg name="output_frame_id" default="velodyne_frame" />
 
-  <!-- replace with desired min range from base_link -->
-  <!-- <arg name="min_range" default="0.9" /> -->
-  <!-- replace with desired max range from base_link -->
-  <!-- <arg name="max_range" default="2.0" /> -->
+  <!-- replace with the desired min range from base_link -->
+  <arg name="min_range" default="0.9" />
+  <!-- replace with the desired max range from base_link -->
+  <arg name="max_range" default="2.0" />
 
   <node name="points_concat_filter_node" output="screen" pkg="ros-point-cloud-merger" type="points_concat_filter_node">
     <param name="output_frame_id" value="$(arg output_frame_id)"/>
@@ -34,8 +34,8 @@
 
     <remap from="/points_concat" to="$(arg output_topic)"/>
 
-    <!-- <param name="min_range" value="$(arg min_range)" />
-    <param name="max_range" value="$(arg max_range)" /> -->
+    <param name="min_range" value="$(arg min_range)" />
+    <param name="max_range" value="$(arg max_range)" />
   </node>
 
 </launch>

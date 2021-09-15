@@ -16,6 +16,21 @@
 
 #include "ros-point-cloud-merger/points_concat_filter.hpp"
 
+/* : can mean access modifiers, inheritance, initialization lists 
+ * 
+ * access modifiers: used to create access modifiers within a class
+ * e.g., public:
+ *         void set_values(int, int);
+ * 
+ * inheritance: used to specify a base class while creating a child class 
+ * e.g., class Child : Base
+ * 
+ * initialization lists: delimit the beginning of an initialization list
+ * e.g., public:
+ *         B(int number = 99) : A(number) { }
+ * 
+ * https://www.quora.com/What-is-the-meaning-of-in-C++
+ */
 PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_("~"), tf_listener_()
 {
   private_node_handle_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
@@ -23,11 +38,13 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
 
   YAML::Node topics = YAML::Load(input_topics_);
   input_topics_size_ = topics.size();
+
   if (input_topics_size_ < 2 || 8 < input_topics_size_)
   {
     ROS_ERROR("The size of input_topics must be between 2 and 8");
     ros::shutdown();
   }
+
   for (size_t i = 0; i < 8; ++i)
   {
     if (i < input_topics_size_)
@@ -41,14 +58,21 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
           new message_filters::Subscriber<PointCloudMsgT>(node_handle_, topics[0].as<std::string>(), 1);
     }
   }
+
   cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
       SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
       *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
+
   cloud_synchronizer_->registerCallback(
       boost::bind(&PointsConcatFilter::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
+
   cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>("/points_concat", 1);
 }
 
+/* void PointsConcatFilter::pointcloud_callback(PointCloudMsgT::Ptr &msg1, PointCloudMsgT::Ptr &msg2,
+                                             PointCloudMsgT::Ptr &msg3, PointCloudMsgT::Ptr &msg4,
+                                             PointCloudMsgT::Ptr &msg5, PointCloudMsgT::Ptr &msg6,
+                                             PointCloudMsgT::Ptr &msg7, PointCloudMsgT::Ptr &msg8) */
 void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                              const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
                                              const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
@@ -56,6 +80,7 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
 {
   assert(2 <= input_topics_size_ && input_topics_size_ <= 8);
 
+  /* PointCloudMsgT::Ptr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
   PointCloudMsgT::ConstPtr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
   PointCloudT::Ptr cloud_sources[8];
   PointCloudT::Ptr cloud_concatenated(new PointCloudT);
@@ -72,6 +97,17 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
         Returns:
         shared pointer to the copy of the cloud */
       cloud_sources[i] = PointCloudT().makeShared();
+
+      /* int total = msgs[i]->data.size(); */
+      /* int total = (msgs[i]->row_step) * (msgs[i]->height);
+      for (int j = 0; j < total; j++)
+      { */
+      /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
+      /* if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
+        {
+          msgs[i]->data[j] = 0;
+        }
+      } */
 
       /*
         Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
@@ -116,6 +152,8 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
 
   // publish points
   cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
+
   cloud_concatenated->header.frame_id = output_frame_id_;
+
   cloud_publisher_.publish(cloud_concatenated);
 }

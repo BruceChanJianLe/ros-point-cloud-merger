@@ -10,6 +10,8 @@ int main(int argc, char ** argv)
 
     ros_util::point_cloud_merger node;
 
+    node.start();
+
     ros::spin();
 
     return 0;
