@@ -27,19 +27,43 @@ namespace ros_util
            default_val – Value to use if the server doesn't contain this parameter. */
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
-        private_nh_.param("output_topic_", output_topic_, std::string("/points_concat"));
+        private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
+
         private_nh_.param("min_range", min_range, std::string("0.9"));
         private_nh_.param("max_range", max_range, std::string("2.0"));
 
         /* namespace YAML, class Node in library yaml-cpp */
         /* YAML::Node YAML::Load(const std::string &input) */
         YAML::Node topics = YAML::Load(input_topics_);
+        
 
         /* cannot input_topics_.size() */
-        input_topics_size_ = topics.size();
+        /* input_topics_size_ = topics.size(); */
+
+        int input_size = 0;
+
+        std::string input_topics = input_topics_;
+
+        while (input_topics.compare("") > 0) {
+            int point, end;
+
+            point = input_topics.find_first_of('/');
+
+            if (point >= 0) {
+                end = input_topics.find_first_of(' ');
+
+                if (end < 0) {
+                    end = input_topics.find_first_of(']');
+                }
+            }
+            input_size++;
+            input_topics = input_topics.substr(++end);
+        }
+
 
         // check range of input topics accepted
-        if (input_topics_size_ < 2 || input_topics_size_ > 8)
+        /* if (input_topics_size_ < 2 || input_topics_size_ > 8) */
+        if (input_size < 2 || input_size > 8)
         {
             ROS_ERROR("The size of input_topics must be between 2 and 8!");
             /* Disconnects everything and unregisters from the master. 
@@ -54,11 +78,9 @@ namespace ros_util
         {
             if (i < input_topics_size_)
             {
-
             }
             else
             {
-                
             }
         }
     }
@@ -66,8 +88,6 @@ namespace ros_util
     void point_cloud_merger::start()
     {
     }
-
-    
 
     // Destructor
     point_cloud_merger::~point_cloud_merger()

@@ -5,6 +5,7 @@
   name is a unique identifier for your node. -->
 <launch>
 
+  <!-- defining defaults -->
   <!-- replace with the desired input topics -->
   <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
   <!-- replace with the desired output topic -->

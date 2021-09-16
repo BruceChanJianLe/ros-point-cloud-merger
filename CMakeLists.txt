@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 3.0.2)
 project(ros-point-cloud-merger)
 
@@ -43,27 +44,20 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(#points_concat_filter_node
-  point_cloud_merger_node
+add_executable(point_cloud_merger_node
   src/point_cloud_merger_node.cpp
   src/point_cloud_merger.cpp
-  #src/points_concat_filter_node.cpp
-  #src/points_concat_filter.cpp
 )
 
-add_dependencies(
-  #points_concat_filter_node 
-  point_cloud_merger_node
+add_dependencies(point_cloud_merger_node
   ${catkin_EXPORTED_TARGETS}
 )
 
-target_include_directories(#points_concat_filter_node PRIVATE
-point_cloud_merger_node PRIVATE
+target_include_directories(point_cloud_merger_node PRIVATE
   ${PCL_INCLUDE_DIRS}
 )
 
-target_link_libraries(#points_concat_filter_node
-  point_cloud_merger_node
+target_link_libraries(point_cloud_merger_node
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
@@ -71,7 +65,6 @@ target_link_libraries(#points_concat_filter_node
 
 install(
   TARGETS
-    #points_concat_filter_node
     point_cloud_merger_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

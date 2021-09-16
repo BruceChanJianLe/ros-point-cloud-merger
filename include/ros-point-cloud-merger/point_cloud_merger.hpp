@@ -41,8 +41,20 @@ namespace ros_util
 
     private:
         /* The typedef declaration provides a way to declare an identifier as a type alias, to be used to replace a possibly complex type name */
-        typedef pcl::PointXYZI PointMerge;
-        typedef pcl::PointCloud<PointMerge> PointCloudMerge;
+        // individual points(x, y, z, intensity)
+        typedef pcl::PointXYZI PointT;
+        // collection of individual points = pointcloud
+        typedef pcl::PointCloud<PointT> PointCloudT;
+        // collection of n dimension points
+        typedef sensor_msgs::PointCloud2 PointCloudMsgT;
+
+        /* ApproximateTime: match messages even if they have different time stamps */
+        typedef message_filters::sync_policies::ApproximateTime<PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
+                                                                PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
+                                                                PointCloudMsgT, PointCloudMsgT>
+            SyncPolicyT;
+
+        typedef unsigned long size_t;
 
         /// ROS node private and global handle
         ros::NodeHandle private_nh_;
@@ -59,6 +71,8 @@ namespace ros_util
 
         std::string min_range;
         std::string max_range;
+
+        /* need to sync - same time */
     };
 
 } // namespace ros_util
