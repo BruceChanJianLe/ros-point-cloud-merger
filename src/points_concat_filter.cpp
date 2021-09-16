@@ -33,15 +33,29 @@
  */
 PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_("~"), tf_listener_()
 {
+  /* param function
+           Parameters:
+           param_name – The key to be searched on the parameter server.
+           param_val – Storage for the retrieved value.
+           default_val – Value to use if the server doesn't contain this parameter. */
   private_node_handle_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
   private_node_handle_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
 
+  /* namespace YAML, class Node in library yaml-cpp */
+  /* YAML::Node YAML::Load(const std::string &input) */
   YAML::Node topics = YAML::Load(input_topics_);
+
   input_topics_size_ = topics.size();
 
+  // check range of input topics accepted
   if (input_topics_size_ < 2 || 8 < input_topics_size_)
   {
     ROS_ERROR("The size of input_topics must be between 2 and 8");
+    /* Disconnects everything and unregisters from the master. 
+            It is generally not necessary to call this function, as the 
+            node will automatically shutdown when all NodeHandles destruct. 
+            However, if you want to break out of a spin() loop explicitly, 
+            this function allows that. */
     ros::shutdown();
   }
 
@@ -66,6 +80,11 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
   cloud_synchronizer_->registerCallback(
       boost::bind(&PointsConcatFilter::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
+  /* This method returns a Publisher that allows you to publish a message on this topic.
+   * Parameters:
+   * topic – Topic to advertise on
+   * queue_size – Maximum number of outgoing messages to be queued for delivery to subscribers
+   */
   cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>("/points_concat", 1);
 }
 

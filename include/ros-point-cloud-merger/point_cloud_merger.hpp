@@ -30,30 +30,23 @@ namespace ros_util
     class point_cloud_merger
     {
     public:
+        // constructor
         point_cloud_merger();
-        ~point_cloud_merger();
 
         // function with nothing in it
         void start();
 
+        // destructor
+        ~point_cloud_merger();
+
     private:
-        typedef pcl::PointXYZI PointT;
-        typedef pcl::PointCloud<PointT> PointCloudT;
-        typedef sensor_msgs::PointCloud2 PointCloudMsgT;
-        typedef message_filters::sync_policies::ApproximateTime<PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                                PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                                PointCloudMsgT, PointCloudMsgT>
-            SyncPolicyT;
+        /* The typedef declaration provides a way to declare an identifier as a type alias, to be used to replace a possibly complex type name */
+        typedef pcl::PointXYZI PointMerge;
+        typedef pcl::PointCloud<PointMerge> PointCloudMerge;
 
         /// ROS node private and global handle
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
-
-        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
-        ros::Subscriber config_subscriber_;
-        ros::Publisher cloud_publisher_;
-        tf::TransformListener tf_listener_;
 
         // for YAML
         size_t input_topics_size_;
@@ -66,11 +59,6 @@ namespace ros_util
 
         std::string min_range;
         std::string max_range;
-
-        void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                                 const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                                 const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                                 const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
     };
 
 } // namespace ros_util

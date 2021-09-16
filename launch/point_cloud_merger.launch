@@ -4,17 +4,6 @@
 <!-- type is the file you want to launch in the package 
   name is a unique identifier for your node. -->
 <launch>
-  <!-- topics of PointCloud2 to concatenate -->
-  <!-- <arg name="input_topics" default="$(optenv INPUT_TOPICS [/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7])" /> -->
-  <!-- topic of the output merged PointCloud2 -->
-  <!-- <arg name="output_topic" default="$(optenv OUTPUT_TOPIC /points_concat)" /> -->
-  <!-- topic of the frame to publish to -->
-  <!-- <arg name="output_frame_id" default="$(optenv OUTPUT_FRAME_ID velodyne_frame)" /> -->
-
-  <!-- min range from base_link -->
-  <!-- <arg name="min_range" default="$(optenv MIN_RANGE 0.9)" /> -->
-  <!-- max range from base_link -->
-  <!-- <arg name="max_range" default="$(optenv MAX_RANGE 130.0)" /> -->
 
   <!-- replace with the desired input topics -->
   <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
@@ -30,10 +19,10 @@
 
   <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
     <param name="output_frame_id" value="$(arg output_frame_id)"/>
-
     <param name="input_topics" value="$(arg input_topics)"/>
-    <!-- <param name="output_topic" to="$(arg output_topic)"/> -->
-    <remap from="/points_concat" to="$(arg output_topic)"/>
+    
+    <!-- <remap from="/points_concat" to="$(arg output_topic)"/> -->
+    <param name="output_topic" value="$(arg output_topic)"/>
 
     <param name="min_range" value="$(arg min_range)" />
     <param name="max_range" value="$(arg max_range)" />
