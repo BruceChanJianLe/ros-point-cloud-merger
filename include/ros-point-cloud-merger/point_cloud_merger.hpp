@@ -60,6 +60,11 @@ namespace ros_util
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
 
+        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
+        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
+        ros::Publisher cloud_publisher_;
+        tf::TransformListener tf_listener_;
+
         // for YAML
         size_t input_topics_size_;
 
@@ -73,7 +78,11 @@ namespace ros_util
         std::string max_range;
 
         /* need to sync - same time */
-    };
+        void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
+                               const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
+                               const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
+                               const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
+};
 
 } // namespace ros_util
 
