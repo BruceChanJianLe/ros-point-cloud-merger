@@ -54,7 +54,7 @@ namespace ros_util
                                                                 PointCloudMsgT, PointCloudMsgT>
             SyncPolicyT;
 
-        typedef unsigned long size_t;
+        /* typedef unsigned long size_t; */
 
         /// ROS node private and global handle
         ros::NodeHandle private_nh_;
@@ -66,7 +66,7 @@ namespace ros_util
         tf::TransformListener tf_listener_;
 
         // for YAML
-        size_t input_topics_size_;
+        /* size_t input_topics_size_; */
 
         // inputs given by user
         std::string input_topics_;
@@ -79,10 +79,10 @@ namespace ros_util
 
         /* need to sync - same time */
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                               const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                               const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                               const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
-};
+                                 const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
+                                 const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
+                                 const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
+    };
 
 } // namespace ros_util
 
