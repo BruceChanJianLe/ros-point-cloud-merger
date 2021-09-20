@@ -51,7 +51,7 @@ namespace ros_util
         point_cloud_merger();
 
         // function with nothing in it
-        void start();
+        /* void start(); */
 
         // destructor
         ~point_cloud_merger();
@@ -71,8 +71,6 @@ namespace ros_util
                                                                 PointCloudMsgT, PointCloudMsgT>
             SyncPolicyT;
 
-        /* typedef unsigned long size_t; */
-
         /// ROS node private and global handle
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
@@ -84,25 +82,19 @@ namespace ros_util
         
         tf::TransformListener tf_listener_;
 
-        // for YAML
-        /* size_t input_topics_size_; */
-
         // inputs given by user
         std::string input_topics_;
         std::string output_topic_;
 
         std::string output_frame_id_;
 
+        /* std::string pmin_range_;
+        std::string pmax_range_; */
         std::string min_range_;
         std::string max_range_;
+        
         std::string nmin_range_;
         std::string nmax_range_;
-
-        /* pcl::PointXYZRBG min_range_;
-        pcl::PointXYZRGB max_range_; */
-        
-        /* pcl::PointXYZRGB min_ranges_;
-        pcl::PointXYZRGB max_ranges_; */
 
         /* need to sync - same time */
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,

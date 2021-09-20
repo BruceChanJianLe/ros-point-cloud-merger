@@ -44,6 +44,7 @@ namespace ros_util
     point_cloud_merger::point_cloud_merger() : private_nh_(), global_nh_()
     {
         /* param function
+
          * Parameters:
          * param_name – The key to be searched on the parameter server.
          * param_val – Storage for the retrieved value.
@@ -53,14 +54,13 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
+        /* private_nh_.param("pmin_range", pmin_range_, std::string("0.9"));
+        private_nh_.param("pmax_range", pmax_range_, std::string("10.0")); */
         private_nh_.param("min_range", min_range_, std::string("0.9"));
         private_nh_.param("max_range", max_range_, std::string("2.0"));
+        
         private_nh_.param("nmin_range", nmin_range_, std::string("-0.9"));
         private_nh_.param("nmax_range", nmax_range_, std::string("-2.0"));
-
-        /* init of min_range and max_range */
-        /* pcl::PointXYZRGB min_range_;
-        pcl::PointXYZRGB max_range_; */
 
         /* namespace YAML, class Node in library yaml-cpp */
         /* YAML::Node YAML::Load(const std::string &input) */
@@ -70,37 +70,37 @@ namespace ros_util
          * Array of input topics: store_input_topics[]
          * Number of topics: input_size
          */
-        /* int input_size = 0; */
-        /* std::string in = input_topics_; */
         std::string store_input_topics[8];
-        bool last = false;
+        bool is_last_topic = false;
 
-        while (input_topics_.compare("") > ZERO)
+        /* not good practice, no error catching */
+        /* have to strictly adhere to format for input topic */
+        while (input_topics_.compare("") > 0)
         {
-            int s, e;
-            s = input_topics_.find_first_of('/');
+            int start_of_topic, end_of_topic;
+            start_of_topic = input_topics_.find_first_of('/');
 
-            if (s > ZERO)
+            if (start_of_topic > 0)
             {
-                e = input_topics_.find_first_of(',');
+                end_of_topic = input_topics_.find_first_of(',');
 
-                if (e < ZERO)
+                /* reached last topic */
+                if (end_of_topic < 0)
                 {
-                    /* e = input_topics_.find_first_of(']'); */
-                    e = input_topics_.find_last_of(']');
-                    last = true;
+                    end_of_topic = input_topics_.find_last_of(']');
+                    is_last_topic = true;
                 }
             }
 
-            store_input_topics[input_size] = input_topics_.substr(s, --e);
-            input_topics_ = input_topics_.substr(e + 2);
+            store_input_topics[input_size] = input_topics_.substr(start_of_topic, --end_of_topic);
+            input_topics_ = input_topics_.substr(end_of_topic + 2);
 
-            if (last == true)
+            if (is_last_topic == true)
             {
                 input_topics_ = "";
             }
             input_size++;
-        }
+        } 
 
         // check range of input topics accepted
         /* if (input_topics_size_ < 2 || input_topics_size_ > 8) */
@@ -150,9 +150,9 @@ namespace ros_util
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, 1);
     }
 
-    void point_cloud_merger::start()
+    /* void point_cloud_merger::start()
     {
-    }
+    } */
 
     void point_cloud_merger::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                                  const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
@@ -188,19 +188,16 @@ namespace ros_util
                 msg – the PCLPointCloud2 binary blob
                 cloud – the resultant pcl::PointCloud<T> */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-                /* cloud_sources[i] = PointCloudT().makeShared(); */
 
                 /* HAVE TO CONSIDER +VE AND -VE */
                 int total = cloud_sources[i]->size();
                 for (int j = 0; j < total; j++)
                 {
                     if ( (cloud_sources[i]->points[j].x < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x < stoi(min_range_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x > stoi(max_range_))) )
-                    /* if ( (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) ) */
                     {
                         cloud_sources[i]->points[j].x = INT_MAX;
                     }
                     else if ( (cloud_sources[i]->points[j].y < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y < stoi(min_range_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y > stoi(max_range_))) )
-                    /* else if ( (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) ) */
                     {
                         cloud_sources[i]->points[j].y = INT_MAX;
                     }

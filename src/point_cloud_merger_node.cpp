@@ -3,7 +3,6 @@
 
 const std::string ROSNodeName = "point_cloud_merger_node";
 
-
 int main(int argc, char ** argv)
 {
     ros::init(argc, argv, ROSNodeName);
@@ -11,7 +10,7 @@ int main(int argc, char ** argv)
     ros_util::point_cloud_merger node;
 
     /* launch start function in .hpp which links to .cpp */
-    node.start();
+    /* node.start(); */
 
     ros::spin();
 
