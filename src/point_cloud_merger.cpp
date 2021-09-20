@@ -194,13 +194,13 @@ namespace ros_util
                 int total = cloud_sources[i]->size();
                 for (int j = 0; j < total; j++)
                 {
-                    /* if ( (cloud_sources[i]->points[j].x < stoi(nmax_range_)) || (cloud_sources[i]->points[j].x > stoi(nmin_range_)) || (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) ) */
-                    if ( (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) )
+                    if ( (cloud_sources[i]->points[j].x < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x < stoi(min_range_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x > stoi(max_range_))) )
+                    /* if ( (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) ) */
                     {
                         cloud_sources[i]->points[j].x = INT_MAX;
                     }
-                    /* else if ( (cloud_sources[i]->points[j].y < stoi(nmax_range_)) || (cloud_sources[i]->points[j].y > stoi(nmin_range_)) || (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) ) */
-                    else if ( (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) )
+                    else if ( (cloud_sources[i]->points[j].y < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y < stoi(min_range_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y > stoi(max_range_))) )
+                    /* else if ( (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) ) */
                     {
                         cloud_sources[i]->points[j].y = INT_MAX;
                     }
