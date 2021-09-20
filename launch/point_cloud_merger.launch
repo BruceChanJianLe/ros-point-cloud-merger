@@ -15,8 +15,12 @@
 
     <!-- replace with the desired min range from base_link -->
     <arg name="min_range" default="0.9" />
+    <!-- this is such that can show obstacle behind husky -->
+    <arg name="nmin_range" default="-0.9" />
     <!-- replace with the desired max range from base_link -->
     <arg name="max_range" default="2.0" />
+    <!-- this is such that can show obstacle other side of husky -->
+    <arg name="nmax_range" default="-2.0" />
 
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
         <param name="output_frame_id" value="$(arg output_frame_id)"/>
@@ -27,6 +31,8 @@
 
         <param name="min_range" value="$(arg min_range)" />
         <param name="max_range" value="$(arg max_range)" />
+        <param name="nmin_range" value="$(arg nmin_range)" />
+        <param name="nmax_range" value="$(arg nmax_range)" />
     </node>
 
 </launch>

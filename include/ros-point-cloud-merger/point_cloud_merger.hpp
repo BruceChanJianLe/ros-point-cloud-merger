@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018-2019 Autoware Foundation. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #ifndef ROS_POINT_CLOUD_MERGER_H__
 #define ROS_POINT_CLOUD_MERGER_H__
 
@@ -12,6 +28,7 @@
 #include <message_filters/synchronizer.h>
 
 #include <pcl/point_types.h>
+
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/transforms.h>
@@ -62,7 +79,9 @@ namespace ros_util
 
         message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
         message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
+
         ros::Publisher cloud_publisher_;
+        
         tf::TransformListener tf_listener_;
 
         // for YAML
@@ -74,8 +93,16 @@ namespace ros_util
 
         std::string output_frame_id_;
 
-        std::string min_range;
-        std::string max_range;
+        std::string min_range_;
+        std::string max_range_;
+        std::string nmin_range_;
+        std::string nmax_range_;
+
+        /* pcl::PointXYZRBG min_range_;
+        pcl::PointXYZRGB max_range_; */
+        
+        /* pcl::PointXYZRGB min_ranges_;
+        pcl::PointXYZRGB max_ranges_; */
 
         /* need to sync - same time */
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,

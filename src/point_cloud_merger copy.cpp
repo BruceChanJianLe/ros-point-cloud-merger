@@ -15,13 +15,12 @@
  */
 
 #include "ros-point-cloud-merger/point_cloud_merger.hpp"
-#include <bits/stdc++.h>
 
 #define MIN_SIZE 2
 #define MAX_SIZE 8
 #define ZERO 0
 
-static int input_size = 0;
+static int input_size = ZERO;
 
 namespace ros_util
 {
@@ -53,26 +52,23 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
-        private_nh_.param("min_range", min_range_, std::string("0.9"));
-        private_nh_.param("max_range", max_range_, std::string("2.0"));
-        private_nh_.param("nmin_range", nmin_range_, std::string("-0.9"));
-        private_nh_.param("nmax_range", nmax_range_, std::string("-2.0"));
-
-        /* init of min_range and max_range */
-        /* pcl::PointXYZRGB min_range_;
-        pcl::PointXYZRGB max_range_; */
+        private_nh_.param("min_range", min_range, std::string("0.9"));
+        private_nh_.param("max_range", max_range, std::string("2.0"));
 
         /* namespace YAML, class Node in library yaml-cpp */
         /* YAML::Node YAML::Load(const std::string &input) */
         YAML::Node topics = YAML::Load(input_topics_);
 
+        /* cannot input_topics_.size() */
+        /* input_topics_size_ = topics.size(); */
+
         /* 
-         * Array of input topics: store_input_topics[]
+         * Array of input topics: store_input_topic[]
          * Number of topics: input_size
          */
         /* int input_size = 0; */
         /* std::string in = input_topics_; */
-        std::string store_input_topics[8];
+        std::string store_input_topic[8];
         bool last = false;
 
         while (input_topics_.compare("") > ZERO)
@@ -86,13 +82,12 @@ namespace ros_util
 
                 if (e < ZERO)
                 {
-                    /* e = input_topics_.find_first_of(']'); */
-                    e = input_topics_.find_last_of(']');
+                    e = input_topics_.find_first_of(']');
                     last = true;
                 }
             }
 
-            store_input_topics[input_size] = input_topics_.substr(s, --e);
+            store_input_topic[input_size] = input_topics_.substr(s, --e);
             input_topics_ = input_topics_.substr(e + 2);
 
             if (last == true)
@@ -122,23 +117,22 @@ namespace ros_util
                 for the one with nothing inside, update with the 1st PointCloud */
             if (i < input_size)
             {
-                /* Constructor See the ros::NodeHandle::subscribe() variants for more information on the parameters */
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1);
             }
             else
             {
                 cloud_subscribers_[i] =
-                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1);
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[ZERO].as<std::string>(), 1);
             }
         }
 
-        /* Sychronise the cloud_subscribers */
+        /*  */
         cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
             SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
             *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
 
-        /* callback */
+        /*  */
         cloud_synchronizer_->registerCallback(
             boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
@@ -159,14 +153,14 @@ namespace ros_util
                                                  const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
                                                  const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8)
     {
-        /*  If the condition is true, the program continues normally and 
-        if the condition is false, the program is terminated and an error message is displayed.  */
         assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
 
         /* PointCloudMsgT::Ptr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-
+        
         PointCloudT::Ptr cloud_sources[MAX_SIZE];
+
+        PointCloudT::Ptr cloud_concatenated(new PointCloudT);
 
         // transform points
         try
@@ -182,29 +176,23 @@ namespace ros_util
                     shared pointer to the copy of the cloud */
                 cloud_sources[i] = PointCloudT().makeShared();
 
+                /* int total = msgs[i]->data.size(); */
+                /* int total = (msgs[i]->row_step) * (msgs[i]->height);
+                for (int j = 0; j < total; j++)
+                { */
+                /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
+                /* if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
+                    {
+                        msgs[i]->data[j] = 0;
+                    }
+                } */
+
                 /*
                 Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
                 Parameters:
                 msg – the PCLPointCloud2 binary blob
                 cloud – the resultant pcl::PointCloud<T> */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-                /* cloud_sources[i] = PointCloudT().makeShared(); */
-
-                /* HAVE TO CONSIDER +VE AND -VE */
-                int total = cloud_sources[i]->size();
-                for (int j = 0; j < total; j++)
-                {
-                    /* if ( (cloud_sources[i]->points[j].x < stoi(nmax_range_)) || (cloud_sources[i]->points[j].x > stoi(nmin_range_)) || (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) ) */
-                    if ( (cloud_sources[i]->points[j].x < stoi(min_range_)) || (cloud_sources[i]->points[j].x > stoi(max_range_)) )
-                    {
-                        cloud_sources[i]->points[j].x = INT_MAX;
-                    }
-                    /* else if ( (cloud_sources[i]->points[j].y < stoi(nmax_range_)) || (cloud_sources[i]->points[j].y > stoi(nmin_range_)) || (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) ) */
-                    else if ( (cloud_sources[i]->points[j].y < stoi(min_range_)) || (cloud_sources[i]->points[j].y > stoi(max_range_)) )
-                    {
-                        cloud_sources[i]->points[j].y = INT_MAX;
-                    }
-                }
 
                 /* Block until a transform is possible or it times out
                 Parameters:
@@ -231,13 +219,8 @@ namespace ros_util
         catch (tf::TransformException &ex)
         {
             ROS_ERROR("%s", ex.what());
-
-            /* return 0; means program exited successful and atleast in (unix) 
-            while return just terminates the program regardles of it's state. */
             return;
         }
-
-        PointCloudT::Ptr cloud_concatenated(new PointCloudT);
 
         // merge points
         /* for (size_t i = 0; i < input_topics_size_; i++) */
@@ -251,7 +234,6 @@ namespace ros_util
 
         cloud_concatenated->header.frame_id = output_frame_id_;
 
-        /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
     }
 
@@ -259,5 +241,4 @@ namespace ros_util
     point_cloud_merger::~point_cloud_merger()
     {
     }
-
 } // namespace ros_util
