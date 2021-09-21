@@ -41,7 +41,7 @@ namespace ros_util
      */
 
     // Constructor
-    point_cloud_merger::point_cloud_merger() : private_nh_(), global_nh_()
+    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_()
     {
         /* param function
 
@@ -50,17 +50,28 @@ namespace ros_util
          * param_val – Storage for the retrieved value.
          * default_val – Value to use if the server doesn't contain this parameter. 
          */
+        /* change the values here if want to change values */
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
         /* private_nh_.param("pmin_range", pmin_range_, std::string("0.9"));
-        private_nh_.param("pmax_range", pmax_range_, std::string("10.0")); */
-        private_nh_.param("min_range", min_range_, std::string("0.9"));
-        private_nh_.param("max_range", max_range_, std::string("2.0"));
-        
+        private_nh_.param("pmax_range", pmax_range_, std::string("2.0"));
         private_nh_.param("nmin_range", nmin_range_, std::string("-0.9"));
-        private_nh_.param("nmax_range", nmax_range_, std::string("-2.0"));
+        private_nh_.param("nmax_range", nmax_range_, std::string("-2.0")); */
+
+        private_nh_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
+        private_nh_.param("pmax_range_x", pmax_range_x_, std::string("2.0"));
+        private_nh_.param("nmin_range_x", nmin_range_x_, std::string("-0.9"));
+        private_nh_.param("nmax_range_x", nmax_range_x_, std::string("-2.0"));
+
+        private_nh_.param("pmin_range_y", pmin_range_y_, std::string("0.9"));
+        private_nh_.param("pmax_range_y", pmax_range_y_, std::string("2.0"));
+        private_nh_.param("nmin_range_y", nmin_range_y_, std::string("-0.9"));
+        private_nh_.param("nmax_range_y", nmax_range_y_, std::string("-2.0"));
+
+        private_nh_.param("pmin_range_z", pmin_range_z_, std::string("0."));
+        private_nh_.param("pmax_range_z", pmax_range_z_, std::string("100.0"));
 
         /* namespace YAML, class Node in library yaml-cpp */
         /* YAML::Node YAML::Load(const std::string &input) */
@@ -100,7 +111,7 @@ namespace ros_util
                 input_topics_ = "";
             }
             input_size++;
-        } 
+        }
 
         // check range of input topics accepted
         /* if (input_topics_size_ < 2 || input_topics_size_ > 8) */
@@ -171,7 +182,6 @@ namespace ros_util
         // transform points
         try
         {
-            /* for (size_t i = 0; i < input_topics_size_; i++) */
             for (int i = ZERO; i < input_size; i++)
             {
                 // Note: If you use kinetic, you can directly receive messages as
@@ -189,19 +199,68 @@ namespace ros_util
                 cloud – the resultant pcl::PointCloud<T> */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
 
-                /* HAVE TO CONSIDER +VE AND -VE */
                 int total = cloud_sources[i]->size();
+
+                std::vector<int> number;
+                /* std::vector<int>::iterator it; */
+                int numbers_to_remove = 0;
+
                 for (int j = 0; j < total; j++)
                 {
-                    if ( (cloud_sources[i]->points[j].x < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x < stoi(min_range_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_)) && (cloud_sources[i]->points[j].x > stoi(max_range_))) )
+                    bool outofbound_flag = false;
+
+                    if ((cloud_sources[i]->points[j].x < stoi(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stoi(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stoi(pmax_range_x_))))
                     {
                         cloud_sources[i]->points[j].x = INT_MAX;
+                        outofbound_flag = true;
                     }
-                    else if ( (cloud_sources[i]->points[j].y < stoi(nmax_range_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y < stoi(min_range_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_)) && (cloud_sources[i]->points[j].y > stoi(max_range_))) )
+                    else if ((cloud_sources[i]->points[j].y < stoi(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stoi(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stoi(pmax_range_y_))))
                     {
                         cloud_sources[i]->points[j].y = INT_MAX;
+                        outofbound_flag = true;
+                    }
+                    /* else if ((cloud_sources[i]->points[j].z < stoi(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stoi(pmax_range_z_)))
+                    {
+                        cloud_sources[i]->points[j].z = INT_MAX;
+                        outofbound_flag = true;
+                    }
+ */
+                    if (outofbound_flag == true)
+                    {
+                        /* it = number.begin();
+                        number.insert(it, j); */
+                        number.insert(number.begin(), j);
+                        numbers_to_remove++;
                     }
                 }
+
+                // Remove the points
+                for (int j = 0; j < numbers_to_remove; j++)
+                {
+                    /* This breaks the organized structure of the cloud by setting the height to 1!
+                    Not sure if to use erase */
+                    /* cloud_sources[i]->erase(number[j]); */
+                    /* cloud_sources[i]->points[number[j]].x = INT_MAX;
+                    cloud_sources[i]->points[number[j]].y = INT_MAX;
+                    cloud_sources[i]->points[number[j]].z = INT_MAX; */
+                }
+
+                // Remove the points
+                /* it = number.begin(); */
+
+                /* pcl::PointCloud<pcl::PointXYZ>::iterator it = cld_ptr->begin() */
+                /* pcl::PointCloud<pcl::PointXYZ>::Ptr & cld_ptr */
+
+                /* for (std::vector<int>::iterator it = number.begin(); it != number.end(); it++) */
+                /* for (int j = 0; j < number.size(); j++) */
+                /* { */
+                //cloud_sources[i]->erase(it);
+                //cloud_sources[i]->erase((*it)++);
+                /* cloud_sources[i]->empty; */
+                /* it = cloud_sources[i]->erase(20); */
+
+                /* pcl::PointCloud<PointT>::erase(it);
+                } */
 
                 /* Block until a transform is possible or it times out
                 Parameters:

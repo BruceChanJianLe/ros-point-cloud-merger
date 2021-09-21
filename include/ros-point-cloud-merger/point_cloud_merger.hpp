@@ -88,13 +88,23 @@ namespace ros_util
 
         std::string output_frame_id_;
 
+        std::string pmin_range_x_;
+        std::string pmax_range_x_;
+        std::string nmin_range_x_;
+        std::string nmax_range_x_;
+
+        std::string pmin_range_y_;
+        std::string pmax_range_y_;
+        std::string nmin_range_y_;
+        std::string nmax_range_y_;
+
+        std::string pmin_range_z_;
+        std::string pmax_range_z_;
+
         /* std::string pmin_range_;
-        std::string pmax_range_; */
-        std::string min_range_;
-        std::string max_range_;
-        
+        std::string pmax_range_;
         std::string nmin_range_;
-        std::string nmax_range_;
+        std::string nmax_range_; */
 
         /* need to sync - same time */
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
