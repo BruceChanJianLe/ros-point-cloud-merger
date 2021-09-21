@@ -211,20 +211,20 @@ namespace ros_util
 
                     if ((cloud_sources[i]->points[j].x < stoi(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stoi(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stoi(pmax_range_x_))))
                     {
-                        cloud_sources[i]->points[j].x = INT_MAX;
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                         outofbound_flag = true;
                     }
                     else if ((cloud_sources[i]->points[j].y < stoi(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stoi(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stoi(pmax_range_y_))))
                     {
-                        cloud_sources[i]->points[j].y = INT_MAX;
+                        /* cloud_sources[i]->points[j].y = INT_MAX; */
                         outofbound_flag = true;
                     }
-                    /* else if ((cloud_sources[i]->points[j].z < stoi(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stoi(pmax_range_z_)))
+                    else if ((cloud_sources[i]->points[j].z < stoi(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stoi(pmax_range_z_)))
                     {
-                        cloud_sources[i]->points[j].z = INT_MAX;
+                        /* cloud_sources[i]->points[j].z = INT_MAX; */
                         outofbound_flag = true;
                     }
- */
+
                     if (outofbound_flag == true)
                     {
                         /* it = number.begin();
@@ -240,9 +240,10 @@ namespace ros_util
                     /* This breaks the organized structure of the cloud by setting the height to 1!
                     Not sure if to use erase */
                     /* cloud_sources[i]->erase(number[j]); */
-                    /* cloud_sources[i]->points[number[j]].x = INT_MAX;
+                    
+                    cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
-                    cloud_sources[i]->points[number[j]].z = INT_MAX; */
+                    cloud_sources[i]->points[number[j]].z = INT_MAX;
                 }
 
                 // Remove the points
