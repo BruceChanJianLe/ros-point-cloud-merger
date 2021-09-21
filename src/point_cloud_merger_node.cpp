@@ -1,7 +1,7 @@
 #include "ros-point-cloud-merger/point_cloud_merger.hpp"
 #include <ros/ros.h>
 
-const std::string ROSNodeName = "point_cloud_merger_node";
+const std::string ROSNodeName = "point_cloud_merger";
 
 int main(int argc, char ** argv)
 {

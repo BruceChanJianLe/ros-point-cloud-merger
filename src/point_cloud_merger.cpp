@@ -41,7 +41,7 @@ namespace ros_util
      */
 
     // Constructor
-    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_()
+    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf_listener_()
     {
         /* param function
 
@@ -61,14 +61,14 @@ namespace ros_util
         private_nh_.param("nmax_range", nmax_range_, std::string("-2.0")); */
 
         private_nh_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
-        private_nh_.param("pmax_range_x", pmax_range_x_, std::string("2.0"));
+        private_nh_.param("pmax_range_x", pmax_range_x_, std::string("10.0"));
         private_nh_.param("nmin_range_x", nmin_range_x_, std::string("-0.9"));
-        private_nh_.param("nmax_range_x", nmax_range_x_, std::string("-2.0"));
+        private_nh_.param("nmax_range_x", nmax_range_x_, std::string("-10.0"));
 
         private_nh_.param("pmin_range_y", pmin_range_y_, std::string("0.9"));
-        private_nh_.param("pmax_range_y", pmax_range_y_, std::string("2.0"));
+        private_nh_.param("pmax_range_y", pmax_range_y_, std::string("10.0"));
         private_nh_.param("nmin_range_y", nmin_range_y_, std::string("-0.9"));
-        private_nh_.param("nmax_range_y", nmax_range_y_, std::string("-2.0"));
+        private_nh_.param("nmax_range_y", nmax_range_y_, std::string("-10.0"));
 
         private_nh_.param("pmin_range_z", pmin_range_z_, std::string("0."));
         private_nh_.param("pmax_range_z", pmax_range_z_, std::string("100.0"));
@@ -123,6 +123,7 @@ namespace ros_util
             node will automatically shutdown when all NodeHandles destruct. 
             However, if you want to break out of a spin() loop explicitly, 
             this function allows that. */
+
             ros::shutdown();
         }
 
@@ -179,6 +180,8 @@ namespace ros_util
 
         PointCloudT::Ptr cloud_sources[MAX_SIZE];
 
+        PointCloudT::Ptr cloud_concatenated(new PointCloudT);
+
         // transform points
         try
         {
@@ -229,6 +232,7 @@ namespace ros_util
                     {
                         /* it = number.begin();
                         number.insert(it, j); */
+
                         number.insert(number.begin(), j);
                         numbers_to_remove++;
                     }
@@ -240,28 +244,28 @@ namespace ros_util
                     /* This breaks the organized structure of the cloud by setting the height to 1!
                     Not sure if to use erase */
                     /* cloud_sources[i]->erase(number[j]); */
-                    
+
                     cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
                     cloud_sources[i]->points[number[j]].z = INT_MAX;
                 }
 
                 // Remove the points
-                /* it = number.begin(); */
+                /* it = number.begin();
 
-                /* pcl::PointCloud<pcl::PointXYZ>::iterator it = cld_ptr->begin() */
-                /* pcl::PointCloud<pcl::PointXYZ>::Ptr & cld_ptr */
+                pcl::PointCloud<pcl::PointXYZ>::iterator it = cld_ptr->begin();
+                pcl::PointCloud<pcl::PointXYZ>::Ptr &cld_ptr;
 
-                /* for (std::vector<int>::iterator it = number.begin(); it != number.end(); it++) */
-                /* for (int j = 0; j < number.size(); j++) */
-                /* { */
-                //cloud_sources[i]->erase(it);
-                //cloud_sources[i]->erase((*it)++);
-                /* cloud_sources[i]->empty; */
-                /* it = cloud_sources[i]->erase(20); */
+                for (std::vector<int>::iterator it = number.begin(); it != number.end(); it++)
+                    for (int j = 0; j < number.size(); j++)
+                    {
+                        cloud_sources[i]->erase(it);
+                        cloud_sources[i]->erase((*it)++);
+                        cloud_sources[i]->empty;
+                        it = cloud_sources[i]->erase(20);
 
-                /* pcl::PointCloud<PointT>::erase(it);
-                } */
+                        pcl::PointCloud<PointT>::erase(it);
+                    } */
 
                 /* Block until a transform is possible or it times out
                 Parameters:
@@ -293,8 +297,6 @@ namespace ros_util
             while return just terminates the program regardles of it's state. */
             return;
         }
-
-        PointCloudT::Ptr cloud_concatenated(new PointCloudT);
 
         // merge points
         /* for (size_t i = 0; i < input_topics_size_; i++) */

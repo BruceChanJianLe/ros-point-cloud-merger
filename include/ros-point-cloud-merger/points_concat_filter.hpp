@@ -1,6 +1,3 @@
-#ifndef ROS_POINTS_CONCAT_FILTER_H__
-#define ROS_POINTS_CONCAT_FILTER_H__
-
 /*
  * Copyright 2018-2019 Autoware Foundation. All rights reserved.
  *
@@ -16,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#ifndef ROS_POINTS_CONCAT_FILTER_H__
+#define ROS_POINTS_CONCAT_FILTER_H__
 
 #include <message_filters/subscriber.h>
 #include <message_filters/sync_policies/approximate_time.h>
@@ -102,8 +102,8 @@ private:
 
       std::string output_frame_id_;
 
-      std::string min_range;
-      std::string max_range;
+      std::string min_range_;
+      std::string max_range_;
 
       /* A callback is a function that is to be executed after another function has finished executing */
       /* void pointcloud_callback(PointCloudMsgT::Ptr &msg1, PointCloudMsgT::Ptr &msg2,
