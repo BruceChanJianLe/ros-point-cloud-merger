@@ -16,7 +16,13 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   tf2_ros
+  velodyne_pointcloud
 )
+
+find_package(Qt5Core REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(PCL 1.7 REQUIRED)
+find_package(OpenMP)
 
 find_package(PkgConfig REQUIRED)
 
@@ -39,9 +45,17 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+link_directories(
+  ${YAML_CPP_LIBRARY_DIRS}
+)
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${PCL_LIBRARY_DIRS}
 )
 
 add_executable(point_cloud_merger_node

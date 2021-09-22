@@ -12,6 +12,7 @@
   - [new file launch-points_concat_filter](#new-file-launch-points_concat_filter)
   - [new file hpp-points_concat_filter](#new-file-hpp-points_concat_filter)
   - [new file cpp-points_concat_filter](#new-file-cpp-points_concat_filter)
+- [ADDITIONAL NOTES](#additional-notes)
 - [REFERENCES](#references)
 - [GitHub Pages](#github-pages-1)
 
@@ -327,6 +328,12 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
   cloud_publisher_.publish(cloud_concatenated);
 }
 ```
+
+<br>
+
+# ADDITIONAL NOTES
+
+- after every change in the .cpp or .h file, need to do ```catkin_make```
 
 <br>
 

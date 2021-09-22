@@ -58,20 +58,19 @@ link_directories(
   ${PCL_LIBRARY_DIRS}
 )
 
-add_executable(point_cloud_merger_node
-  src/point_cloud_merger_node.cpp
+add_executable(point_cloud_merger
   src/point_cloud_merger.cpp
 )
 
-add_dependencies(point_cloud_merger_node
+add_dependencies(point_cloud_merger
   ${catkin_EXPORTED_TARGETS}
 )
 
-target_include_directories(point_cloud_merger_node PRIVATE
+target_include_directories(point_cloud_merger PRIVATE
   ${PCL_INCLUDE_DIRS}
 )
 
-target_link_libraries(point_cloud_merger_node
+target_link_libraries(point_cloud_merger
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
@@ -79,7 +78,7 @@ target_link_libraries(point_cloud_merger_node
 
 install(
   TARGETS
-    point_cloud_merger_node
+    point_cloud_merger
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

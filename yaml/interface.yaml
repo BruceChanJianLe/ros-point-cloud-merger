@@ -1,6 +1,10 @@
-- name: /points_concat_filter
+#- name: /points_concat_filter
+#  publish: [/points_concat]
+#  subscribe: [/config/points_concat_filter, /lidar*/points_raw]
+
+- name: /point_cloud_merge
   publish: [/points_concat]
-  subscribe: [/config/points_concat_filter, /lidar*/points_raw]
+  subscribe: [/config/point_cloud_merge, /lidar*/points_raw]
 
 - topic: points_concat
   type: sensor_msgs/PointCloud2

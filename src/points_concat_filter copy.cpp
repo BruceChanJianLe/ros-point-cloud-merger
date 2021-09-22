@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "ros-point-cloud-merger/points_concat_filter.hpp"
+#include "ros-point-cloud-merger/points_concat_filter.h"
 
 /* : can mean access modifiers, inheritance, initialization lists 
  * 
@@ -42,26 +42,6 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
            default_val – Value to use if the server doesn't contain this parameter. */
     private_node_handle_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
     private_node_handle_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
-    private_node_handle_.param("output_topic", output_topic_, std::string("/points_concat"));
-
-    /* Values from input_topics, output_frame_id, output_topic -> okay will load in .launch but not pmin_range... */
-    private_node_handle_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
-    private_node_handle_.param("pmax_range_x", pmax_range_x_, std::string("2.0"));
-    private_node_handle_.param("nmin_range_x", nmin_range_x_, std::string("-0.9"));
-    private_node_handle_.param("nmax_range_x", nmax_range_x_, std::string("-2.0"));
-
-    private_node_handle_.param("pmin_range_y", pmin_range_y_, std::string("0.9"));
-    private_node_handle_.param("pmax_range_y", pmax_range_y_, std::string("2.0"));
-    private_node_handle_.param("nmin_range_y", nmin_range_y_, std::string("-0.9"));
-    private_node_handle_.param("nmax_range_y", nmax_range_y_, std::string("-2.0"));
-
-    private_node_handle_.param("pmin_range_z", pmin_range_z_, std::string("0.0"));
-    private_node_handle_.param("pmax_range_z", pmax_range_z_, std::string("100.0"));
-
-    /* private_node_handle_.getParam("pmin_range_x", pmin_range_x_);
-    private_node_handle_.getParam("pmax_range_x", pmax_range_x_);
-    private_node_handle_.getParam("nmin_range_x", nmin_range_x_);
-    private_node_handle_.getParam("nmax_range_x", nmax_range_x_); */
 
     /* namespace YAML, class Node in library yaml-cpp */
     /* YAML::Node YAML::Load(const std::string &input) */
@@ -109,7 +89,7 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
    * topic – Topic to advertise on
    * queue_size – Maximum number of outgoing messages to be queued for delivery to subscribers
    */
-    cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>(output_topic_, 1);
+    cloud_publisher_ = node_handle_.advertise<PointCloudMsgT>("/points_concat", 1);
 }
 
 /* void PointsConcatFilter::pointcloud_callback(PointCloudMsgT::Ptr &msg1, PointCloudMsgT::Ptr &msg2,
@@ -141,60 +121,23 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
         shared pointer to the copy of the cloud */
             cloud_sources[i] = PointCloudT().makeShared();
 
+            /* int total = msgs[i]->data.size(); */
+            /* int total = (msgs[i]->row_step) * (msgs[i]->height);
+      for (int j = 0; j < total; j++)
+      { */
+            /* if (msgs[i]->data[j] > uint8_t(2) || msgs[i]->data[j] < uint8_t(0.9)) */
+            /* if (msgs[i]->data[j] > uint8_t(stoi(max_range)) || msgs[i]->data[j] < uint8_t(stoi(min_range)))
+        {
+          msgs[i]->data[j] = 0;
+        }
+      } */
+
             /*
         Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
         Parameters:
         msg – the PCLPointCloud2 binary blob
         cloud – the resultant pcl::PointCloud<T> */
             pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-
-            int total = cloud_sources[i]->size();
-
-            std::vector<int> number;
-            /* std::vector<int>::iterator it; */
-            int numbers_to_remove = 0;
-
-            for (int j = 0; j < total; j++)
-            {
-                bool outofbound_flag = false;
-
-                if ((cloud_sources[i]->points[j].x < stoi(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stoi(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stoi(pmax_range_x_))))
-                {
-                    /* cloud_sources[i]->points[j].x = INT_MAX; */
-                    outofbound_flag = true;
-                }
-                else if ((cloud_sources[i]->points[j].y < stoi(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stoi(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stoi(pmax_range_y_))))
-                {
-                    /* cloud_sources[i]->points[j].y = INT_MAX; */
-                    outofbound_flag = true;
-                }
-                /* else if ((cloud_sources[i]->points[j].z < stoi(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stoi(pmax_range_z_)))
-                { */
-                    /* cloud_sources[i]->points[j].z = INT_MAX; */
-                    /* outofbound_flag = true;
-                } */
-
-                if (outofbound_flag == true)
-                {
-                    /* it = number.begin();
-                        number.insert(it, j); */
-
-                    number.insert(number.begin(), j);
-                    numbers_to_remove++;
-                }
-            }
-
-            // Remove the points
-            for (int j = 0; j < numbers_to_remove; j++)
-            {
-                /* This breaks the organized structure of the cloud by setting the height to 1!
-                    Not sure if to use erase */
-                /* cloud_sources[i]->erase(number[j]); */
-
-                cloud_sources[i]->points[number[j]].x = INT_MAX;
-                cloud_sources[i]->points[number[j]].y = INT_MAX;
-                cloud_sources[i]->points[number[j]].z = INT_MAX;
-            }
 
             /* Block until a transform is possible or it times out
         Parameters:
@@ -236,8 +179,4 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
     cloud_concatenated->header.frame_id = output_frame_id_;
 
     cloud_publisher_.publish(cloud_concatenated);
-}
-
-PointsConcatFilter::~PointsConcatFilter()
-{
 }

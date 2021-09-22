@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <!-- this merges the PointCloud2s -->
 
-<!-- type is the file you want to launch in the package 
-  name is a unique identifier for your node. -->
 <launch>
   <!-- topics of PointCloud2 to concatenate -->
   <!-- <arg name="input_topics" default="$(optenv INPUT_TOPICS [/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7])" /> -->
@@ -24,18 +22,70 @@
   <arg name="output_frame_id" default="velodyne_frame" />
 
   <!-- replace with the desired min range from base_link -->
-  <arg name="min_range" default="0.9" />
+  <!-- p implies positive -->
+  <arg name="pmin_range" default="0.9" />
+  <!-- this is such that can show obstacle behind husky -->
+  <!-- n implies negative -->
+  <arg name="nmin_range" default="-0.9" />
   <!-- replace with the desired max range from base_link -->
-  <arg name="max_range" default="2.0" />
+  <arg name="pmax_range" default="10.0" />
+  <!-- this is such that can show obstacle other side of husky -->
+  <arg name="nmax_range" default="-10.0" />
 
+
+  <!-- replace with the desired min range from base_link -->
+  <!-- p implies positive -->
+  <arg name="pmin_range_x" default="0.9" />
+  <!-- this is such that can show obstacle behind husky -->
+  <!-- n implies negative -->
+  <arg name="nmin_range_x" default="-0.9" />
+  <!-- replace with the desired max range from base_link -->
+  <arg name="pmax_range_x" default="10.0" />
+  <!-- this is such that can show obstacle other side of husky -->
+  <arg name="nmax_range_x" default="-10.0" />
+
+
+  <!-- replace with the desired min range from base_link -->
+  <!-- p implies positive -->
+  <arg name="pmin_range_y" default="0.9" />
+  <!-- this is such that can show obstacle behind husky -->
+  <!-- n implies negative -->
+  <arg name="nmin_range_y" default="-0.9" />
+  <!-- replace with the desired max range from base_link -->
+  <arg name="pmax_range_y" default="10.0" />
+  <!-- this is such that can show obstacle other side of husky -->
+  <arg name="nmax_range_y" default="-10.0" />
+
+
+  <!-- replace with the desired min range from base_link -->
+  <!-- p implies positive -->
+  <arg name="pmin_range_z" default="0.0" />
+  <!-- replace with the desired max range from base_link -->
+  <arg name="pmax_range_z" default="100.0" />
+
+  <!-- type is the file you want to launch in the package 
+  name is a unique identifier for your node. -->
   <node name="points_concat_filter_node" output="screen" pkg="ros-point-cloud-merger" type="points_concat_filter_node">
     <param name="output_frame_id" value="$(arg output_frame_id)"/>
+
     <param name="input_topics" value="$(arg input_topics)"/>
+    <param name="output_topic" value="$(arg output_topic)"/>
 
-    <remap from="/points_concat" to="$(arg output_topic)"/>
 
-    <param name="min_range" value="$(arg min_range)" />
-    <param name="max_range" value="$(arg max_range)" />
+    <param name="pmin_range_x" value="$(arg pmin_range_x)" />
+    <param name="pmax_range_x" value="$(arg pmax_range_x)" />
+    <param name="nmin_range_x" value="$(arg nmin_range_x)" />
+    <param name="nmax_range_x" value="$(arg nmax_range_x)" />
+
+
+    <param name="pmin_range_y" value="$(arg pmin_range_y)" />
+    <param name="pmax_range_y" value="$(arg pmax_range_y)" />
+    <param name="nmin_range_y" value="$(arg nmin_range_y)" />
+    <param name="nmax_range_y" value="$(arg nmax_range_y)" />
+
+
+    <param name="pmin_range_z" value="$(arg pmin_range_z)" />
+    <param name="pmax_range_z" value="$(arg pmax_range_z)" />
   </node>
 
 </launch>

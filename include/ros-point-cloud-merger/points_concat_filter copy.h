@@ -17,21 +17,16 @@
 #ifndef ROS_POINTS_CONCAT_FILTER_H__
 #define ROS_POINTS_CONCAT_FILTER_H__
 
-// ROS Feature
-#include <ros/ros.h>
-
-// STL
-#include <string>
-
 #include <message_filters/subscriber.h>
 #include <message_filters/sync_policies/approximate_time.h>
 #include <message_filters/synchronizer.h>
 
 #include <pcl/point_types.h>
-
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/transforms.h>
+
+#include <ros/ros.h>
 
 #include <sensor_msgs/PointCloud2.h>
 
@@ -46,7 +41,6 @@ class PointsConcatFilter
 {
 public:
       PointsConcatFilter();
-      ~PointsConcatFilter();
 
 private:
       // individual points
@@ -88,7 +82,7 @@ private:
             handle will stop being called. Once all Subscriber for a given topic go out of scope the 
             topic will be unsubscribed. */
       // create a ros::Subscriber which is used to subscribe to a topic
-      ros::Subscriber config_subscriber_;
+      /* ros::Subscriber config_subscriber_; */
 
       /* Manages an advertisement on a specific topic. A Publisher should always be created through 
         a call to NodeHandle::advertise(), or copied from one that was. Once all copies of a specific 
@@ -105,22 +99,11 @@ private:
       size_t input_topics_size_;
 
       std::string input_topics_;
-      std::string output_topic_;
 
       std::string output_frame_id_;
 
-      std::string pmin_range_x_;
-      std::string pmax_range_x_;
-      std::string nmin_range_x_;
-      std::string nmax_range_x_;
-
-      std::string pmin_range_y_;
-      std::string pmax_range_y_;
-      std::string nmin_range_y_;
-      std::string nmax_range_y_;
-
-      std::string pmin_range_z_;
-      std::string pmax_range_z_;
+      std::string min_range_;
+      std::string max_range_;
 
       /* A callback is a function that is to be executed after another function has finished executing */
       /* void pointcloud_callback(PointCloudMsgT::Ptr &msg1, PointCloudMsgT::Ptr &msg2,

@@ -4,9 +4,10 @@
 <!-- type is the file you want to launch in the package 
   name is a unique identifier for your node. -->
 <launch>
+
     <!-- defining defaults -->
     <!-- replace with the desired input topics -->
-    <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
+    <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3]" />
     <!-- replace with the desired output topic -->
     <arg name="output_topic" default="/points_concat" />
     <!-- replace with the desired output frame -->
@@ -31,9 +32,9 @@
     <!-- n implies negative -->
     <arg name="nmin_range_x" default="-0.9" />
     <!-- replace with the desired max range from base_link -->
-    <arg name="pmax_range_x" default="2.0" />
+    <arg name="pmax_range_x" default="5.0" />
     <!-- this is such that can show obstacle other side of husky -->
-    <arg name="nmax_range_x" default="-2.0" />
+    <arg name="nmax_range_x" default="-5.0" />
 
     <!-- replace with the desired min range from base_link -->
     <!-- p implies positive -->
@@ -42,9 +43,9 @@
     <!-- n implies negative -->
     <arg name="nmin_range_y" default="-0.9" />
     <!-- replace with the desired max range from base_link -->
-    <arg name="pmax_range_y" default="2.0" />
+    <arg name="pmax_range_y" default="5.0" />
     <!-- this is such that can show obstacle other side of husky -->
-    <arg name="nmax_range_y" default="-2.0" />
+    <arg name="nmax_range_y" default="-5.0" />
 
     <!-- replace with the desired min range from base_link -->
     <!-- p implies positive -->
@@ -52,7 +53,8 @@
     <!-- replace with the desired max range from base_link -->
     <arg name="pmax_range_z" default="100.0" />
     
-    <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
+    <!-- <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node"> -->
+    <node name="point_cloud_merger" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger">
         <param name="output_frame_id" value="$(arg output_frame_id)"/>
 
         <param name="input_topics" value="$(arg input_topics)"/>

@@ -50,6 +50,7 @@ namespace ros_util
          * param_val – Storage for the retrieved value.
          * default_val – Value to use if the server doesn't contain this parameter. 
          */
+        
         /* change the values here if want to change values */
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
@@ -212,21 +213,21 @@ namespace ros_util
                 {
                     bool outofbound_flag = false;
 
-                    if ((cloud_sources[i]->points[j].x < stoi(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stoi(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stoi(pmax_range_x_))))
+                    if ((cloud_sources[i]->points[j].x < stod(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stod(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stod(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stod(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stod(pmax_range_x_))))
                     {
                         /* cloud_sources[i]->points[j].x = INT_MAX; */
                         outofbound_flag = true;
                     }
-                    else if ((cloud_sources[i]->points[j].y < stoi(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stoi(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stoi(pmax_range_y_))))
+                    else if ((cloud_sources[i]->points[j].y < stod(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stod(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stod(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stod(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stod(pmax_range_y_))))
                     {
                         /* cloud_sources[i]->points[j].y = INT_MAX; */
                         outofbound_flag = true;
                     }
-                    else if ((cloud_sources[i]->points[j].z < stoi(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stoi(pmax_range_z_)))
-                    {
+                    /* else if ((cloud_sources[i]->points[j].z < stod(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stod(pmax_range_z_)))
+                    { */
                         /* cloud_sources[i]->points[j].z = INT_MAX; */
-                        outofbound_flag = true;
-                    }
+                        /* outofbound_flag = true;
+                    } */
 
                     if (outofbound_flag == true)
                     {
