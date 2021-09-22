@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<!-- <?xml version="1.0"?> -->
 <!-- this merges the PointCloud2s -->
 
 <!-- type is the file you want to launch in the package 
@@ -52,16 +52,12 @@
     <!-- replace with the desired max range from base_link -->
     <arg name="pmax_range_z" default="100.0" />
     
+    <!-- name cannot be namespace -->
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
         <param name="output_frame_id" value="$(arg output_frame_id)"/>
 
         <param name="input_topics" value="$(arg input_topics)"/>
         <param name="output_topic" value="$(arg output_topic)"/>
-
-        <!-- <param name="pmin_range" value="$(arg pmin_range)" />
-        <param name="pmax_range" value="$(arg pmax_range)" />
-        <param name="nmin_range" value="$(arg nmin_range)" />
-        <param name="nmax_range" value="$(arg nmax_range)" /> -->
 
         <param name="pmin_range_x" value="$(arg pmin_range_x)" />
         <param name="pmax_range_x" value="$(arg pmax_range_x)" />

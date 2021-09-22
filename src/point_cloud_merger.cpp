@@ -50,7 +50,7 @@ namespace ros_util
          * param_val – Storage for the retrieved value.
          * default_val – Value to use if the server doesn't contain this parameter. 
          */
-        
+
         /* change the values here if want to change values */
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
@@ -225,8 +225,8 @@ namespace ros_util
                     }
                     /* else if ((cloud_sources[i]->points[j].z < stod(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stod(pmax_range_z_)))
                     { */
-                        /* cloud_sources[i]->points[j].z = INT_MAX; */
-                        /* outofbound_flag = true;
+                    /* cloud_sources[i]->points[j].z = INT_MAX; */
+                    /* outofbound_flag = true;
                     } */
 
                     if (outofbound_flag == true)
@@ -239,17 +239,47 @@ namespace ros_util
                     }
                 }
 
-                // Remove the points
-                for (int j = 0; j < numbers_to_remove; j++)
+                /* for (int j = 0; j < MAX_SIZE; j++)
                 {
+                    cloud_source[j] = cloud_sources[j];
+                }
+ */
+                // Remove the points
+                /* for (int j = 0; j < numbers_to_remove; j++)
+                { */
                     /* This breaks the organized structure of the cloud by setting the height to 1!
                     Not sure if to use erase */
                     /* cloud_sources[i]->erase(number[j]); */
 
-                    cloud_sources[i]->points[number[j]].x = INT_MAX;
+                    /* cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
                     cloud_sources[i]->points[number[j]].z = INT_MAX;
+                } */
+                
+                // remove out of bound points
+                PointCloudT::Ptr cloud_source[MAX_SIZE];
+
+                int k = 0;
+                for (int j = 0; j < cloud_sources[i]->size() - numbers_to_remove; j++)
+                {
+                    /* if (checkInside(number, j) == false)
+                    {
+                        cloud_source[i]->points[j] = cloud_sources[i]->points[k];
+                    } */
+                    bool inside = false;
+                    for (int l = 0; l < number.size(); l++) {
+                        if (k == number[l]) {
+                            inside = true;
+                        }
+                    }
+                    
+                    if (inside == false) {
+                        cloud_source[i]->points[j] = cloud_sources[i]->points[k];
+                    }
+                    k++;
                 }
+
+                cloud_source[i] = cloud_sources[i];
 
                 // Remove the points
                 /* it = number.begin();
@@ -319,5 +349,17 @@ namespace ros_util
     point_cloud_merger::~point_cloud_merger()
     {
     }
+
+    /* bool point_cloud_merger::checkInside(std::vector<int> number, int current)
+    {
+        for (int i = 0; i < number.size(); i++)
+        {
+            if (current = number[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    } */
 
 } // namespace ros_util

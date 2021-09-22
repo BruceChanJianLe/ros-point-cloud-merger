@@ -58,6 +58,8 @@ namespace ros_util
         // destructor
         ~point_cloud_merger();
 
+        /* bool checkInside(std::vector<int>, int); */
+
     private:
         /* The typedef declaration provides a way to declare an identifier as a type alias, to be used to replace a possibly complex type name */
         // individual points(x, y, z, intensity)
