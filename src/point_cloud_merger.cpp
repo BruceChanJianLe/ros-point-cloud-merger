@@ -56,24 +56,6 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
-        /* private_nh_.param("pmin_range", pmin_range_, std::string("0.9"));
-        private_nh_.param("pmax_range", pmax_range_, std::string("2.0"));
-        private_nh_.param("nmin_range", nmin_range_, std::string("-0.9"));
-        private_nh_.param("nmax_range", nmax_range_, std::string("-2.0")); */
-
-        /* private_nh_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
-        private_nh_.param("pmax_range_x", pmax_range_x_, std::string("10.0"));
-        private_nh_.param("nmin_range_x", nmin_range_x_, std::string("-0.9"));
-        private_nh_.param("nmax_range_x", nmax_range_x_, std::string("-10.0"));
-
-        private_nh_.param("pmin_range_y", pmin_range_y_, std::string("0.9"));
-        private_nh_.param("pmax_range_y", pmax_range_y_, std::string("10.0"));
-        private_nh_.param("nmin_range_y", nmin_range_y_, std::string("-0.9"));
-        private_nh_.param("nmax_range_y", nmax_range_y_, std::string("-10.0"));
-
-        private_nh_.param("pmin_range_z", pmin_range_z_, std::string("0."));
-        private_nh_.param("pmax_range_z", pmax_range_z_, std::string("100.0")); */
-
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
         private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
         private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
@@ -84,7 +66,7 @@ namespace ros_util
         private_nh_.param("nmin_range_y", nmin_range_y_, double(-0.9));
         private_nh_.param("nmax_range_y", nmax_range_y_, double(-2.0));
 
-        private_nh_.param("pmin_range_z", pmin_range_z_, double(0.0));
+        private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
         /* namespace YAML, class Node in library yaml-cpp */
@@ -189,12 +171,16 @@ namespace ros_util
         if the condition is false, the program is terminated and an error message is displayed.  */
         assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
 
-        /* PointCloudMsgT::Ptr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
+        
+        // Array
+        PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
         PointCloudT::Ptr cloud_sources[MAX_SIZE];
 
         PointCloudT::Ptr cloud_concatenated(new PointCloudT);
+
+        PointCloudT::Ptr cloud_source[MAX_SIZE];
 
         // transform points
         try
@@ -208,6 +194,7 @@ namespace ros_util
                     Returns:
                     shared pointer to the copy of the cloud */
                 cloud_sources[i] = PointCloudT().makeShared();
+                cloud_source[i] = PointCloudT().makeShared();
 
                 /*
                 Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
@@ -215,6 +202,9 @@ namespace ros_util
                 msg – the PCLPointCloud2 binary blob
                 cloud – the resultant pcl::PointCloud<T> */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
+
+                // !!!! DEBUG HERE in cpp one pointer cannot point to 2
+                pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
                 int total = cloud_sources[i]->size();
 
@@ -226,90 +216,64 @@ namespace ros_util
                 {
                     bool outofbound_flag = false;
 
-                    if ((cloud_sources[i]->points[j].x < nmax_range_x_) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x > pmax_range_x_)))
+                    if ((cloud_sources[i]->points[j].x < nmax_range_x_) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) || (cloud_sources[i]->points[j].x > pmax_range_x_))
                     {
                         outofbound_flag = true;
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                     }
-                    else if ((cloud_sources[i]->points[j].y < nmax_range_y_) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y > pmax_range_y_)))
+                    else if ((cloud_sources[i]->points[j].y < nmax_range_y_) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)) || (cloud_sources[i]->points[j].y > pmax_range_y_))
                     {
                         outofbound_flag = true;
+                        /* cloud_sources[i]->points[j].y = INT_MAX; */
                     }
-                    /* else if ((cloud_sources[i]->points[j].z < stod(pmin_range_z_)) || (cloud_sources[i]->points[j].z > stod(pmax_range_z_)))
-                    { */
-                    /* cloud_sources[i]->points[j].z = INT_MAX; */
-                    /* outofbound_flag = true;
+                    /* else if ((cloud_sources[i]->points[j].z < pmin_range_z_) || (cloud_sources[i]->points[j].z > pmax_range_z_))
+                    {
+                        outofbound_flag = true;
                     } */
 
                     if (outofbound_flag == true)
                     {
-                        /* it = number.begin();
-                        number.insert(it, j); */
-                        // add points into vector 
-                        number.insert(number.begin(), j);
-                        numbers_to_remove++;
+                        // add points into vector
+                        number.insert(number.end(), j);
+                        numbers_to_remove++; // or can number.size()
                     }
                 }
 
-                /* for (int j = 0; j < MAX_SIZE; j++)
+                // Remove the points by setting to inf
+                /* for (int j = 0; j < numbers_to_remove; j++)
                 {
-                    cloud_source[j] = cloud_sources[j];
-                }
- */
-                // Remove the points
-                for (int j = 0; j < numbers_to_remove; j++)
-                {
-                    /* This breaks the organized structure of the cloud by setting the height to 1!
-                    Not sure if to use erase */
-                    /* cloud_sources[i]->erase(number[j]); */
-
                     cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
-                    /* cloud_sources[i]->points[number[j]].z = INT_MAX; */
-                }
-                
-                /* !!!!!!!!!! using a boost::shared_ptr before it's initialized somewhere */
+                    cloud_sources[i]->points[number[j]].z = INT_MAX;
+                } */
 
                 // remove out of bound points
-                /* PointCloudT::Ptr cloud_source[MAX_SIZE];
+                cloud_source[i]->clear();
 
-                int k = 0;
-                for (int j = 0; j < cloud_sources[i]->size() - numbers_to_remove; j++)
-                { */
+                int j = 0;
+                for (int k = 0; k < cloud_sources[i]->size(); k++)
+                {
                     /* if (checkInside(number, j) == false)
                     {
                         cloud_source[i]->points[j] = cloud_sources[i]->points[k];
                     } */
-                    /* bool inside = false;
-                    for (int l = 0; l < number.size(); l++) {
-                        if (k == number[l]) {
-                            inside = true;
+                    bool is_inside = false;
+                    for (int l = 0; l < number.size(); l++)
+                    {
+                        if (k == number[l])
+                        {
+                            is_inside = true;
                         }
                     }
-                    
-                    if (inside == false) {
+                    // if index is not in vector
+                    if (is_inside == false)
+                    {
                         cloud_source[i]->points[j] = cloud_sources[i]->points[k];
                     }
-                    k++;
+                    j++;
                 }
 
-                cloud_sources[i].swap(cloud_source[i]); */
-
-                // Remove the points
-                /* it = number.begin();
-
-                pcl::PointCloud<pcl::PointXYZ>::iterator it = cld_ptr->begin();
-                pcl::PointCloud<pcl::PointXYZ>::Ptr &cld_ptr;
-
-                for (std::vector<int>::iterator it = number.begin(); it != number.end(); it++)
-                    for (int j = 0; j < number.size(); j++)
-                    {
-                        cloud_sources[i]->erase(it);
-                        cloud_sources[i]->erase((*it)++);
-                        cloud_sources[i]->empty;
-                        it = cloud_sources[i]->erase(20);
-
-                        pcl::PointCloud<PointT>::erase(it);
-                    } */
+                cloud_sources[i].swap(cloud_source[i]);
 
                 /* Block until a transform is possible or it times out
                 Parameters:
