@@ -93,7 +93,7 @@ namespace ros_util
 
         std::string output_frame_id_;
 
-        std::string pmin_range_x_;
+        /* std::string pmin_range_x_;
         std::string pmax_range_x_;
         std::string nmin_range_x_;
         std::string nmax_range_x_;
@@ -104,7 +104,20 @@ namespace ros_util
         std::string nmax_range_y_;
 
         std::string pmin_range_z_;
-        std::string pmax_range_z_;
+        std::string pmax_range_z_; */
+
+        double pmin_range_x_;
+        double pmax_range_x_;
+        double nmin_range_x_;
+        double nmax_range_x_;
+
+        double pmin_range_y_;
+        double pmax_range_y_;
+        double nmin_range_y_;
+        double nmax_range_y_;
+
+        double pmin_range_z_;
+        double pmax_range_z_;
 
         /* std::string pmin_range_;
         std::string pmax_range_;
