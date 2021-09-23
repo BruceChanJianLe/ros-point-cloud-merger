@@ -16,7 +16,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   tf2_ros
-  velodyne_pointcloud
 )
 
 find_package(Qt5Core REQUIRED)
