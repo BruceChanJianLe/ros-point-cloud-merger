@@ -75,17 +75,17 @@ namespace ros_util
         private_nh_.param("pmax_range_z", pmax_range_z_, std::string("100.0")); */
 
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
-        private_nh_.param("pmax_range_x", pmax_range_x_, double(10.0));
+        private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
         private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
-        private_nh_.param("nmax_range_x", nmax_range_x_, double(-10.0));
+        private_nh_.param("nmax_range_x", nmax_range_x_, double(-2.0));
 
         private_nh_.param("pmin_range_y", pmin_range_y_, double(0.9));
-        private_nh_.param("pmax_range_y", pmax_range_y_, double(10.0));
+        private_nh_.param("pmax_range_y", pmax_range_y_, double(2.0));
         private_nh_.param("nmin_range_y", nmin_range_y_, double(-0.9));
-        private_nh_.param("nmax_range_y", nmax_range_y_, double(-10.0));
+        private_nh_.param("nmax_range_y", nmax_range_y_, double(-2.0));
 
         private_nh_.param("pmin_range_z", pmin_range_z_, double(0.0));
-        private_nh_.param("pmax_range_z", pmax_range_z_, double(100));
+        private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
         /* namespace YAML, class Node in library yaml-cpp */
         /* YAML::Node YAML::Load(const std::string &input) */
@@ -264,9 +264,11 @@ namespace ros_util
 
                     cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
-                    cloud_sources[i]->points[number[j]].z = INT_MAX;
+                    /* cloud_sources[i]->points[number[j]].z = INT_MAX; */
                 }
                 
+                /* !!!!!!!!!! using a boost::shared_ptr before it's initialized somewhere */
+
                 // remove out of bound points
                 /* PointCloudT::Ptr cloud_source[MAX_SIZE];
 
@@ -290,7 +292,7 @@ namespace ros_util
                     k++;
                 }
 
-                cloud_source[i] = cloud_sources[i]; */
+                cloud_sources[i].swap(cloud_source[i]); */
 
                 // Remove the points
                 /* it = number.begin();

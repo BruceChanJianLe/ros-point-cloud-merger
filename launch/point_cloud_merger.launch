@@ -31,9 +31,9 @@
     <!-- n implies negative -->
     <arg name="nmin_range_x" default="-0.9" />
     <!-- replace with the desired max range from base_link -->
-    <arg name="pmax_range_x" default="2.0" />
+    <arg name="pmax_range_x" default="5.0" />
     <!-- this is such that can show obstacle other side of husky -->
-    <arg name="nmax_range_x" default="-2.0" />
+    <arg name="nmax_range_x" default="-5.0" />
 
     <!-- replace with the desired min range from base_link -->
     <!-- p implies positive -->
@@ -42,9 +42,9 @@
     <!-- n implies negative -->
     <arg name="nmin_range_y" default="-0.9" />
     <!-- replace with the desired max range from base_link -->
-    <arg name="pmax_range_y" default="2.0" />
+    <arg name="pmax_range_y" default="5.0" />
     <!-- this is such that can show obstacle other side of husky -->
-    <arg name="nmax_range_y" default="-2.0" />
+    <arg name="nmax_range_y" default="-5.0" />
 
     <!-- replace with the desired min range from base_link -->
     <!-- p implies positive -->
