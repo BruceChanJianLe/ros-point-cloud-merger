@@ -45,20 +45,20 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
     private_node_handle_.param("output_topic", output_topic_, std::string("/points_concat"));
 
     /* Values from input_topics, output_frame_id, output_topic -> okay will load in .launch but not pmin_range... */
-    /* private_node_handle_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
-    private_node_handle_.param("pmax_range_x", pmax_range_x_, std::string("2.0"));
+    private_node_handle_.param("pmin_range_x", pmin_range_x_, std::string("0.9"));
+    private_node_handle_.param("pmax_range_x", pmax_range_x_, std::string("5.0"));
     private_node_handle_.param("nmin_range_x", nmin_range_x_, std::string("-0.9"));
-    private_node_handle_.param("nmax_range_x", nmax_range_x_, std::string("-2.0"));
+    private_node_handle_.param("nmax_range_x", nmax_range_x_, std::string("-5.0"));
 
     private_node_handle_.param("pmin_range_y", pmin_range_y_, std::string("0.9"));
-    private_node_handle_.param("pmax_range_y", pmax_range_y_, std::string("2.0"));
+    private_node_handle_.param("pmax_range_y", pmax_range_y_, std::string("5.0"));
     private_node_handle_.param("nmin_range_y", nmin_range_y_, std::string("-0.9"));
-    private_node_handle_.param("nmax_range_y", nmax_range_y_, std::string("-2.0"));
+    private_node_handle_.param("nmax_range_y", nmax_range_y_, std::string("-5.0"));
 
     private_node_handle_.param("pmin_range_z", pmin_range_z_, std::string("0.0"));
-    private_node_handle_.param("pmax_range_z", pmax_range_z_, std::string("100.0")); */
+    private_node_handle_.param("pmax_range_z", pmax_range_z_, std::string("100.0"));
 
-    private_node_handle_.param("pmin_range_x", pmin_range_x_, double(0.9));
+    /* private_node_handle_.param("pmin_range_x", pmin_range_x_, double(0.9));
     private_node_handle_.param("pmax_range_x", pmax_range_x_, double(2.0));
     private_node_handle_.param("nmin_range_x", nmin_range_x_, double(-0.9));
     private_node_handle_.param("nmax_range_x", nmax_range_x_, double(-2.0));
@@ -69,7 +69,7 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
     private_node_handle_.param("nmax_range_y", nmax_range_y_, double(-2.0));
 
     private_node_handle_.param("pmin_range_z", pmin_range_z_, double(0.0));
-    private_node_handle_.param("pmax_range_z", pmax_range_z_, double(100.0));
+    private_node_handle_.param("pmax_range_z", pmax_range_z_, double(100.0)); */
 
     /* private_node_handle_.getParam("pmin_range_x", pmin_range_x_);
     private_node_handle_.getParam("pmax_range_x", pmax_range_x_);
@@ -171,14 +171,14 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
             {
                 bool outofbound_flag = false;
 
-                /* if ((cloud_sources[i]->points[j].x < stoi(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stoi(pmin_range_x_))) || ((cloud_sources[i]->points[j].x > stoi(nmin_range_x_)) && (cloud_sources[i]->points[j].x > stoi(pmax_range_x_)))) */
-                if ((cloud_sources[i]->points[j].x < nmax_range_x_) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) || ((cloud_sources[i]->points[j].x > pmax_range_x_)))
+                if ((cloud_sources[i]->points[j].x < stod(nmax_range_x_)) || ((cloud_sources[i]->points[j].x > stod(nmin_range_x_)) && (cloud_sources[i]->points[j].x < stod(pmin_range_x_))) || (cloud_sources[i]->points[j].x > stod(pmax_range_x_)))
+                /* if ((cloud_sources[i]->points[j].x < nmax_range_x_) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) || ((cloud_sources[i]->points[j].x > pmax_range_x_))) */
                 {
                     /* cloud_sources[i]->points[j].x = INT_MAX; */
                     outofbound_flag = true;
                 }
-                /* else if ((cloud_sources[i]->points[j].y < stoi(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stoi(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stoi(nmin_range_y_)) && (cloud_sources[i]->points[j].y > stoi(pmax_range_y_)))) */
-                else if ((cloud_sources[i]->points[j].y < nmax_range_y_) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)) || ((cloud_sources[i]->points[j].y > pmax_range_y_)))
+                else if ((cloud_sources[i]->points[j].y < stod(nmax_range_y_)) || ((cloud_sources[i]->points[j].y > stod(nmin_range_y_)) && (cloud_sources[i]->points[j].y < stod(pmin_range_y_))) || ((cloud_sources[i]->points[j].y > stod(pmax_range_y_))))
+                /* else if ((cloud_sources[i]->points[j].y < nmax_range_y_) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)) || ((cloud_sources[i]->points[j].y > pmax_range_y_))) */
                 {
                     /* cloud_sources[i]->points[j].y = INT_MAX; */
                     outofbound_flag = true;

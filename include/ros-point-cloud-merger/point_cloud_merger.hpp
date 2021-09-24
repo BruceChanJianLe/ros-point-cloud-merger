@@ -82,6 +82,10 @@ namespace ros_util
         message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
         message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
 
+        /* add */
+        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscriber_[8];
+        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizers_; */
+
         /* ros::Subscriber config_subscriber_; */
         ros::Publisher cloud_publisher_;
         
@@ -92,6 +96,11 @@ namespace ros_util
         std::string output_topic_;
 
         std::string output_frame_id_;
+
+        double pmin_range_;
+        double pmax_range_;
+        double nmin_range_;
+        double nmax_range_;
 
         double pmin_range_x_;
         double pmax_range_x_;

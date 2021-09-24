@@ -71,7 +71,7 @@
     <param name="input_topics" value="$(arg input_topics)"/>
     <param name="output_topic" value="$(arg output_topic)"/>
 
-    <param name="pmin_range_x" type="double" value="$(arg pmin_range_x)" />
+    <!-- <param name="pmin_range_x" type="double" value="$(arg pmin_range_x)" />
     <param name="pmax_range_x" type="double" value="$(arg pmax_range_x)" />
     <param name="nmin_range_x" type="double" value="$(arg nmin_range_x)" />
     <param name="nmax_range_x" type="double" value="$(arg nmax_range_x)" />
@@ -82,10 +82,10 @@
     <param name="nmax_range_y" type="double" value="$(arg nmax_range_y)" />
 
     <param name="pmin_range_z" type="double" value="$(arg pmin_range_z)" />
-    <param name="pmax_range_z" type="double" value="$(arg pmax_range_z)" />
+    <param name="pmax_range_z" type="double" value="$(arg pmax_range_z)" /> -->
 
 
-    <!-- <param name="pmin_range_x" value="$(arg pmin_range_x)" />
+    <param name="pmin_range_x" value="$(arg pmin_range_x)" />
     <param name="pmax_range_x" value="$(arg pmax_range_x)" />
     <param name="nmin_range_x" value="$(arg nmin_range_x)" />
     <param name="nmax_range_x" value="$(arg nmax_range_x)" />
@@ -98,7 +98,7 @@
 
 
     <param name="pmin_range_z" value="$(arg pmin_range_z)" />
-    <param name="pmax_range_z" value="$(arg pmax_range_z)" /> -->
+    <param name="pmax_range_z" value="$(arg pmax_range_z)" />
   </node>
 
 </launch>

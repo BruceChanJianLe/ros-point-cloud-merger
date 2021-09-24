@@ -56,6 +56,11 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
+        private_nh_.param("pmin_range", pmin_range_, double(0.9));
+        private_nh_.param("pmax_range", pmax_range_, double(2.0));
+        private_nh_.param("nmin_range", nmin_range_, double(-0.9));
+        private_nh_.param("nmax_range", nmax_range_, double(-2.0));
+
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
         private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
         private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
@@ -133,11 +138,17 @@ namespace ros_util
                 /* Constructor See the ros::NodeHandle::subscribe() variants for more information on the parameters */
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1);
+
+                /* cloud_subscriber_[i] =
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1); */
             }
             else
             {
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1);
+
+                /* cloud_subscriber_[i] =
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1); */
             }
         }
 
@@ -145,6 +156,10 @@ namespace ros_util
         cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
             SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
             *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
+
+        /* cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
+            SyncPolicyT(10), *cloud_subscriber_[0], *cloud_subscriber_[1], *cloud_subscriber_[2], *cloud_subscriber_[3],
+            *cloud_subscriber_[4], *cloud_subscriber_[5], *cloud_subscriber_[6], *cloud_subscriber_[7]); */
 
         /* callback */
         cloud_synchronizer_->registerCallback(
@@ -172,7 +187,7 @@ namespace ros_util
         assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
 
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-        
+
         // Array
         PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
@@ -206,7 +221,7 @@ namespace ros_util
                 // !!!! DEBUG HERE in cpp one pointer cannot point to 2
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
-                int total = cloud_sources[i]->size();
+                int total = cloud_source[i]->size();
 
                 std::vector<int> number;
                 /* std::vector<int>::iterator it; */
@@ -216,47 +231,55 @@ namespace ros_util
                 {
                     bool outofbound_flag = false;
 
-                    if ((cloud_sources[i]->points[j].x < nmax_range_x_) || ((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) || (cloud_sources[i]->points[j].x > pmax_range_x_))
+                    if ((cloud_sources[i]->points[j].x < nmax_range_x_) || (cloud_sources[i]->points[j].y < nmax_range_y_))
                     {
                         outofbound_flag = true;
                         /* cloud_sources[i]->points[j].x = INT_MAX; */
                     }
-                    else if ((cloud_sources[i]->points[j].y < nmax_range_y_) || ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)) || (cloud_sources[i]->points[j].y > pmax_range_y_))
+                    else if ((cloud_sources[i]->points[j].x > pmax_range_x_) || (cloud_sources[i]->points[j].y > pmax_range_y_))
                     {
                         outofbound_flag = true;
-                        /* cloud_sources[i]->points[j].y = INT_MAX; */
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                     }
-                    /* else if ((cloud_sources[i]->points[j].z < pmin_range_z_) || (cloud_sources[i]->points[j].z > pmax_range_z_))
+                    else if (((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) && ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)))
                     {
                         outofbound_flag = true;
-                    } */
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
+                    }
 
                     if (outofbound_flag == true)
                     {
-                        // add points into vector
-                        number.insert(number.end(), j);
-                        numbers_to_remove++; // or can number.size()
+                        number.insert(number.begin(), j);
+                        numbers_to_remove++;
                     }
                 }
 
                 // Remove the points by setting to inf
-                /* for (int j = 0; j < numbers_to_remove; j++)
+                for (int j = 0; j < numbers_to_remove; j++)
                 {
                     cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
                     cloud_sources[i]->points[number[j]].z = INT_MAX;
+                }
+
+                /* for (int j = 0; j < total; j++)
+                {
+                    cloud_sources[i]->points[j].x = INT_MAX;
+                    cloud_sources[i]->points[j].y = INT_MAX;
+                    cloud_sources[i]->points[j].z = INT_MAX;
                 } */
 
                 // remove out of bound points
-                cloud_source[i]->clear();
+                /* cloud_source[i]->clear(); */
 
-                int j = 0;
-                for (int k = 0; k < cloud_sources[i]->size(); k++)
-                {
-                    /* if (checkInside(number, j) == false)
+                /* if (checkInside(number, j) == false)
                     {
                         cloud_source[i]->points[j] = cloud_sources[i]->points[k];
                     } */
+
+                /* int j = 0;
+                for (int k = 0; k < cloud_sources[i]->size(); k++)
+                {
                     bool is_inside = false;
                     for (int l = 0; l < number.size(); l++)
                     {
@@ -266,14 +289,16 @@ namespace ros_util
                         }
                     }
                     // if index is not in vector
-                    if (is_inside == false)
+                    if (is_inside == true)
                     {
-                        cloud_source[i]->points[j] = cloud_sources[i]->points[k];
+                        cloud_source[i]->points[j].x = cloud_sources[i]->points[k].x;
+                        cloud_source[i]->points[j].y = cloud_sources[i]->points[k].y;
+                        cloud_source[i]->points[j].z = cloud_sources[i]->points[k].z;
                     }
                     j++;
                 }
 
-                cloud_sources[i].swap(cloud_source[i]);
+                cloud_sources[i].swap(cloud_source[i]); */
 
                 /* Block until a transform is possible or it times out
                 Parameters:
