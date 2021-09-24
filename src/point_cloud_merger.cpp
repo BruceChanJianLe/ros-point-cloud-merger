@@ -236,36 +236,39 @@ namespace ros_util
                     if ((cloud_sources[i]->points[j].x > pmax_range_x_) || (cloud_sources[i]->points[j].y > pmax_range_y_))
                     {
                         outofbound_flag = true;
-                        cloud_sources[i]->points[j].x = INT_MAX;
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                         number.push_back(j);
                     }
                     else if ((cloud_sources[i]->points[j].x < nmax_range_x_) || (cloud_sources[i]->points[j].y < nmax_range_y_))
                     {
                         outofbound_flag = true;
-                        cloud_sources[i]->points[j].x = INT_MAX;
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                         number.push_back(j);
                     }
                     else if (((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) && ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)))
                     {
                         outofbound_flag = true;
-                        cloud_sources[i]->points[j].x = INT_MAX;
+                        /* cloud_sources[i]->points[j].x = INT_MAX; */
                         number.push_back(j);
                     }
-                    /* else if (outofbound_flag == false)
+                    else if (outofbound_flag == false)
                     {
                         cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
                         cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
                         cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
+                        current_new++;
                     }
-                    current_new++; */
                 }
-
-                /* for (int i = current_new; i < cloud_source[i]->size() - current_new; i++)
+                
+                if (cloud_source[i]->size() > current_new)
                 {
-                    cloud_source[i]->points[i].x = INT_MAX;
-                    cloud_source[i]->points[i].y = INT_MAX;
-                    cloud_source[i]->points[i].z = INT_MAX;
-                } */
+                    for (int p = current_new; p < cloud_source[i]->size(); p++)
+                    {
+                        cloud_source[i]->points[p].x = INT_MAX;
+                        cloud_source[i]->points[p].y = INT_MAX;
+                        cloud_source[i]->points[p].z = INT_MAX;
+                    }
+                }
 
                 /* cloud_sources[i].swap(cloud_source[i]); */
 
@@ -274,43 +277,6 @@ namespace ros_util
                         cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
                         cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
                         cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
-                        current_new++;
-                    } */
-
-                // +ve x axis and y axis not considered
-                /* if (outofbound_flag == false)
-                    {
-                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
-                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
-                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
-                        current_new++;
-                    } */
-
-                /*  if (outofbound_flag == true)
-                    {
-                        number.insert(number.begin(), j);
-                        numbers_to_remove++;
-                        number.push_back(j);
-                    } */
-
-                /* int current_new = 0;
-                    for (int k = 0; k < cloud_sources[i]->size(); k++)
-                    {
-                        bool is_inside = true;
-                        for (int l = 0; l < number.size(); l++)
-                        {
-                            if (k == number[l])
-                            {
-                                is_inside = false;
-                            }
-                        }
-                        // if index is not in vector
-                        if (is_inside == true)
-                        {
-                            cloud_source[i]->points[current_new].x = cloud_sources[i]->points[k].x;
-                            cloud_source[i]->points[current_new].y = cloud_sources[i]->points[k].y;
-                            cloud_source[i]->points[current_new].z = cloud_sources[i]->points[k].z;
-                        }
                         current_new++;
                     } */
 
@@ -378,7 +344,7 @@ namespace ros_util
                 fixed_frame(msgs[i]->header.frame_id) – fixed TF frame
                 cloud_out(*cloud_sources[i]) – the output point cloud
                 tf_listener(tf_listener_) – a TF listener object */
-                pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_sources[i], msgs[i]->header.frame_id, *cloud_sources[i], tf_listener_);
+                pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tf_listener_);
             }
         }
         catch (tf::TransformException &ex)
@@ -394,7 +360,7 @@ namespace ros_util
         /* for (size_t i = 0; i < input_topics_size_; i++) */
         for (int i = ZERO; i < input_size; i++)
         {
-            *cloud_concatenated += *cloud_sources[i];
+            *cloud_concatenated += *cloud_source[i];
         }
 
         // publish points
