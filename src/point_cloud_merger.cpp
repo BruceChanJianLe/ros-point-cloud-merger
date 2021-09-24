@@ -221,55 +221,115 @@ namespace ros_util
                 // !!!! DEBUG HERE in cpp one pointer cannot point to 2
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
-                int total = cloud_source[i]->size();
+                /* int total = cloud_source[i]->size(); */
 
                 std::vector<int> number;
                 /* std::vector<int>::iterator it; */
-                int numbers_to_remove = 0;
+                /* int numbers_to_remove = 0; */
 
-                for (int j = 0; j < total; j++)
+                int current_new = 0;
+
+                for (int j = 0; j < cloud_sources[i]->size(); j++)
                 {
                     bool outofbound_flag = false;
 
-                    if ((cloud_sources[i]->points[j].x < nmax_range_x_) || (cloud_sources[i]->points[j].y < nmax_range_y_))
+                    if ((cloud_sources[i]->points[j].x > pmax_range_x_) || (cloud_sources[i]->points[j].y > pmax_range_y_))
                     {
                         outofbound_flag = true;
-                        /* cloud_sources[i]->points[j].x = INT_MAX; */
+                        cloud_sources[i]->points[j].x = INT_MAX;
+                        number.push_back(j);
                     }
-                    else if ((cloud_sources[i]->points[j].x > pmax_range_x_) || (cloud_sources[i]->points[j].y > pmax_range_y_))
+                    else if ((cloud_sources[i]->points[j].x < nmax_range_x_) || (cloud_sources[i]->points[j].y < nmax_range_y_))
                     {
                         outofbound_flag = true;
-                        /* cloud_sources[i]->points[j].x = INT_MAX; */
+                        cloud_sources[i]->points[j].x = INT_MAX;
+                        number.push_back(j);
                     }
                     else if (((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) && ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)))
                     {
                         outofbound_flag = true;
-                        /* cloud_sources[i]->points[j].x = INT_MAX; */
+                        cloud_sources[i]->points[j].x = INT_MAX;
+                        number.push_back(j);
                     }
+                    /* else if (outofbound_flag == false)
+                    {
+                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
+                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
+                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
+                    }
+                    current_new++; */
+                }
 
-                    if (outofbound_flag == true)
+                /* for (int i = current_new; i < cloud_source[i]->size() - current_new; i++)
+                {
+                    cloud_source[i]->points[i].x = INT_MAX;
+                    cloud_source[i]->points[i].y = INT_MAX;
+                    cloud_source[i]->points[i].z = INT_MAX;
+                } */
+
+                /* cloud_sources[i].swap(cloud_source[i]); */
+
+                /* if (cloud_sources[i]->points[j].x > nmax_range_x_ || cloud_sources[i]->points[j].y > nmax_range_y_)
+                    {
+                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
+                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
+                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
+                        current_new++;
+                    } */
+
+                // +ve x axis and y axis not considered
+                /* if (outofbound_flag == false)
+                    {
+                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
+                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
+                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
+                        current_new++;
+                    } */
+
+                /*  if (outofbound_flag == true)
                     {
                         number.insert(number.begin(), j);
                         numbers_to_remove++;
-                    }
-                }
+                        number.push_back(j);
+                    } */
 
-                // Remove the points by setting to inf
-                for (int j = 0; j < numbers_to_remove; j++)
+                /* int current_new = 0;
+                    for (int k = 0; k < cloud_sources[i]->size(); k++)
+                    {
+                        bool is_inside = true;
+                        for (int l = 0; l < number.size(); l++)
+                        {
+                            if (k == number[l])
+                            {
+                                is_inside = false;
+                            }
+                        }
+                        // if index is not in vector
+                        if (is_inside == true)
+                        {
+                            cloud_source[i]->points[current_new].x = cloud_sources[i]->points[k].x;
+                            cloud_source[i]->points[current_new].y = cloud_sources[i]->points[k].y;
+                            cloud_source[i]->points[current_new].z = cloud_sources[i]->points[k].z;
+                        }
+                        current_new++;
+                    } */
+
+                // METHOD 1: Remove points by setting to INT_MAX
+                /* for (int j = 0; j < numbers_to_remove; j++)
                 {
                     cloud_sources[i]->points[number[j]].x = INT_MAX;
                     cloud_sources[i]->points[number[j]].y = INT_MAX;
                     cloud_sources[i]->points[number[j]].z = INT_MAX;
-                }
-
-                /* for (int j = 0; j < total; j++)
-                {
-                    cloud_sources[i]->points[j].x = INT_MAX;
-                    cloud_sources[i]->points[j].y = INT_MAX;
-                    cloud_sources[i]->points[j].z = INT_MAX;
                 } */
 
-                // remove out of bound points
+                // METHOD 2: Remove points by erasing
+                /* for (int j = 0; j < total; j++)
+                {
+                    cloud_source[i]->points[j].x = INT_MAX;
+                    cloud_source[i]->points[j].y = INT_MAX;
+                    cloud_source[i]->points[j].z = INT_MAX;
+                } */
+
                 /* cloud_source[i]->clear(); */
 
                 /* if (checkInside(number, j) == false)
@@ -277,28 +337,27 @@ namespace ros_util
                         cloud_source[i]->points[j] = cloud_sources[i]->points[k];
                     } */
 
-                /* int j = 0;
+                /* int current_new = 0;
                 for (int k = 0; k < cloud_sources[i]->size(); k++)
                 {
-                    bool is_inside = false;
+                    bool is_inside = true;
                     for (int l = 0; l < number.size(); l++)
                     {
                         if (k == number[l])
                         {
-                            is_inside = true;
+                            is_inside = false;
                         }
                     }
                     // if index is not in vector
                     if (is_inside == true)
                     {
-                        cloud_source[i]->points[j].x = cloud_sources[i]->points[k].x;
-                        cloud_source[i]->points[j].y = cloud_sources[i]->points[k].y;
-                        cloud_source[i]->points[j].z = cloud_sources[i]->points[k].z;
+                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[k].x;
+                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[k].y;
+                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[k].z;
                     }
-                    j++;
-                }
-
-                cloud_sources[i].swap(cloud_source[i]); */
+                    current_new++;
+                } */
+                /* cloud_sources[i].swap(cloud_source[i]); */
 
                 /* Block until a transform is possible or it times out
                 Parameters:
