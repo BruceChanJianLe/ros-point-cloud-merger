@@ -1,47 +1,39 @@
 <!-- <?xml version="1.0"?> -->
-<!-- this merges the PointCloud2s -->
 
-<!-- type is the file you want to launch in the package 
-  name is a unique identifier for your node. -->
 <launch>
-    <!-- defining defaults -->
     <!-- replace with the desired input topics -->
     <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
     <!-- replace with the desired output topic -->
     <arg name="output_topic" default="/points_concat" />
-    <!-- replace with the desired output frame -->
-    <!-- to change in the link to robot.urdf as well -->
+    <!-- replace with the desired output frame 
+         to change in the link to robot.urdf as well -->
     <arg name="output_frame_id" default="velodyne_frame" />
 
-    <!-- replace with the desired min range from base_link -->
-    <!-- p implies positive -->
+
+    <!-- replace with the desired positive x min range from base_link -->
     <arg name="pmin_range_x" default="0.5" />
-    <!-- this is such that can show obstacle behind husky -->
-    <!-- n implies negative -->
+    <!-- replace with the desired negative x min range from base_link -->
     <arg name="nmin_range_x" default="-0.5" />
-    <!-- replace with the desired max range from base_link -->
+    <!-- replace with the desired positive x max range from base_link -->
     <arg name="pmax_range_x" default="5.0" />
-    <!-- this is such that can show obstacle other side of husky -->
+    <!-- replace with the desired negative x max range from base_link -->
     <arg name="nmax_range_x" default="-5.0" />
 
-    <!-- replace with the desired min range from base_link -->
-    <!-- p implies positive -->
+    <!-- replace with the desired positive y min range from base_link -->
     <arg name="pmin_range_y" default="0.5" />
-    <!-- this is such that can show obstacle behind husky -->
-    <!-- n implies negative -->
+    <!-- replace with the desired negative y min range from base_link -->
     <arg name="nmin_range_y" default="-0.5" />
-    <!-- replace with the desired max range from base_link -->
+    <!-- replace with the desired positive y max range from base_link -->
     <arg name="pmax_range_y" default="5.0" />
-    <!-- this is such that can show obstacle other side of husky -->
+    <!-- replace with the desired negative y max range from base_link -->
     <arg name="nmax_range_y" default="-5.0" />
 
-    <!-- replace with the desired min range from base_link -->
-    <!-- p implies positive -->
+    <!-- replace with the desired z min height -->
     <arg name="pmin_range_z" default="-1.0" />
-    <!-- replace with the desired max range from base_link -->
+    <!-- replace with the desired z max height -->
     <arg name="pmax_range_z" default="100.0" />
-    
-    <!-- name cannot be namespace -->
+
+
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
         <param name="output_frame_id" value="$(arg output_frame_id)"/>
 

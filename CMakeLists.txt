@@ -18,11 +18,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
 )
 
-find_package(Qt5Core REQUIRED)
-find_package(OpenCV REQUIRED)
-find_package(PCL 1.7 REQUIRED)
-find_package(OpenMP)
-
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(YAML_CPP REQUIRED yaml-cpp)

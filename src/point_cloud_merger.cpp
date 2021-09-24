@@ -19,39 +19,13 @@
 
 #define MIN_SIZE 2
 #define MAX_SIZE 8
-#define ZERO 0
 
 static int input_size = 0;
 
 namespace ros_util
 {
-    /* 
-     * access modifiers: used to create access modifiers within a class
-     * e.g., public:
-     *         void set_values(int, int);
-     * 
-     * inheritance: used to specify a base class while creating a child class 
-     * e.g., class Child : Base
-     * 
-     * initialization lists: delimit the beginning of an initialization list
-     * e.g., public:
-     *         B(int number = 99) : A(number) { }
-     * 
-     * https://www.quora.com/What-is-the-meaning-of-in-C++
-     */
-
-    // Constructor
     point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf_listener_()
     {
-        /* param function
-
-         * Parameters:
-         * param_name – The key to be searched on the parameter server.
-         * param_val – Storage for the retrieved value.
-         * default_val – Value to use if the server doesn't contain this parameter. 
-         */
-
-        /* change the values here if want to change values */
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
@@ -69,19 +43,13 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
-        /* namespace YAML, class Node in library yaml-cpp */
-        /* YAML::Node YAML::Load(const std::string &input) */
         YAML::Node topics = YAML::Load(input_topics_);
 
-        /* 
-         * Array of input topics: store_input_topics[]
-         * Number of topics: input_size
-         */
         std::string store_input_topics[8];
         bool is_last_topic = false;
 
-        /* not good practice, no error catching */
-        /* have to strictly adhere to format for input topic */
+        /* not good practice, no error catching 
+           have to strictly adhere to format for input topic */
         while (input_topics_.compare("") > 0)
         {
             int start_of_topic, end_of_topic;
@@ -109,8 +77,7 @@ namespace ros_util
             input_size++;
         }
 
-        // check range of input topics accepted
-        /* if (input_topics_size_ < 2 || input_topics_size_ > 8) */
+        // check number of input topics accepted
         if (input_size < MIN_SIZE || input_size > MAX_SIZE)
         {
             ROS_ERROR("Size of input_topics must be between 2 and 8! Exiting now...");
@@ -124,13 +91,12 @@ namespace ros_util
         }
 
         /* steps: subscribe, sync, callback */
-        for (int i = ZERO; i < MAX_SIZE; i++)
+        for (int i = 0; i < MAX_SIZE; i++)
         {
             /* update cloud_subscriber with the PointClouds in the input_topics
-                for the one with nothing inside, update with the 1st PointCloud */
+            for the one with nothing inside, update with the 1st PointCloud */
             if (i < input_size)
             {
-                /* Constructor See the ros::NodeHandle::subscribe() variants for more information on the parameters */
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1);
             }
@@ -150,11 +116,7 @@ namespace ros_util
         cloud_synchronizer_->registerCallback(
             boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
-        /* This method returns a Publisher that allows you to publish a message on this topic.
-         * Parameters:
-         * topic – Topic to advertise on
-         * queue_size – Maximum number of outgoing messages to be queued for delivery to subscribers
-         */
+        /* returns a Publisher that allows you to publish a message on this topic. */
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, 1);
     }
 
@@ -169,7 +131,6 @@ namespace ros_util
 
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
-        // Array
         PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
         PointCloudT::Ptr cloud_sources[MAX_SIZE];
@@ -181,28 +142,20 @@ namespace ros_util
         // transform points
         try
         {
-            for (int i = ZERO; i < input_size; i++)
+            for (int i = 0; i < input_size; i++)
             {
                 // Note: If you use kinetic, you can directly receive messages as
                 // PointCloutT.
 
-                /* makeShared(): Copy the cloud to the heap and return a smart pointer
-                    Returns:
-                    shared pointer to the copy of the cloud */
+                /* copy the cloud to the heap and return a smart pointer */
                 cloud_sources[i] = PointCloudT().makeShared();
                 cloud_source[i] = PointCloudT().makeShared();
 
-                /*
-                Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map.
-                Parameters:
-                msg – the PCLPointCloud2 binary blob
-                cloud – the resultant pcl::PointCloud<T> */
+                /* convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-
-                // !!!! DEBUG HERE in cpp one pointer cannot point to 2
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
-                int current_new = 0;
+                int current_index = 0;
 
                 for (int j = 0; j < cloud_sources[i]->size(); j++)
                 {
@@ -226,16 +179,16 @@ namespace ros_util
                     }
                     else if (outofbound_flag == false)
                     {
-                        cloud_source[i]->points[current_new].x = cloud_sources[i]->points[j].x;
-                        cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
-                        cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
-                        current_new++;
+                        cloud_source[i]->points[current_index].x = cloud_sources[i]->points[j].x;
+                        cloud_source[i]->points[current_index].y = cloud_sources[i]->points[j].y;
+                        cloud_source[i]->points[current_index].z = cloud_sources[i]->points[j].z;
+                        current_index++;
                     }
                 }
 
-                if (cloud_source[i]->size() > current_new)
+                if (cloud_source[i]->size() > current_index)
                 {
-                    for (int p = current_new; p < cloud_source[i]->size(); p++)
+                    for (int p = current_index; p < cloud_source[i]->size(); p++)
                     {
                         cloud_source[i]->points[p].x = INT_MAX;
                         cloud_source[i]->points[p].y = INT_MAX;
@@ -243,25 +196,10 @@ namespace ros_util
                     }
                 }
 
-                /* Block until a transform is possible or it times out
-                Parameters:
-                target_frame – The frame into which to transform
-                source_frame – The frame from which to transform
-                time – The time at which to transform
-                timeout – How long to block before failing
-                polling_sleep_duration – How often to retest if failed
-                error_msg – A pointer to a string which will be filled with why the transform failed, if not NULL */
+                /* block until a transform is possible or it times out */
                 tf_listener_.waitForTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
 
-                /*
-                Transforms (Maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener.
-                Parameters:
-                target_frame(output_frame_id_) – the target TF frame the point cloud should be transformed to
-                target_time(ros::Time(0)) – the target timestamp
-                cloud_in(*cloud_sources[i]) – the input point cloud
-                fixed_frame(msgs[i]->header.frame_id) – fixed TF frame
-                cloud_out(*cloud_sources[i]) – the output point cloud
-                tf_listener(tf_listener_) – a TF listener object */
+                /* transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
                 pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tf_listener_);
             }
         }
@@ -275,8 +213,7 @@ namespace ros_util
         }
 
         // merge points
-        /* for (size_t i = 0; i < input_topics_size_; i++) */
-        for (int i = ZERO; i < input_size; i++)
+        for (int i = 0; i < input_size; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
@@ -286,11 +223,10 @@ namespace ros_util
 
         cloud_concatenated->header.frame_id = output_frame_id_;
 
-        /* Publish a message on the topic associated with this Publisher. */
+        /* publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
     }
 
-    // Destructor
     point_cloud_merger::~point_cloud_merger()
     {
     }

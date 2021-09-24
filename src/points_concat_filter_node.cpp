@@ -3,6 +3,7 @@
 
 const std::string ROSNodeName = "points_concat_filter";
 
+// launch node for points_concat_filter.cpp
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, ROSNodeName);
