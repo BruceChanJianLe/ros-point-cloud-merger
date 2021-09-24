@@ -82,10 +82,6 @@ namespace ros_util
         message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
         message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
 
-        /* add */
-        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscriber_[8];
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizers_; */
-
         /* ros::Subscriber config_subscriber_; */
         ros::Publisher cloud_publisher_;
         

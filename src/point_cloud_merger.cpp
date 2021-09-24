@@ -221,7 +221,7 @@ namespace ros_util
                 // !!!! DEBUG HERE in cpp one pointer cannot point to 2
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
-                /* int total = cloud_source[i]->size(); */
+                int total = cloud_source[i]->size();
 
                 std::vector<int> number;
                 /* std::vector<int>::iterator it; */
@@ -257,9 +257,12 @@ namespace ros_util
                         cloud_source[i]->points[current_new].y = cloud_sources[i]->points[j].y;
                         cloud_source[i]->points[current_new].z = cloud_sources[i]->points[j].z;
                         current_new++;
+                        /* cloud_source[i]->push_back(cloud_sources[i]->points[j].x);
+                        cloud_source[i]->push_back(cloud_sources[i]->points[j].y);
+                        cloud_source[i]->push_back(cloud_sources[i]->points[j].z); */
                     }
                 }
-                
+
                 if (cloud_source[i]->size() > current_new)
                 {
                     for (int p = current_new; p < cloud_source[i]->size(); p++)
@@ -268,6 +271,7 @@ namespace ros_util
                         cloud_source[i]->points[p].y = INT_MAX;
                         cloud_source[i]->points[p].z = INT_MAX;
                     }
+                    /* cloud_source[i]->erase(current_new, total); */
                 }
 
                 /* cloud_sources[i].swap(cloud_source[i]); */
