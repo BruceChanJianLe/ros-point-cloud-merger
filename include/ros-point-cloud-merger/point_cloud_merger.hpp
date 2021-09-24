@@ -52,13 +52,8 @@ namespace ros_util
         // constructor
         point_cloud_merger();
 
-        // function with nothing in it
-        /* void start(); */
-
         // destructor
         ~point_cloud_merger();
-
-        /* bool checkInside(std::vector<int>, int); */
 
     private:
         /* The typedef declaration provides a way to declare an identifier as a type alias, to be used to replace a possibly complex type name */
@@ -92,11 +87,6 @@ namespace ros_util
         std::string output_topic_;
 
         std::string output_frame_id_;
-
-        double pmin_range_;
-        double pmax_range_;
-        double nmin_range_;
-        double nmax_range_;
 
         double pmin_range_x_;
         double pmax_range_x_;

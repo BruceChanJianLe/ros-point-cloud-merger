@@ -15,17 +15,6 @@
 
     <!-- replace with the desired min range from base_link -->
     <!-- p implies positive -->
-    <arg name="pmin_range" default="0.5" />
-    <!-- this is such that can show obstacle behind husky -->
-    <!-- n implies negative -->
-    <arg name="nmin_range" default="-0.5" />
-    <!-- replace with the desired max range from base_link -->
-    <arg name="pmax_range" default="5.0" />
-    <!-- this is such that can show obstacle other side of husky -->
-    <arg name="nmax_range" default="-5.0" />
-
-    <!-- replace with the desired min range from base_link -->
-    <!-- p implies positive -->
     <arg name="pmin_range_x" default="0.5" />
     <!-- this is such that can show obstacle behind husky -->
     <!-- n implies negative -->
@@ -58,11 +47,6 @@
 
         <param name="input_topics" value="$(arg input_topics)"/>
         <param name="output_topic" value="$(arg output_topic)"/>
-
-        <param name="pmin_range" type="double" value="$(arg pmin_range)" />
-        <param name="pmax_range" type="double" value="$(arg pmax_range)" />
-        <param name="nmin_range" type="double" value="$(arg nmin_range)" />
-        <param name="nmax_range" type="double" value="$(arg nmax_range)" />
 
         <param name="pmin_range_x" type="double" value="$(arg pmin_range_x)" />
         <param name="pmax_range_x" type="double" value="$(arg pmax_range_x)" />
