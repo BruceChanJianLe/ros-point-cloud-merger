@@ -9,7 +9,6 @@
          to change in the link to robot.urdf as well -->
     <arg name="output_frame_id" default="velodyne_frame" />
 
-
     <!-- replace with the desired positive x min range from base_link -->
     <arg name="pmin_range_x" default="0.5" />
     <!-- replace with the desired negative x min range from base_link -->
