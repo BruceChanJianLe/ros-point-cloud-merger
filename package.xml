@@ -8,6 +8,7 @@
   <maintainer email="jianle001@e.ntu.edu.sg">Bruce Chan Jian Le</maintainer>
   <maintainer email="e0425705@u.nus.edu">Puah Siew Wen</maintainer>
   <license>MIT</license>
+  <license>BSD</license>
   <url type="website">https://github.com/BruceChanJianLe/ros-point-cloud-merger</url>
 
   <buildtool_depend>catkin</buildtool_depend>
