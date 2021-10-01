@@ -13,11 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   tf
-  tf2
-  tf2_ros
 )
 
 find_package(PkgConfig REQUIRED)
+
+find_package(PCL REQUIRED)
 
 pkg_check_modules(YAML_CPP REQUIRED yaml-cpp)
 
@@ -45,6 +45,7 @@ link_directories(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 
 link_directories(

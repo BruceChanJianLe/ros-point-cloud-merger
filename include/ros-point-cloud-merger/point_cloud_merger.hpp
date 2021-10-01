@@ -36,8 +36,6 @@
 #include <tf/tf.h>
 #include <tf/transform_listener.h>
 
-#include <velodyne_pointcloud/point_types.h>
-
 #include <yaml-cpp/yaml.h>
 
 namespace ros_util
