@@ -54,7 +54,7 @@ namespace ros_util
          *   in this case do not need to store input topics into a array  
          *   but can be useful in future projects
          */
-        std::string store_input_topics[8];
+        std::string store_input_topics[MAX_SIZE];
 
         while (ss >> source)
         {
@@ -98,15 +98,11 @@ namespace ros_util
             for the one with nothing inside, update with the 1st PointCloud */
             if (i < input_size)
             {
-                /* cloud_subscribers_[i] =
-                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1); */
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], 1);
             }
             else
             {
-                /* cloud_subscribers_[i] =
-                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1); */
                 cloud_subscribers_[i] =
                     new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], 1);
             }
@@ -138,11 +134,20 @@ namespace ros_util
 
         PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
-        PointCloudT::Ptr cloud_sources[MAX_SIZE];
+        /* std::shared_ptr<PointCloudMsgT> msgs[MAX_SIZE] = std::make_shared<PointCloudMsgT>(); 
+        msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
 
-        PointCloudT::Ptr cloud_concatenated(new PointCloudT);
+        boost::shared_ptr<PointCloudT> cloud_sources[MAX_SIZE];
 
-        PointCloudT::Ptr cloud_source[MAX_SIZE];
+        boost::shared_ptr<PointCloudT> cloud_source[MAX_SIZE];
+
+        boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
+
+        /* PointCloudT::Ptr cloud_sources[MAX_SIZE]; */
+
+        /* PointCloudT::Ptr cloud_source[MAX_SIZE]; */
+
+        /* PointCloudT::Ptr cloud_concatenated(new PointCloudT); */
 
         // transform points
         try
@@ -191,6 +196,7 @@ namespace ros_util
                     }
                 }
 
+                /* set the points that are out of bound as INT_MAX */
                 if (cloud_source[i]->size() > current_index)
                 {
                     for (int p = current_index; p < cloud_source[i]->size(); p++)
@@ -230,9 +236,6 @@ namespace ros_util
 
         /* publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
-
-        /* delete cloud_source;
-        delete cloud_sources; */
     }
 
     point_cloud_merger::~point_cloud_merger()
