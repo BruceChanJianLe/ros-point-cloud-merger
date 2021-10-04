@@ -20,7 +20,7 @@
 #define MIN_SIZE 2
 #define MAX_SIZE 8
 
-/* static int input_size = 0; */
+static int input_size = 0;
 
 namespace ros_util
 {
@@ -43,11 +43,28 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
-        YAML::Node topics = YAML::Load(input_topics_);
-        input_topics_size_ = topics.size();
+        /* YAML::Node topics = YAML::Load(input_topics_);
+        input_topics_size_ = topics.size(); */
+
+        input_topics_ = input_topics_.substr(1);
+        std::stringstream ss(input_topics_);
+        std::string source;
+
+        /* 
+         *   in this case do not need to store input topics into a array  
+         *   but can be useful in future projects
+         */
+        std::string store_input_topics[8];
+
+        while (ss >> source)
+        {
+            source = source.substr(0, source.length() - 1);
+            store_input_topics[input_size] = source;
+            input_size++;
+        }
 
         // check number of input topics accepted
-        if (input_topics_size_ < MIN_SIZE)
+        if (input_size < MIN_SIZE)
         {
             ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
 
@@ -59,9 +76,11 @@ namespace ros_util
             ros::shutdown();
 
             return;
-        } else if (input_topics_size_ > MAX_SIZE) {
+        }
+        else if (input_size > MAX_SIZE)
+        {
             ROS_ERROR("Maximum size accepted is 8 but size of input topics is more than 8. Exiting now...");
-            
+
             /* Disconnects everything and unregisters from the master. 
             It is generally not necessary to call this function, as the 
             node will automatically shutdown when all NodeHandles destruct. 
@@ -77,15 +96,19 @@ namespace ros_util
         {
             /* update cloud_subscriber with the PointClouds in the input_topics
             for the one with nothing inside, update with the 1st PointCloud */
-            if (i < input_topics_size_)
+            if (i < input_size)
             {
+                /* cloud_subscribers_[i] =
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1); */
                 cloud_subscribers_[i] =
-                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[i].as<std::string>(), 1);
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], 1);
             }
             else
             {
+                /* cloud_subscribers_[i] =
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1); */
                 cloud_subscribers_[i] =
-                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, topics[0].as<std::string>(), 1);
+                    new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], 1);
             }
         }
 
@@ -109,7 +132,7 @@ namespace ros_util
     {
         /*  If the condition is true, the program continues normally and 
         if the condition is false, the program is terminated and an error message is displayed.  */
-        assert(input_topics_size_ >= MIN_SIZE && input_topics_size_ <= MAX_SIZE);
+        assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
 
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
@@ -124,7 +147,7 @@ namespace ros_util
         // transform points
         try
         {
-            for (int i = 0; i < input_topics_size_; i++)
+            for (int i = 0; i < input_size; i++)
             {
                 // Note: If you use kinetic, you can directly receive messages as
                 // PointCloutT.
@@ -195,7 +218,7 @@ namespace ros_util
         }
 
         // merge points
-        for (int i = 0; i < input_topics_size_; i++)
+        for (int i = 0; i < input_size; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
@@ -208,9 +231,8 @@ namespace ros_util
         /* publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
 
-        delete cloud_source;
-        delete cloud_sources;
-
+        /* delete cloud_source;
+        delete cloud_sources; */
     }
 
     point_cloud_merger::~point_cloud_merger()
