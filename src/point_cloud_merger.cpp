@@ -130,24 +130,16 @@ namespace ros_util
         if the condition is false, the program is terminated and an error message is displayed.  */
         assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
 
+        /* typedef ConstPtr boost::shared_ptr<const PointCloud<pcl::PointXYZ>> */
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
         PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-
-        /* std::shared_ptr<PointCloudMsgT> msgs[MAX_SIZE] = std::make_shared<PointCloudMsgT>(); 
-        msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8}; */
 
         boost::shared_ptr<PointCloudT> cloud_sources[MAX_SIZE];
 
         boost::shared_ptr<PointCloudT> cloud_source[MAX_SIZE];
 
         boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
-
-        /* PointCloudT::Ptr cloud_sources[MAX_SIZE]; */
-
-        /* PointCloudT::Ptr cloud_source[MAX_SIZE]; */
-
-        /* PointCloudT::Ptr cloud_concatenated(new PointCloudT); */
 
         // transform points
         try
