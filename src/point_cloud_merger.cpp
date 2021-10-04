@@ -209,7 +209,8 @@ namespace ros_util
         cloud_publisher_.publish(cloud_concatenated);
 
         delete cloud_source;
-        
+        delete cloud_sources;
+
     }
 
     point_cloud_merger::~point_cloud_merger()
