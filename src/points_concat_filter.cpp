@@ -23,11 +23,13 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
 
   YAML::Node topics = YAML::Load(input_topics_);
   input_topics_size_ = topics.size();
+  
   if (input_topics_size_ < 2 || 8 < input_topics_size_)
   {
     ROS_ERROR("The size of input_topics must be between 2 and 8");
     ros::shutdown();
   }
+
   for (size_t i = 0; i < 8; ++i)
   {
     if (i < input_topics_size_)
@@ -41,6 +43,7 @@ PointsConcatFilter::PointsConcatFilter() : node_handle_(), private_node_handle_(
           new message_filters::Subscriber<PointCloudMsgT>(node_handle_, topics[0].as<std::string>(), 1);
     }
   }
+  
   cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
       SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
       *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
