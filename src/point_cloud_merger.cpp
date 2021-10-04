@@ -207,6 +207,9 @@ namespace ros_util
 
         /* publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
+
+        delete cloud_source;
+        
     }
 
     point_cloud_merger::~point_cloud_merger()
