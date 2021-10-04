@@ -34,8 +34,6 @@
 #include <tf/tf.h>
 #include <tf/transform_listener.h>
 
-#include <yaml-cpp/yaml.h>
-
 namespace ros_util
 {
     class point_cloud_merger

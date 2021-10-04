@@ -43,9 +43,6 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
-        /* YAML::Node topics = YAML::Load(input_topics_);
-        input_topics_size_ = topics.size(); */
-
         input_topics_ = input_topics_.substr(1);
         std::stringstream ss(input_topics_);
         std::string source;
