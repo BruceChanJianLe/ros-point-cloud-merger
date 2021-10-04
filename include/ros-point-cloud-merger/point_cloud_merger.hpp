@@ -62,8 +62,6 @@ namespace ros_util
         
         tf::TransformListener tf_listener_;
 
-        size_t input_topics_size_;
-
         std::string input_topics_;
         std::string output_topic_;
 
