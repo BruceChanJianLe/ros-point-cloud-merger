@@ -1,8 +1,4 @@
-# [GitHub Pages](https://e0425705.github.io/husky_sw/)
-
 ## Contents
-- [GitHub Pages](#github-pages)
-  - [Contents](#contents)
 - [HOW TO USE THIS PACKAGE](#how-to-use-this-package)
   - [Launch package](#launch-package)
 - [HOW TO CHANGE VARIABLES](#how-to-change-variables)
@@ -26,7 +22,6 @@
   - [New file cpp-point_cloud_merger](#new-file-cpp-point_cloud_merger)
 - [EXAMPLE IMPLEMENTATION](#example-implementation)
 - [REFERENCES](#references)
-- [GitHub Pages](#github-pages-1)
 
 <br>
 
@@ -694,7 +689,3 @@ namespace ros_util
 
 - [Core Perception - launch file](https://github.com/Autoware-AI/core_perception/blob/master/points_preprocessor/launch/points_concat_filter.launch)
 - [Core Perception - cpp](https://github.com/Autoware-AI/core_perception/blob/master/points_preprocessor/nodes/points_concat_filter/points_concat_filter.cpp)
-
----
-
-# [GitHub Pages](https://e0425705.github.io/husky_sw/)
