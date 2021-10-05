@@ -17,6 +17,8 @@
 #ifndef ROS_POINT_CLOUD_MERGER_H__
 #define ROS_POINT_CLOUD_MERGER_H__
 
+#define MAX_SIZE 8
+
 #include <ros/ros.h>
 
 #include <string>
@@ -55,29 +57,49 @@ namespace ros_util
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
 
-        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[8];
+        /* ROS subscription filter. */
+        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
+        /* Synchronizes incoming channels */
         message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
 
+        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[MAX_SIZE];
+        boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT> > cloud_synchronizer_; */
+
+        /* Manages an advertisement on a specific topic.  */
         ros::Publisher cloud_publisher_;
         
+        /* Subscribes to message and automatically stores incoming data */
         tf::TransformListener tf_listener_;
 
+        /* Storage for the retrieved value for input_topics */
         std::string input_topics_;
+        /* Storage for the retrieved value for output_topic */
         std::string output_topic_;
 
+        /* Storage for the retrieved value for output_frame_id */
         std::string output_frame_id_;
 
+        /* Storage for the retrieved value for pmin_range_x */
         double pmin_range_x_;
+        /* Storage for the retrieved value for pmax_range_x */
         double pmax_range_x_;
+        /* Storage for the retrieved value for nmin_range_x */
         double nmin_range_x_;
+        /* Storage for the retrieved value for nmax_range_x */
         double nmax_range_x_;
 
+        /* Storage for the retrieved value for pmin_range_y */
         double pmin_range_y_;
+        /* Storage for the retrieved value for pmax_range_y */
         double pmax_range_y_;
+        /* Storage for the retrieved value for nmin_range_y */
         double nmin_range_y_;
+        /* Storage for the retrieved value for nmax_range_y */
         double nmax_range_y_;
 
+        /* Storage for the retrieved value for pmin_range_z */
         double pmin_range_z_;
+        /* Storage for the retrieved value for pmax_range_z */
         double pmax_range_z_;
 
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
