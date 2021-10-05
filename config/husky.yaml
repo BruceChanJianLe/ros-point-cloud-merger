@@ -1,0 +1,17 @@
+point_cloud_merger_node: 
+    - input_topics: '[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]'
+    - output_frame_id: 'velodyne_frame'
+    - output_topic: '/point_concat'
+
+    - pmin_range_x: 0.5
+    - pmax_range_x: 5.0
+    - nmin_range_x: -0.5
+    - nmax_range_x: -5.0
+
+    - pmin_range_y: 0.5
+    - pmax_range_y: 5.0
+    - nmin_range_y: -0.5
+    - nmax_range_y: -5.0
+
+    - pmin_range_y: -1.0
+    - pmax_range_y: 100.0

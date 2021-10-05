@@ -1,37 +1,40 @@
 <?xml version="1.0"?>
 
 <launch>
+    <rosparam command="load" file="$(find ros-point-cloud-merger)/config/husky_try.yaml" />
+
+    <!-- <arg name="robot_name" default="config/husky_try.yaml" /> -->
+    
     <!-- replace with the desired input topics -->
-    <arg name="input_topics" default="[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]" />
+    <arg name="input_topics" default="$(optenv INPUT_TOPICS [/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7])" />
     <!-- replace with the desired output topic -->
-    <arg name="output_topic" default="/points_concat" />
+    <arg name="output_topic" default="$(optenv OUTPUT_TOPIC /points_concat)" />
     <!-- replace with the desired output frame 
          to change in the link to robot.urdf as well -->
-    <arg name="output_frame_id" default="velodyne_frame" />
+    <arg name="output_frame_id" default="$(optenv OUTPUT_FRAME_ID velodyne_frame)" />
 
     <!-- replace with the desired positive x min range from base_link -->
-    <arg name="pmin_range_x" default="0.5" />
+    <arg name="pmin_range_x" default="$(optenv PMIN_RANGE_X 0.5)" />
     <!-- replace with the desired negative x min range from base_link -->
-    <arg name="nmin_range_x" default="-0.5" />
+    <arg name="nmin_range_x" default="$(optenv NMIN_RANGE_X -0.5)" />
     <!-- replace with the desired positive x max range from base_link -->
-    <arg name="pmax_range_x" default="5.0" />
+    <arg name="pmax_range_x" default="$(optenv PMAX_RANGE_X 5.0)" />
     <!-- replace with the desired negative x max range from base_link -->
-    <arg name="nmax_range_x" default="-5.0" />
+    <arg name="nmax_range_x" default="$(optenv NMAX_RANGE_X -5.0)" />
 
     <!-- replace with the desired positive y min range from base_link -->
-    <arg name="pmin_range_y" default="0.5" />
+    <arg name="pmin_range_y" default="$(optenv PMIN_RANGE_Y 0.5)" />
     <!-- replace with the desired negative y min range from base_link -->
-    <arg name="nmin_range_y" default="-0.5" />
+    <arg name="nmin_range_y" default="$(optenv NMIN_RANGE_Y -0.5)" />
     <!-- replace with the desired positive y max range from base_link -->
-    <arg name="pmax_range_y" default="5.0" />
+    <arg name="pmax_range_y" default="$(optenv PMAX_RANGE_Y 5.0)" />
     <!-- replace with the desired negative y max range from base_link -->
-    <arg name="nmax_range_y" default="-5.0" />
+    <arg name="nmax_range_y" default="$(optenv NMAX_RANGE_Y -5.0)" />
 
     <!-- replace with the desired z min height -->
-    <arg name="pmin_range_z" default="-1.0" />
+    <arg name="pmin_range_z" default="$(optenv PMIN_RANGE_Z -1.0)" />
     <!-- replace with the desired z max height -->
-    <arg name="pmax_range_z" default="100.0" />
-
+    <arg name="pmax_range_z" default="$(optenv PMAX_RANGE_Z 100.0)" />
 
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
         <param name="output_frame_id" value="$(arg output_frame_id)"/>
