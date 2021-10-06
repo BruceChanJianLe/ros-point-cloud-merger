@@ -1,6 +1,7 @@
 ## Contents
 - [HOW TO USE THIS PACKAGE](#how-to-use-this-package)
   - [Launch package](#launch-package)
+  - [Launch package with particular configuration](#launch-package-with-particular-configuration)
 - [HOW TO CHANGE CONFIGURATION](#how-to-change-configuration)
   - [Change input topics](#change-input-topics)
   - [Change output topic](#change-output-topic)
@@ -34,7 +35,19 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch
 ```
 >By default, configuration would be husky.yaml
 
->Configuration can be accessed in [here](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/husky.yaml)]
+>Configured files can be accessed in [here](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config)
+
+## Launch package with particular configuration
+
+```
+roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=husky
+```
+>this will launch package with [husky](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/husky.yaml) configuration
+
+```
+roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=kobuki
+```
+>this will launch package with [kobuki](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/kobuki.yaml) configuration
 
 <br>
 
