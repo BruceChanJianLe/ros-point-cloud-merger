@@ -8,9 +8,9 @@
   - [Change minimum range x axis in **point_cloud_merger.launch**](#change-minimum-range-x-axis-in-point_cloud_mergerlaunch)
   - [Change minimum range y axis in **point_cloud_merger.launch**](#change-minimum-range-y-axis-in-point_cloud_mergerlaunch)
   - [Change maximum range x axis in **point_cloud_merger.launch**](#change-maximum-range-x-axis-in-point_cloud_mergerlaunch)
-  - [Change maximum range y axis](#change-maximum-range-y-axis)
-  - [Change minimum height z axis](#change-minimum-height-z-axis)
-  - [Change maximum height z axis](#change-maximum-height-z-axis)
+  - [Change maximum range y axis in **point_cloud_merger.launch**](#change-maximum-range-y-axis-in-point_cloud_mergerlaunch)
+  - [Change minimum height z axis in **point_cloud_merger.launch**](#change-minimum-height-z-axis-in-point_cloud_mergerlaunch)
+  - [Change maximum height z axis in **point_cloud_merger.launch**](#change-maximum-height-z-axis-in-point_cloud_mergerlaunch)
 - [WHAT EXISTING FILES TO CHANGE](#what-existing-files-to-change)
   - [How package.xml should look like](#how-packagexml-should-look-like)
   - [How CMakeLists.txt should look like](#how-cmakeliststxt-should-look-like)
@@ -82,9 +82,7 @@ in this case, **5.0** and **-5.0** are desired maximum range in the positive x a
 <arg name="nmax_range_x" default="-5.0" />
 ```
 
-## Change maximum range y axis
-
-**in point_cloud_merger.launch**
+## Change maximum range y axis in **point_cloud_merger.launch**
 
 in this case, **5.0** and **-5.0** are desired maximum range in the positive y axis and negative y axis respectively
 ```
@@ -92,18 +90,14 @@ in this case, **5.0** and **-5.0** are desired maximum range in the positive y a
 <arg name="nmax_range_y" default="-5.0" />
 ```
 
-## Change minimum height z axis
-
-**in point_cloud_merger.launch**
+## Change minimum height z axis in **point_cloud_merger.launch**
 
 in this case, **-1.0** is desired minimum height in the z axis 
 ```
 <arg name="pmin_range_z" default="-1.0" />
 ```
 
-## Change maximum height z axis
-
-**in point_cloud_merger.launch**
+## Change maximum height z axis in **point_cloud_merger.launch**
 
 in this case, **100.0** is desired maximum height in the z axis
 ```
