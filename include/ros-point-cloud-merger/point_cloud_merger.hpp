@@ -36,6 +36,8 @@
 #include <tf/tf.h>
 #include <tf/transform_listener.h>
 
+#include <tf2_ros/transform_listener.h>
+
 namespace ros_util
 {
     class point_cloud_merger
@@ -69,7 +71,10 @@ namespace ros_util
         ros::Publisher cloud_publisher_;
         
         /* Subscribes to message and automatically stores incoming data */
-        tf::TransformListener tf_listener_;
+        /* Stores known frames and offers a ROS service, "tf_frames", */
+        tf2_ros::Buffer tfBuffer;
+        /* Request and receive coordinate frame transform information */
+        tf2_ros::TransformListener tf2_listener_;
 
         /* Storage for the retrieved value for input_topics */
         std::string input_topics_;

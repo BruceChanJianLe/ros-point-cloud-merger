@@ -24,7 +24,7 @@ static int input_size = 0;
 
 namespace ros_util
 {
-    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf_listener_()
+    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
@@ -230,10 +230,10 @@ namespace ros_util
                 }
 
                 /* block until a transform is possible or it times out */
-                tf_listener_.waitForTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
+                tfBuffer.lookupTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
 
                 /* transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
-                pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tf_listener_);
+                pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tfBuffer);
             }
         }
         catch (tf::TransformException &ex)
