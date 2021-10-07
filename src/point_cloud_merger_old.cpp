@@ -118,7 +118,7 @@ namespace ros_util
                 /* (cloud_subscribers_[i])->subscribe(global_nh_, store_input_topics[i], QUEUE_SIZE); */
                 /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>>(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE)); */
 
-                store_input_topics[i] = store_input_topics[0];
+                /* store_input_topics[i] = store_input_topics[0]; */
             }
             else
             {

@@ -60,9 +60,9 @@ namespace ros_util
         ros::NodeHandle global_nh_;
 
         /* ROS subscription filter. */
-        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
+        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE]; */
         /* Synchronizes incoming channels */
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
+        /* message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_; */
 
         /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[MAX_SIZE];
         boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT> > cloud_synchronizer_; */

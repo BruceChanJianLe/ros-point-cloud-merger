@@ -15,6 +15,7 @@
  */
 
 #include "ros-point-cloud-merger/point_cloud_merger.hpp"
+#include <boost/make_shared.hpp>
 
 #define MIN_SIZE 2
 #define MAX_SIZE 8
@@ -88,64 +89,91 @@ namespace ros_util
             return;
         }
 
-        /* boost::shared_ptr <message_filters::Subscriber<PointCloudMsgT> > sub(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], 1)); */
-
-        /* message_filters::Subscriber<PointCloudMsgT> cloud_subscribers_[MAX_SIZE]; */
-        /* message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_; */
-
-        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[MAX_SIZE]; */
-        /* boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT> > cloud_synchronizer_; */
-
-        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[1] = boost::make_shared<message_filters::Subscriber<PointCloudMsgT> >(message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[1], QUEUE_SIZE)); */
-
-        /* int cloud_subscribers_[MAX_SIZE]; */
-
-        /* steps: subscribe, sync, callback */
         for (int i = 0; i < MAX_SIZE; i++)
         {
-            /* update cloud_subscriber with the PointClouds in the input_topics
-            for the one with nothing inside, update with the 1st PointCloud */
-            if (i < input_size)
+            if (i >= input_size)
             {
-                /* boost::shared_ptr < message_filters::Subscriber<PointCloudMsgT>> cloud_subscribers_1(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE)); */
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> cloud_subscribers_[i];
-                cloud_subscribers_[i]->subscribe(global_nh_, store_input_topics[i], QUEUE_SIZE); */
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> cloud_subscribers_[i] = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE)); */
-                /* (cloud_subscribers_[i])->subscribe(global_nh_, store_input_topics[i], QUEUE_SIZE); */
-                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>>(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE)); */
-            }
-            else
-            {
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> cloud_subscribers_[i];
-                cloud_subscribers_[i]->subscribe(global_nh_, store_input_topics[0], QUEUE_SIZE); */
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> cloud_subscribers_[0] = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE)); */
-                /* (cloud_subscribers_[i])->subscribe(global_nh_, store_input_topics[0], QUEUE_SIZE); */
-                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE);
-                /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE)); */
+                store_input_topics[i] = store_input_topics[0];
             }
         }
 
-        /* boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_; */
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub0(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub1(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[1], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub2(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[2], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub3(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[3], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub4(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[4], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub5(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[5], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub6(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[6], QUEUE_SIZE));
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub7(new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[7], QUEUE_SIZE));
 
-        /* Sychronise the cloud_subscribers */
-        /* cloud_synchronizer_->connectInput(
-            *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
+        boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_(new message_filters::Synchronizer<SyncPolicyT>(
+            SyncPolicyT(10), *sub0, *sub1, *sub2, *sub3, *sub4, *sub5, *sub6, *sub7));
+
+        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub0 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[0], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub1 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[1], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub2 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[2], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub3 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[3], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub4 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[4], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub5 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[5], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub6 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[6], QUEUE_SIZE);
+        boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub7 = boost::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[7], QUEUE_SIZE); */
+
+        /* boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_ = boost::make_shared<message_filters::Synchronizer<SyncPolicyT>>(
+            SyncPolicyT(10), *sub0, *sub1, *sub2, *sub3, *sub4, *sub5, *sub6, *sub7); */
+
+        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> cloud_subcribers_[MAX_SIZE];
+
+        for (int i = 0; i < MAX_SIZE; i++)
+        {
+            if (i < input_size)
+            {
+                cloud_subcribers_[i]->subscribe(global_nh_, store_input_topics[i], QUEUE_SIZE);
+            }
+            else
+            {
+                cloud_subcribers_[i]->subscribe(global_nh_, store_input_topics[0], QUEUE_SIZE);
+            }
+        }
+
+        boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_ = boost::make_shared<message_filters::Synchronizer<SyncPolicyT>>(
+            SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
             *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]); */
-        /* cloud_synchronizer_->connectInput(
-            cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
-        cloud_synchronizer_->init(); */
-        cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
-            SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
-        /* boost::shared_ptr < message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_(new message_filters::Synchronizer<SyncPolicyT>(
-            SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7])); */
 
-        /* callback */
-        cloud_synchronizer_->registerCallback(
-            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
+        /* cloud_synchronizer_->connectInput(*cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
+                                          *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
+        cloud_synchronizer_->init(); */
+
+        /* ORIGINAL */
+
+        /* steps: subscribe, sync, callback */
+
+        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
+        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;  */
+
+        /* ROS subscription filter. */
+        /* update cloud_subscriber with the PointClouds in the input_topics
+            for the one with nothing inside, update with the 1st PointCloud */
+        /* for (int i = 0; i < MAX_SIZE; i++)
+            {
+            if (i < input_size)
+            {
+                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
+            }
+            else
+            {
+                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE);
+            }
+        } */
+
+            /* Sychronise the cloud_subscribers */
+            /* cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
+            SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
+            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]); */
+
+            /* callback */
+            /* ros_util::point_cloud_merger *this */
+            cloud_synchronizer_->registerCallback(
+                boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
         /* returns a Publisher that allows you to publish a message on this topic. */
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, 1);
