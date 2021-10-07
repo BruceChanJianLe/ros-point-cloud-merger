@@ -59,6 +59,11 @@ void PointsConcatFilter::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg
 {
   assert(2 <= input_topics_size_ && input_topics_size_ <= 8);
 
+  /* 
+  typedef boost::shared_ptr<PointCloud<PointT> > Ptr;
+  typedef boost::shared_ptr<const PointCloud<PointT> > ConstPtr;  
+   */
+
   PointCloudMsgT::ConstPtr msgs[8] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
   PointCloudT::Ptr cloud_sources[8];
   PointCloudT::Ptr cloud_concatenated(new PointCloudT);
