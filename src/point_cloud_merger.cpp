@@ -97,36 +97,12 @@ namespace ros_util
             }
         }
 
-        /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
-
-        std::vector<std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>>> cloud_subscriber_;
-        /* cloud_subscriber_.reserve(MAX_SIZE); */
-
-        for (int i = 0; i < MAX_SIZE; i++)
-        {
-            cloud_subscriber_.push_back(std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[i], QUEUE_SIZE));
-        }
-
-        std::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_ = std::make_shared<message_filters::Synchronizer<SyncPolicyT>> 
-            (SyncPolicyT(10), *cloud_subscriber_.at(0), *cloud_subscriber_.at(1), *cloud_subscriber_.at(2), *cloud_subscriber_.at(3), 
-            *cloud_subscriber_.at(4), *cloud_subscriber_.at(5), *cloud_subscriber_.at(6), *cloud_subscriber_.at(7));
-
-        cloud_synchronizer_->registerCallback(boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
-
-        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
-
-        /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
-
-        /* ORIGINAL */
         /* steps: subscribe, sync, callback */
-
-        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;  */
 
         /* ROS subscription filter. */
         /* update cloud_subscriber with the PointClouds in the input_topics
             for the one with nothing inside, update with the 1st PointCloud */
-        /* for (int i = 0; i < MAX_SIZE; i++)
+        for (int i = 0; i < MAX_SIZE; i++)
             {
             if (i < input_size)
             {
@@ -136,19 +112,19 @@ namespace ros_util
             {
                 cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE);
             }
-        } */
+        }
 
         /* Sychronise the cloud_subscribers */
-        /* cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
+        cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
             SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]); */
+            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
 
         /* callback */
-        /* cloud_synchronizer_->registerCallback(
-            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8)); */
+        cloud_synchronizer_->registerCallback(
+            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
         /* returns a Publisher that allows you to publish a message on this topic. */
-        /* cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE); */
+        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
     }
 
     void point_cloud_merger::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,

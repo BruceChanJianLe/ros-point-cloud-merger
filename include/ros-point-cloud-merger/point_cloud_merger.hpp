@@ -23,11 +23,6 @@
 
 #include <string>
 
-/* testing */
-#include <iostream>
-#include <memory>
-#include <boost/make_shared.hpp>
-
 #include <message_filters/subscriber.h>
 #include <message_filters/sync_policies/approximate_time.h>
 #include <message_filters/synchronizer.h>
@@ -37,9 +32,6 @@
 #include <pcl_ros/transforms.h>
 
 #include <sensor_msgs/PointCloud2.h>
-
-/* #include <tf/tf.h>
-#include <tf/transform_listener.h> */
 
 #include <tf2_ros/transform_listener.h>
 
@@ -66,12 +58,9 @@ namespace ros_util
         ros::NodeHandle global_nh_;
 
         /* ROS subscription filter. */
-        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE]; */
+        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
         /* Synchronizes incoming channels */
-        /* message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_; */
-
-        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[MAX_SIZE];
-        boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT> > cloud_synchronizer_; */
+        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
 
         /* Manages an advertisement on a specific topic.  */
         ros::Publisher cloud_publisher_;
