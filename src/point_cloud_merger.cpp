@@ -100,7 +100,7 @@ namespace ros_util
         /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
 
         std::vector<std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>>> cloud_subscriber_;
-        cloud_subscriber_.reserve(MAX_SIZE);
+        /* cloud_subscriber_.reserve(MAX_SIZE); */
 
         for (int i = 0; i < MAX_SIZE; i++)
         {
@@ -114,29 +114,6 @@ namespace ros_util
         cloud_synchronizer_->registerCallback(boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
-
-        /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
-
-        /* std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub0 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[0], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub1 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[1], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub2 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[2], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub3 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[3], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub4 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[4], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub5 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[5], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub6 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[6], QUEUE_SIZE);
-        std::shared_ptr<message_filters::Subscriber<PointCloudMsgT>> sub7 = std::make_shared<message_filters::Subscriber<PointCloudMsgT>>(global_nh_, store_input_topics[7], QUEUE_SIZE);
-        ROS_INFO("Use Count %ld", sub0.use_count());
-
-        std::shared_ptr<message_filters::Synchronizer<SyncPolicyT>> cloud_synchronizer_ = std::make_shared<message_filters::Synchronizer<SyncPolicyT>>(
-            SyncPolicyT(10), *sub0, *sub1, *sub2, *sub3, *sub4, *sub5, *sub6, *sub7); */
-
-        /* 
-        boost::bind defines placeholders from _1 to _9. These placeholders tell boost::bind() to return a function object that expects as 
-        many parameters as the placeholder with the greatest number.
-         */
-        /* cloud_synchronizer_->registerCallback(boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
-
-        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE); */
 
         /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
 
