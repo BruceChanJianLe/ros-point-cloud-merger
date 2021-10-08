@@ -23,6 +23,11 @@
 
 #include <string>
 
+/* testing */
+#include <iostream>
+#include <memory>
+#include <boost/make_shared.hpp>
+
 #include <message_filters/subscriber.h>
 #include <message_filters/sync_policies/approximate_time.h>
 #include <message_filters/synchronizer.h>
@@ -33,8 +38,8 @@
 
 #include <sensor_msgs/PointCloud2.h>
 
-#include <tf/tf.h>
-#include <tf/transform_listener.h>
+/* #include <tf/tf.h>
+#include <tf/transform_listener.h> */
 
 #include <tf2_ros/transform_listener.h>
 
@@ -44,6 +49,7 @@ namespace ros_util
     {
     public:
         point_cloud_merger();
+
         ~point_cloud_merger();
 
     private:
@@ -69,7 +75,7 @@ namespace ros_util
 
         /* Manages an advertisement on a specific topic.  */
         ros::Publisher cloud_publisher_;
-        
+
         /* Subscribes to message and automatically stores incoming data */
         /* Stores known frames and offers a ROS service, "tf_frames", */
         tf2_ros::Buffer tfBuffer;
