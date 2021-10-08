@@ -65,14 +65,6 @@ namespace ros_util
         ros::NodeHandle private_nh_;
         ros::NodeHandle global_nh_;
 
-        /* ROS subscription filter. */
-        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE]; */
-        /* Synchronizes incoming channels */
-        /* message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_; */
-
-        /* boost::shared_ptr<message_filters::Subscriber<PointCloudMsgT> > cloud_subscribers_[MAX_SIZE];
-        boost::shared_ptr<message_filters::Synchronizer<SyncPolicyT> > cloud_synchronizer_; */
-
         /* Manages an advertisement on a specific topic.  */
         ros::Publisher cloud_publisher_;
 
