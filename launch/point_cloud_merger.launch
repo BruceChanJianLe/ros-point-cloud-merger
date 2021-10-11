@@ -10,13 +10,13 @@
     -->
     <arg name="enable_range_flag" default="true"/>
 
-    <!-- Replace with the desired config file -->
+    <!-- Replace with the desired config file for x range -->
     <arg name="x_range" default="husky_x" />
 
-    <!-- Replace with the desired config file -->
+    <!-- Replace with the desired config file for y range -->
     <arg name="y_range" default="husky_y" />
 
-    <!-- Replace with the desired config file -->
+    <!-- Replace with the desired config file for z range -->
     <arg name="z_range" default="husky_z" />
 
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
