@@ -80,7 +80,7 @@ namespace ros_util
         std::string output_frame_id_;
 
         /* Storage for the retrieved value for whether to enable range */
-        std::string enable_range_;
+        std::string enable_range_flag_;
 
         /* Storage for the retrieved value for pmin_range_x */
         double pmin_range_x_;

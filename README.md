@@ -3,6 +3,8 @@
   - [Launch package](#launch-package)
   - [Launch package with particular configuration METHOD 1](#launch-package-with-particular-configuration-method-1)
   - [Launch package with particular configuration METHOD 2](#launch-package-with-particular-configuration-method-2)
+  - [Launch package with maximum and minimum range enabled/disabled METHOD 1](#launch-package-with-maximum-and-minimum-range-enableddisabled-method-1)
+  - [Launch package with maximum and minimum range enabled/disabled METHOD 2](#launch-package-with-maximum-and-minimum-range-enableddisabled-method-2)
 - [HOW TO CHANGE CONFIGURATION](#how-to-change-configuration)
   - [Change input topics](#change-input-topics)
   - [Change output topic](#change-output-topic)
@@ -38,8 +40,11 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch
 
 >Configured files can be accessed in [here](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config)
 
+<br>
+
 ## Launch package with particular configuration METHOD 1
 
+in **terminal**
 ```
 roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=husky
 ```
@@ -50,6 +55,8 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=kobuki
 ```
 >this will launch package with [kobuki](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/kobuki.yaml) configuration
 
+<br>
+
 ## Launch package with particular configuration METHOD 2
 
 in **point_cloud_merger.launch**
@@ -58,6 +65,36 @@ in **point_cloud_merger.launch**
 ```
 
 >in this case, husky.yaml is configuration that you want
+
+<br>
+
+## Launch package with maximum and minimum range enabled/disabled METHOD 1
+
+in **point_cloud_merger.launch**
+```
+roslaunch ros-point-cloud-merger point_cloud_merger.launch enable_range_flag:=true
+```
+>this will launch package with maximum and minimum range enabled
+
+```
+roslaunch ros-point-cloud-merger point_cloud_merger.launch enable_range_flag:=false
+```
+>this will launch package with maximum and minimum range disabled
+
+<br>
+
+## Launch package with maximum and minimum range enabled/disabled METHOD 2
+
+in **terminal**
+```
+<arg name="enable_range_flag" default="true"/>
+```
+>this will launch package with maximum and minimum range enabled
+
+```
+<arg name="enable_range_flag" default="false"/>
+```
+>this will launch package with maximum and minimum range disabled
 
 <br>
 
