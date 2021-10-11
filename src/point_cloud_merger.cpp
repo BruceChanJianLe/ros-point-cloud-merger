@@ -209,20 +209,13 @@ namespace ros_util
                         cloud_source[i]->points[current_index].x = cloud_sources[i]->points[j].x;
                         cloud_source[i]->points[current_index].y = cloud_sources[i]->points[j].y;
                         cloud_source[i]->points[current_index].z = cloud_sources[i]->points[j].z;
+
                         current_index++;
                     }
                 }
 
-                /* set the points that are out of bound as INT_MAX */
-                if (cloud_source[i]->size() > current_index)
-                {
-                    for (int p = current_index; p < cloud_source[i]->size(); p++)
-                    {
-                        cloud_source[i]->points[p].x = INT_MAX;
-                        cloud_source[i]->points[p].y = INT_MAX;
-                        cloud_source[i]->points[p].z = INT_MAX;
-                    }
-                }
+                /* Resize pointcloud */
+                cloud_source[i]->resize(--current_index);
 
                 /* block until a transform is possible or it times out */
                 tfBuffer.lookupTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
