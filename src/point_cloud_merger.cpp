@@ -65,12 +65,10 @@ namespace ros_util
         std::stringstream ss(input_topics_);
         std::string source;
 
-        /* 
-         *   in this case do not need to store input topics into a array  
-         *   but can be useful in future projects
-         */
+        /* Array that stores input topics */
         std::string store_input_topics[MAX_SIZE];
 
+        /* Stores input into store_input_topics[] array */
         while (ss >> source)
         {
             source = source.substr(0, source.length() - 1);
@@ -78,7 +76,7 @@ namespace ros_util
             input_size++;
         }
 
-        // check number of input topics accepted
+        // Check number of input topics accepted
         if (input_size < MIN_SIZE)
         {
             ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
@@ -106,7 +104,7 @@ namespace ros_util
             return;
         }
 
-        /* replace input topics >= input size with 1st input topic */
+        /* Replace input topics >= input size with 1st input topic */
         for (int i = 0; i < MAX_SIZE; i++)
         {
             if (i >= input_size)
@@ -115,10 +113,10 @@ namespace ros_util
             }
         }
 
-        /* steps: subscribe, sync, callback */
+        /* Steps: subscribe, sync, callback */
 
         /* ROS subscription filter. */
-        /* update cloud_subscriber with the PointClouds in the input_topics
+        /* Update cloud_subscriber with the PointClouds in the input_topics
             for the one with nothing inside, update with the 1st PointCloud */
         for (int i = 0; i < MAX_SIZE; i++)
         {
@@ -137,11 +135,11 @@ namespace ros_util
             SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
             *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
 
-        /* callback */
+        /* Callback */
         cloud_synchronizer_->registerCallback(
             boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
-        /* returns a Publisher that allows you to publish a message on this topic. */
+        /* Returns a Publisher that allows you to publish a message on this topic. */
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
     }
 
@@ -166,19 +164,18 @@ namespace ros_util
 
         boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
 
-        // transform points
+        // Transform points
         try
         {
             for (int i = 0; i < input_size; i++)
             {
-                // Note: If you use kinetic, you can directly receive messages as
-                // PointCloutT.
+                // Note: If you use kinetic, you can directly receive messages as PointCloutT.
 
-                /* copy the cloud to the heap and return a smart pointer */
+                /* Copy the cloud to the heap and return a smart pointer */
                 cloud_sources[i] = PointCloudT().makeShared();
                 cloud_source[i] = PointCloudT().makeShared();
 
-                /* convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
+                /* Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
@@ -214,13 +211,29 @@ namespace ros_util
                     }
                 }
 
-                /* Resize pointcloud */
-                cloud_source[i]->resize(--current_index);
+                /* Resize pointcloud if current index is > 0 */
+                if (current_index > 0)
+                {
+                    cloud_source[i]->resize(--current_index);
+                }
+                else
+                {
+                    ROS_ERROR("PointCloud after filtering is 0. Exiting now...");
 
-                /* block until a transform is possible or it times out */
+                    /* Disconnects everything and unregisters from the master. 
+                       It is generally not necessary to call this function, as the 
+                       node will automatically shutdown when all NodeHandles destruct. 
+                       However, if you want to break out of a spin() loop explicitly, 
+                       this function allows that. */
+                    ros::shutdown();
+
+                    return;
+                }
+
+                /* Block until a transform is possible or it times out */
                 tfBuffer.lookupTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
 
-                /* transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
+                /* Transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
                 pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tfBuffer);
             }
         }
@@ -233,18 +246,18 @@ namespace ros_util
             return;
         }
 
-        // merge points
+        // Merge points
         for (int i = 0; i < input_size; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
 
-        // publish points
+        // Publish points
         cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
 
         cloud_concatenated->header.frame_id = output_frame_id_;
 
-        /* publish a message on the topic associated with this Publisher. */
+        /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
     }
 

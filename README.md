@@ -9,12 +9,12 @@
   - [Change input topics](#change-input-topics)
   - [Change output topic](#change-output-topic)
   - [Change output frame id](#change-output-frame-id)
-  - [Change minimum range x axis](#change-minimum-range-x-axis)
-  - [Change minimum range y axis](#change-minimum-range-y-axis)
-  - [Change maximum range x axis](#change-maximum-range-x-axis)
-  - [Change maximum range y axis](#change-maximum-range-y-axis)
-  - [Change minimum height z axis](#change-minimum-height-z-axis)
-  - [Change maximum height z axis](#change-maximum-height-z-axis)
+  - [Change minimum range in x axis](#change-minimum-range-in-x-axis)
+  - [Change minimum range in y axis](#change-minimum-range-in-y-axis)
+  - [Change maximum range in x axis](#change-maximum-range-in-x-axis)
+  - [Change maximum range in y axis](#change-maximum-range-in-y-axis)
+  - [Change minimum height in z axis](#change-minimum-height-in-z-axis)
+  - [Change maximum height in z axis](#change-maximum-height-in-z-axis)
 - [WHAT EXISTING FILES TO CHANGE](#what-existing-files-to-change)
   - [What to add in to robot urdf](#what-to-add-in-to-robot-urdf)
   - [How package.xml should look like](#how-packagexml-should-look-like)
@@ -131,7 +131,7 @@ output_frame_id: 'velodyne_frame'
 
 **when modifying the value here, have to also modify at the robot urdf**
 
-## Change minimum range x axis
+## Change minimum range in x axis
 
 in this case, **0.5** and **-0.5** are desired minimum range in the positive x axis and negative x axis respectively
 ```
@@ -139,7 +139,7 @@ pmin_range_x: 0.5
 nmin_range_x: -0.5
 ```
 
-## Change minimum range y axis
+## Change minimum range in y axis
 
 in this case, **0.5** and **-0.5** are desired minimum range in the positive y axis and negative y axis respectively
 ```
@@ -147,7 +147,7 @@ pmin_range_y: 0.5
 nmin_range_y: -0.5
 ```
 
-## Change maximum range x axis
+## Change maximum range in x axis
 
 in this case, **5.0** and **-5.0** are desired maximum range in the positive x axis and negative x axis respectively
 ```
@@ -155,21 +155,21 @@ pmax_range_x: 5.0
 nmax_range_x: -5.0
 ```
 
-## Change maximum range y axis
+## Change maximum range in y axis
 
 in this case, **5.0** and **-5.0** are desired maximum range in the positive y axis and negative y axis respectively
 ```
 pmax_range_y: 5.0
 nmax_range_y: -5.0
 ```
-## Change minimum height z axis
+## Change minimum height in z axis
 
 in this case, **-1.0** is desired minimum height in the z axis 
 ```
 pmin_range_z: -1.0
 ```
 
-## Change maximum height z axis
+## Change maximum height in z axis
 
 in this case, **100.0** is desired maximum height in the z axis
 ```
@@ -215,7 +215,15 @@ in this case, the output fame id is velodyne_frame
     <!-- Replace with the desired config file -->
     <arg name="robot_name" default="husky" />
 
+    <!-- Replace with either true or false, 
+         false: enable raw merge pointcloud 
+         true: enable filtered pointcloud with maximum and minimum range enabled
+    -->
+    <arg name="enable_range_flag" default="true"/>
+
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
+
+        <param name="enable_range_flag" type="string" value="$(arg enable_range_flag)"/>
 
         <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg robot_name).yaml" />
 
@@ -328,6 +336,9 @@ namespace ros_util
         /* Storage for the retrieved value for output_frame_id */
         std::string output_frame_id_;
 
+        /* Storage for the retrieved value for whether to enable maximum and minimum range */
+        std::string enable_range_flag_;
+
         /* Storage for the retrieved value for pmin_range_x */
         double pmin_range_x_;
         /* Storage for the retrieved value for pmax_range_x */
@@ -397,6 +408,8 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
+        private_nh_.param("enable_range_flag", enable_range_flag_, std::string("true"));
+
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
         private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
         private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
@@ -410,16 +423,30 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
+        if (enable_range_flag_.compare("true") != 0)
+        {
+            pmin_range_x_ = 0.0;
+            pmax_range_x_ = DBL_MAX;
+            nmin_range_x_ = 0.0;
+            nmax_range_x_ = -DBL_MAX;
+
+            pmin_range_y_ = 0.0;
+            pmax_range_y_ = DBL_MAX;
+            nmin_range_y_ = 0.0;
+            nmax_range_y_ = -DBL_MAX;
+
+            pmin_range_z_ = -DBL_MAX;
+            pmax_range_z_ = DBL_MAX;
+        }
+
         input_topics_ = input_topics_.substr(1);
         std::stringstream ss(input_topics_);
         std::string source;
 
-        /* 
-         *   in this case do not need to store input topics into a array  
-         *   but can be useful in future projects
-         */
+        /* Array that stores input topics */
         std::string store_input_topics[MAX_SIZE];
 
+        /* Stores input into store_input_topics[] array */
         while (ss >> source)
         {
             source = source.substr(0, source.length() - 1);
@@ -427,7 +454,7 @@ namespace ros_util
             input_size++;
         }
 
-        // check number of input topics accepted
+        // Check number of input topics accepted
         if (input_size < MIN_SIZE)
         {
             ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
@@ -455,7 +482,7 @@ namespace ros_util
             return;
         }
 
-        /* replace input topics >= input size with 1st input topic */
+        /* Replace input topics >= input size with 1st input topic */
         for (int i = 0; i < MAX_SIZE; i++)
         {
             if (i >= input_size)
@@ -463,17 +490,14 @@ namespace ros_util
                 store_input_topics[i] = store_input_topics[0];
             }
         }
-        
-        /* steps: subscribe, sync, callback */
 
-        /* message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;  */
+        /* Steps: subscribe, sync, callback */
 
         /* ROS subscription filter. */
-        /* update cloud_subscriber with the PointClouds in the input_topics
+        /* Update cloud_subscriber with the PointClouds in the input_topics
             for the one with nothing inside, update with the 1st PointCloud */
         for (int i = 0; i < MAX_SIZE; i++)
-            {
+        {
             if (i < input_size)
             {
                 cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
@@ -487,14 +511,14 @@ namespace ros_util
         /* Sychronise the cloud_subscribers */
         cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
             SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]); 
+            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
 
-        /* callback */
+        /* Callback */
         cloud_synchronizer_->registerCallback(
-            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8)); 
+            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
-        /* returns a Publisher that allows you to publish a message on this topic. */
-        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE); 
+        /* Returns a Publisher that allows you to publish a message on this topic. */
+        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
     }
 
     void point_cloud_merger::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
@@ -518,19 +542,18 @@ namespace ros_util
 
         boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
 
-        // transform points
+        // Transform points
         try
         {
             for (int i = 0; i < input_size; i++)
             {
-                // Note: If you use kinetic, you can directly receive messages as
-                // PointCloutT.
+                // Note: If you use kinetic, you can directly receive messages as PointCloutT.
 
-                /* copy the cloud to the heap and return a smart pointer */
+                /* Copy the cloud to the heap and return a smart pointer */
                 cloud_sources[i] = PointCloudT().makeShared();
                 cloud_source[i] = PointCloudT().makeShared();
 
-                /* convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
+                /* Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
                 pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
@@ -561,25 +584,34 @@ namespace ros_util
                         cloud_source[i]->points[current_index].x = cloud_sources[i]->points[j].x;
                         cloud_source[i]->points[current_index].y = cloud_sources[i]->points[j].y;
                         cloud_source[i]->points[current_index].z = cloud_sources[i]->points[j].z;
+
                         current_index++;
                     }
                 }
 
-                /* set the points that are out of bound as INT_MAX */
-                if (cloud_source[i]->size() > current_index)
+                /* Resize pointcloud if current index is > 0 */
+                if (current_index > 0)
                 {
-                    for (int p = current_index; p < cloud_source[i]->size(); p++)
-                    {
-                        cloud_source[i]->points[p].x = INT_MAX;
-                        cloud_source[i]->points[p].y = INT_MAX;
-                        cloud_source[i]->points[p].z = INT_MAX;
-                    }
+                    cloud_source[i]->resize(--current_index);
+                }
+                else
+                {
+                    ROS_ERROR("PointCloud after filtering is 0. Exiting now...");
+
+                    /* Disconnects everything and unregisters from the master. 
+                       It is generally not necessary to call this function, as the 
+                       node will automatically shutdown when all NodeHandles destruct. 
+                       However, if you want to break out of a spin() loop explicitly, 
+                       this function allows that. */
+                    ros::shutdown();
+
+                    return;
                 }
 
-                /* block until a transform is possible or it times out */
+                /* Block until a transform is possible or it times out */
                 tfBuffer.lookupTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
 
-                /* transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
+                /* Transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
                 pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tfBuffer);
             }
         }
@@ -592,18 +624,18 @@ namespace ros_util
             return;
         }
 
-        // merge points
+        // Merge points
         for (int i = 0; i < input_size; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
 
-        // publish points
+        // Publish points
         cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
 
         cloud_concatenated->header.frame_id = output_frame_id_;
 
-        /* publish a message on the topic associated with this Publisher. */
+        /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
     }
 
