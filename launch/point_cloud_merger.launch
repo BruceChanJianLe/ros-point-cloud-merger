@@ -10,11 +10,23 @@
     -->
     <arg name="enable_range_flag" default="true"/>
 
+    <!-- Replace with the desired config file -->
+    <arg name="x_range" default="husky_x" />
+
+    <!-- Replace with the desired config file -->
+    <arg name="y_range" default="husky_y" />
+
+    <!-- Replace with the desired config file -->
+    <arg name="z_range" default="husky_z" />
+
     <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
 
         <param name="enable_range_flag" type="string" value="$(arg enable_range_flag)"/>
 
         <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg robot_name).yaml" />
+        <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg x_range).yaml" />
+        <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg y_range).yaml" />
+        <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg z_range).yaml" />
 
     </node>
 </launch>

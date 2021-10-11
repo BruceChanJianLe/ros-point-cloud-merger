@@ -1,0 +1,4 @@
+# Replace with the desired z min height
+pmin_range_z: -1.0
+# Replace with the desired z max height
+pmax_range_z: 100.0
