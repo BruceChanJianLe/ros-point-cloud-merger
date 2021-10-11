@@ -30,6 +30,8 @@ namespace ros_util
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
 
+        private_nh_.param("enable_range", enable_range_, std::string("true"));
+
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
         private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
         private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
@@ -42,6 +44,28 @@ namespace ros_util
 
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
+
+        if (enable_range_.compare("true") != 0)
+        {
+            ROS_INFO("%f", pmin_range_x_);
+            ROS_INFO("%f", pmax_range_x_);
+
+            pmin_range_x_ = 0.0;
+            pmax_range_x_ = 1000.0;
+            nmin_range_x_ = 0.0;
+            nmax_range_x_ = -1000.0;
+
+            pmin_range_y_ = 0.0;
+            pmax_range_y_ = 1000.0;
+            nmin_range_y_ = 0.0;
+            nmax_range_y_ = -1000.0;
+
+            pmin_range_z_ = -1000.0;
+            pmax_range_z_ = 1000.0;
+
+            ROS_INFO("%f", pmin_range_x_);
+            ROS_INFO("%f", pmax_range_x_);
+        }
 
         input_topics_ = input_topics_.substr(1);
         std::stringstream ss(input_topics_);
@@ -103,7 +127,7 @@ namespace ros_util
         /* update cloud_subscriber with the PointClouds in the input_topics
             for the one with nothing inside, update with the 1st PointCloud */
         for (int i = 0; i < MAX_SIZE; i++)
-            {
+        {
             if (i < input_size)
             {
                 cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
@@ -165,6 +189,8 @@ namespace ros_util
                 pcl::fromROSMsg(*msg[i], *cloud_source[i]);
 
                 int current_index = 0;
+
+                
 
                 for (int j = 0; j < cloud_sources[i]->size(); j++)
                 {

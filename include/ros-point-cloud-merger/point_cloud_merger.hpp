@@ -79,6 +79,9 @@ namespace ros_util
         /* Storage for the retrieved value for output_frame_id */
         std::string output_frame_id_;
 
+        /* Storage for the retrieved value for whether to enable range */
+        std::string enable_range_;
+
         /* Storage for the retrieved value for pmin_range_x */
         double pmin_range_x_;
         /* Storage for the retrieved value for pmax_range_x */
