@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Replace with the desired config file -->
+    <arg name="robot_name" default="husky" />
+
+    <!-- Replace with either true or false, 
+         false: enable raw merge pointcloud 
+         true: enable filtered pointcloud with maximum and minimum range enabled
+    -->
+    <arg name="enable_range_flag" default="true"/>
+
+    <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
+
+        <param name="enable_range_flag" type="string" value="$(arg enable_range_flag)"/>
+
+        <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg robot_name).yaml" />
+
+    </node>
+</launch>
