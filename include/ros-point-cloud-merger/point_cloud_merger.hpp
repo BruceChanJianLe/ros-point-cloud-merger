@@ -48,10 +48,10 @@ namespace ros_util
 
         /* For unit test purposes */
         /* HERE */
-        std::string checkInputSize(int input_size);
-        double replaceXValue(double pmin_range_x);
-        double replaceYValue(double pmin_range_y);
-        double replaceZValue(double pmin_range_z);
+        std::string checkInputSize(int);
+        double replaceXValue(double);
+        double replaceYValue(double);
+        double replaceZValue(double);
 
         ~point_cloud_merger();
 
