@@ -1,7 +1,0 @@
-# Replace with the desired input topics
-input_topics: '[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]'
-# Replace with the desired output topic
-output_topic: '/husky_points_concat'
-
-# Replace with the desired output frame to change in the link to robot.urdf as well
-output_frame_id: 'velodyne_frame'

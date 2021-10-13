@@ -1,8 +1,0 @@
-# Replace with the desired positive x min range from base_link
-pmin_range_x: 0.5
-# Replace with the desired positive x max range from base_link
-pmax_range_x: 5.0
-# Replace with the desired negative x min range from base_link
-nmin_range_x: -0.5
-# Replace with the desired negative x max range from base_link
-nmax_range_x: -5.0
