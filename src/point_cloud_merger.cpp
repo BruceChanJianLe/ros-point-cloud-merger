@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "ros-gtest/PointCloudMerger.hpp"
+#include "ros-point-cloud-merger/point_cloud_merger.hpp"
 
 #define MIN_SIZE 2
 #define MAX_SIZE 8
