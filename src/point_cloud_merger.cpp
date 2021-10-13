@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "ros-point-cloud-merger/point_cloud_merger.hpp"
+#include "ros-gtest/PointCloudMerger.hpp"
 
 #define MIN_SIZE 2
 #define MAX_SIZE 8
@@ -75,6 +75,13 @@ namespace ros_util
             store_input_topics[input_size] = source;
             input_size++;
         }
+
+        /* For unit test purposes */
+        /* HERE */
+        std::string isValid = checkInputSize(input_size);
+        pmin_range_x_ = replaceXValue(pmin_range_x_);
+        pmin_range_y_ = replaceYValue(pmin_range_y_);
+        pmin_range_z_ = replaceZValue(pmin_range_z_);
 
         // Check number of input topics accepted
         if (input_size < MIN_SIZE)
@@ -259,6 +266,40 @@ namespace ros_util
 
         /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
+    }
+
+    std::string checkInputSize(int input_size){
+        std::string output = "Successful!";
+
+        if (input_size < 2 || input_size > 8) {
+            output = "Rejected! Out of bound input size.";
+        }
+
+        return output;        
+    }
+
+    double replaceXValue(double pmin_range_x_){
+        double output;
+
+        output = pmin_range_x_;
+
+        return output; 
+    }
+
+    double replaceYValue(double pmin_range_y_){
+        double output;
+
+        output = pmin_range_y_;
+
+        return output; 
+    }
+
+    double replaceZValue(double pmin_range_z_){
+        double output;
+
+        output = pmin_range_z_;
+
+        return output; 
     }
 
     point_cloud_merger::~point_cloud_merger()
