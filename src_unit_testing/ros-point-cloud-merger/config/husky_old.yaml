@@ -1,0 +1,30 @@
+# Replace with the desired input topics
+input_topics: '[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]'
+# Replace with the desired output topic
+output_topic: '/husky_points_concat'
+
+# Replace with the desired output frame to change in the link to robot.urdf as well
+output_frame_id: 'velodyne_frame'
+
+# Replace with the desired positive x min range from base_link
+pmin_range_x: 0.5
+# Replace with the desired positive x max range from base_link
+pmax_range_x: 5.0
+# Replace with the desired negative x min range from base_link
+nmin_range_x: -0.5
+# Replace with the desired negative x max range from base_link
+nmax_range_x: -5.0
+
+# Replace with the desired positive y min range from base_link
+pmin_range_y: 0.5
+# Replace with the desired positive y max range from base_link
+pmax_range_y: 5.0
+# Replace with the desired negative y min range from base_link
+nmin_range_y: -0.5
+# Replace with the desired negative y max range from base_link
+nmax_range_y: -5.0
+
+# Replace with the desired z min height
+pmin_range_z: -1.0
+# Replace with the desired z max height
+pmax_range_z: 100.0
