@@ -292,29 +292,17 @@ namespace ros_util
 
     double point_cloud_merger::replaceXValue(double pmin_range_x_)
     {
-        double output;
-
-        output = pmin_range_x_;
-
-        return output;
+        return pmin_range_x_;
     }
 
     double point_cloud_merger::replaceYValue(double pmin_range_y_)
     {
-        double output;
-
-        output = pmin_range_y_;
-
-        return output;
+        return pmin_range_y_;
     }
 
     double point_cloud_merger::replaceZValue(double pmin_range_z_)
     {
-        double output;
-
-        output = pmin_range_z_;
-
-        return output;
+        return pmin_range_z_;
     }
 
     point_cloud_merger::~point_cloud_merger()

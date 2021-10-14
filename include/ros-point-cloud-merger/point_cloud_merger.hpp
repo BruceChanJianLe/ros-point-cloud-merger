@@ -42,6 +42,12 @@ namespace ros_util
     public:
         point_cloud_merger();
 
+        /* point_cloud_merger(int x, int y, int z, std::string inputs) {
+            pmin_range_x_ = x;
+            pmin_range_y_ = y;
+            pmin_range_z_ = z;
+        } */
+ 
         std::string getInputTopics(){
             return input_topics_;
         }

@@ -32,6 +32,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -54,9 +55,12 @@ target_include_directories(point_cloud_merger_node PRIVATE
 target_link_libraries(point_cloud_merger_node
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
+  ${Boost_LIBRARIES}
 )
 
-catkin_add_gtest(${PROJECT_NAME} src/test.cpp)
+catkin_add_gtest(${PROJECT_NAME} 
+  src/test.cpp
+)
 
 install(
   TARGETS
