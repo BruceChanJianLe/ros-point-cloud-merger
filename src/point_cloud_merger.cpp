@@ -78,10 +78,15 @@ namespace ros_util
 
         /* For unit test purposes */
         /* HERE */
+        double new_pmin_range_x = 0.5;
+        double new_pmin_range_y = 0.5;
+        double new_pmin_range_z = -1.0;
+
+        input_size = getInputSize();
         std::string isValid = checkInputSize(input_size);
-        pmin_range_x_ = replaceXValue(pmin_range_x_);
-        pmin_range_y_ = replaceYValue(pmin_range_y_);
-        pmin_range_z_ = replaceZValue(pmin_range_z_);
+        pmin_range_x_ = replaceXValue(new_pmin_range_x);
+        pmin_range_y_ = replaceYValue(new_pmin_range_y);
+        pmin_range_z_ = replaceZValue(new_pmin_range_z);
 
         // Check number of input topics accepted
         if (input_size < MIN_SIZE)
@@ -268,38 +273,48 @@ namespace ros_util
         cloud_publisher_.publish(cloud_concatenated);
     }
 
-    std::string checkInputSize(int input_size){
+    int point_cloud_merger::getInputSize()
+    {
+        return input_size;
+    }
+
+    std::string point_cloud_merger::checkInputSize(int input_size)
+    {
         std::string output = "Successful!";
 
-        if (input_size < 2 || input_size > 8) {
+        if (input_size < 2 || input_size > 8)
+        {
             output = "Rejected! Out of bound input size.";
         }
 
-        return output;        
+        return output;
     }
 
-    double replaceXValue(double pmin_range_x_){
+    double point_cloud_merger::replaceXValue(double pmin_range_x_)
+    {
         double output;
 
         output = pmin_range_x_;
 
-        return output; 
+        return output;
     }
 
-    double replaceYValue(double pmin_range_y_){
+    double point_cloud_merger::replaceYValue(double pmin_range_y_)
+    {
         double output;
 
         output = pmin_range_y_;
 
-        return output; 
+        return output;
     }
 
-    double replaceZValue(double pmin_range_z_){
+    double point_cloud_merger::replaceZValue(double pmin_range_z_)
+    {
         double output;
 
         output = pmin_range_z_;
 
-        return output; 
+        return output;
     }
 
     point_cloud_merger::~point_cloud_merger()

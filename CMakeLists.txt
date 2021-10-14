@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   roscpp
   rospy
+  std_msgs
   sensor_msgs
   tf2
   tf2_ros
@@ -54,6 +55,8 @@ target_link_libraries(point_cloud_merger_node
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
 )
+
+catkin_add_gtest(${PROJECT_NAME} src/test.cpp)
 
 install(
   TARGETS
