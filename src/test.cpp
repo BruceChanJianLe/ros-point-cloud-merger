@@ -8,7 +8,8 @@
 
 /* using namespace ros_util; */
 
-double replace(double output) {
+double replace(double output)
+{
     return output;
 }
 
@@ -180,10 +181,17 @@ TEST(TestCase12, testName12)
 
 int main(int argc, char **argv)
 {
+    /* ros::init(argc, argv, "point_cloud_merger_node"); */
+
     ::testing::InitGoogleTest(&argc, argv);
 
-    /* ros::init(argc, argv, "point_cloud_merger_node");
-    ros::NodeHandle nh; */
+    /* ros::NodeHandle nh;
+    ros::NodeHandle private_nh("~"); */
+
+    /* tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tf2_listener_(tfBuffer); */
+
+    ros::spin();
 
     return RUN_ALL_TESTS();
 }
