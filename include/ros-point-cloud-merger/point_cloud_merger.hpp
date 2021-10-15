@@ -42,25 +42,75 @@ namespace ros_util
     public:
         point_cloud_merger();
 
-        /* point_cloud_merger(int x, int y, int z, std::string inputs) {
-            pmin_range_x_ = x;
-            pmin_range_y_ = y;
-            pmin_range_z_ = z;
-        } */
- 
-        std::string getInputTopics(){
-            return input_topics_;
-        }
-
         /* For unit test purposes */
         /* HERE */
-        int getInputSize();
-        std::string checkInputSize(int input_size);
-        double replaceXValue(double pmin_range_x);
-        double replaceYValue(double pmin_range_y);
-        double replaceZValue(double pmin_range_z); 
 
-        ~point_cloud_merger();
+        point_cloud_merger(double x, double y, double z, int input) : tf2_listener_(tfBuffer)
+        {
+            setXValue(x);
+            setYValue(y);
+            setZValue(z);
+            setInputSize(input);
+        }
+
+        std::string getInputTopics()
+        {
+            return input_topics_;
+        }     
+
+        std::string checkInputSize()
+        {
+            std::string output = "Successful!";
+
+            if (input_size_ < 2 || input_size_ > 8)
+            {
+                output = "Rejected! Out of bound input size.";
+            }
+
+            return output;
+        }
+
+        void setXValue(double pmin_range_x)
+        {
+            pmin_range_x_ = pmin_range_x;
+        }
+
+        void setYValue(double pmin_range_y)
+        {
+            pmin_range_y_ = pmin_range_y;
+        }
+
+        void setZValue(double pmin_range_z)
+        {
+            pmin_range_z_ = pmin_range_z;
+        }
+
+        void setInputSize(int input)
+        {
+            input_size_ = input;
+        }
+
+        double getXValue()
+        {
+            return pmin_range_x_;
+        }
+
+        double getYValue()
+        {
+            return pmin_range_y_;
+        }
+
+        double getZValue()
+        {
+            return pmin_range_z_;
+        }
+
+        int getInputSize()
+        {
+            return input_size_;
+        }
+
+        /* ~point_cloud_merger(); */
 
     private:
         typedef pcl::PointXYZI PointT;
@@ -122,6 +172,8 @@ namespace ros_util
         double pmin_range_z_;
         /* Storage for the retrieved value for pmax_range_z */
         double pmax_range_z_;
+
+        int input_size_;
 
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                  const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,

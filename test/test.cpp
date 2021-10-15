@@ -6,7 +6,8 @@
 
 #include "ros-point-cloud-merger/AxisManager.hpp"
 
-TEST(TestCase001, testName001) {
+/* dummy test */
+TEST(TestCase0001, testName0001) {
     AxisValue merge(1, 1, 1, "/points");
 
     EXPECT_EQ(1, merge.getX());
@@ -14,47 +15,116 @@ TEST(TestCase001, testName001) {
     EXPECT_EQ(1, merge.getZ());
 }
 
+/* CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `__static_initialization_and_destruction_0(int, int)':
+        test.cpp:(.text+0x16c3): undefined reference to `boost::system::generic_category()'
+        test.cpp:(.text+0x16cf): undefined reference to `boost::system::generic_category()'
+        test.cpp:(.text+0x16db): undefined reference to `boost::system::system_category()'
+        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(int, std::error_condition const&) const':
+        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xb8): undefined reference to `boost::system::generic_category()'
+        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xf3): undefined reference to `boost::system::generic_category()'
+        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(std::error_code const&, int) const':
+        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xb8): undefined reference to `boost::system::generic_category()'
+        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xf3): undefined reference to `boost::system::generic_category()'
+        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x1d2): undefined reference to `boost::system::generic_category()'
+        collect2: error: ld returned 1 exit status */
+
+
 TEST(TestCase01, testName01)
 {
-    /* CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `TestCase1_testName1_Test::TestBody()':
-        test.cpp:(.text+0x2d): undefined reference to `ros_util::point_cloud_merger::point_cloud_merger()'
-        test.cpp:(.text+0x52): undefined reference to `ros_util::point_cloud_merger::replaceXValue(double)'
-        test.cpp:(.text+0x161): undefined reference to `ros_util::point_cloud_merger::replaceYValue(double)'
-        test.cpp:(.text+0x270): undefined reference to `ros_util::point_cloud_merger::replaceZValue(double)'
-        test.cpp:(.text+0x369): undefined reference to `ros_util::point_cloud_merger::~point_cloud_merger()'
-        test.cpp:(.text+0x448): undefined reference to `ros_util::point_cloud_merger::~point_cloud_merger()' */
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 2);
 
-    ros_util::point_cloud_merger merge;
+    double compare = 10.0;
 
-    double output, compare;
-
-    output = merge.replaceXValue(10.0);
-    compare = 10.0;
-    EXPECT_EQ(compare, output);
-
-    output = merge.replaceYValue(10.0);
-    compare = 10.0;
-    EXPECT_EQ(compare, output);
-
-    output = merge.replaceZValue(-1.0);
-    compare = -1.0;
-    EXPECT_EQ(compare, output);
+    EXPECT_EQ(compare, merge.getXValue());
+    EXPECT_EQ(compare, merge.getYValue());
+    EXPECT_EQ(compare, merge.getZValue());
+    EXPECT_EQ(compare, merge.getInputSize());
 }
 
-TEST(TestCase02, testName02)
+TEST(TestCase001, testName001)
 {
-    /* CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `TestCase02_testName02_Test::TestBody()':
-        test.cpp:(.text+0x493): undefined reference to `ros_util::point_cloud_merger::point_cloud_merger()'
-        test.cpp:(.text+0x4cf): undefined reference to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)'
-        test.cpp:(.text+0x5f9): undefined reference to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)'
-        test.cpp:(.text+0x723): undefined reference to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)'
-        test.cpp:(.text+0x84d): undefined reference to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)'
-        test.cpp:(.text+0x977): undefined reference to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)'
-        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o:test.cpp:(.text+0xaa1): more undefined references to `ros_util::point_cloud_merger::checkInputSize[abi:cxx11](int)' follow
-        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `TestCase02_testName02_Test::TestBody()':
-        test.cpp:(.text+0xf58): undefined reference to `ros_util::point_cloud_merger::~point_cloud_merger()'
-        test.cpp:(.text+0x11cf): undefined reference to `ros_util::point_cloud_merger::~point_cloud_merger()' */
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 1);
 
+    std::string compare = "Rejected! Out of bound input size.";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase002, testName002)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 2);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase003, testName003)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 3);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase004, testName004)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 4);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase005, testName005)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 5);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase006, testName006)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 6);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase007, testName007)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 7);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase008, testName008)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 8);
+
+    std::string compare = "Successful!";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+TEST(TestCase009, testName009)
+{
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 9);
+
+    std::string compare = "Rejected! Out of bound input size.";
+    
+    EXPECT_EQ(compare, merge.checkInputSize());
+}
+
+
+/* TEST(TestCase02, testName02)
+{
     ros_util::point_cloud_merger merge;
 
     std::string output, compare;
@@ -94,7 +164,7 @@ TEST(TestCase02, testName02)
     output = merge.checkInputSize(9);
     compare = "Rejected! Out of bound input size.";
     EXPECT_EQ(compare, output);
-}
+} */
 
 /* TEST(TestCase1, testName1)
 {

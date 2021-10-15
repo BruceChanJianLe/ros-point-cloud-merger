@@ -45,7 +45,6 @@ link_directories(
 add_executable(point_cloud_merger_node
   src/point_cloud_merger_node.cpp
   src/point_cloud_merger.cpp
-  test/test.cpp
 )
 
 add_dependencies(point_cloud_merger_node
@@ -54,6 +53,7 @@ add_dependencies(point_cloud_merger_node
 
 target_include_directories(point_cloud_merger_node PRIVATE
   ${PCL_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 target_link_libraries(point_cloud_merger_node

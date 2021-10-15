@@ -78,7 +78,7 @@ namespace ros_util
 
         /* For unit test purposes */
         /* HERE */
-        double new_pmin_range_x = 0.5;
+        /* double new_pmin_range_x = 0.5;
         double new_pmin_range_y = 0.5;
         double new_pmin_range_z = -1.0;
 
@@ -86,7 +86,7 @@ namespace ros_util
         std::string isValid = checkInputSize(input_size);
         pmin_range_x_ = replaceXValue(new_pmin_range_x);
         pmin_range_y_ = replaceYValue(new_pmin_range_y);
-        pmin_range_z_ = replaceZValue(new_pmin_range_z);
+        pmin_range_z_ = replaceZValue(new_pmin_range_z); */
 
         // Check number of input topics accepted
         if (input_size < MIN_SIZE)
@@ -273,7 +273,7 @@ namespace ros_util
         cloud_publisher_.publish(cloud_concatenated);
     }
 
-    int point_cloud_merger::getInputSize()
+    /* int point_cloud_merger::getInputSize()
     {
         return input_size;
     }
@@ -303,10 +303,10 @@ namespace ros_util
     double point_cloud_merger::replaceZValue(double pmin_range_z_)
     {
         return pmin_range_z_;
-    }
+    } */
 
-    point_cloud_merger::~point_cloud_merger()
+    /* point_cloud_merger::~point_cloud_merger()
     {
-    }
+    } */
 
 } // namespace ros_util
