@@ -15,19 +15,48 @@ TEST(TestCase0001, testName0001) {
     EXPECT_EQ(1, merge.getZ());
 }
 
-/* CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `__static_initialization_and_destruction_0(int, int)':
-        test.cpp:(.text+0x16c3): undefined reference to `boost::system::generic_category()'
-        test.cpp:(.text+0x16cf): undefined reference to `boost::system::generic_category()'
-        test.cpp:(.text+0x16db): undefined reference to `boost::system::system_category()'
-        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(int, std::error_condition const&) const':
-        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xb8): undefined reference to `boost::system::generic_category()'
-        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xf3): undefined reference to `boost::system::generic_category()'
-        CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(std::error_code const&, int) const':
-        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xb8): undefined reference to `boost::system::generic_category()'
-        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xf3): undefined reference to `boost::system::generic_category()'
-        test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x1d2): undefined reference to `boost::system::generic_category()'
-        collect2: error: ld returned 1 exit status */
-
+/* 
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `__static_initialization_and_destruction_0(int, int)':
+test.cpp:(.text+0x1ffb): undefined reference to `boost::system::generic_category()'
+test.cpp:(.text+0x2007): undefined reference to `boost::system::generic_category()'
+test.cpp:(.text+0x2013): undefined reference to `boost::system::system_category()'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `ros::Duration::Duration(double)':
+test.cpp:(.text._ZN3ros8DurationC2Ed[_ZN3ros8DurationC5Ed]+0x33): undefined reference to `ros::DurationBase<ros::Duration>::fromSec(double)'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(int, std::error_condition const&) const':
+test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xb8): undefined reference to `boost::system::generic_category()'
+test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0xf3): undefined reference to `boost::system::generic_category()'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `boost::system::error_category::std_category::equivalent(std::error_code const&, int) const':
+test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xb8): undefined reference to `boost::system::generic_category()'
+test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0xf3): undefined reference to `boost::system::generic_category()'
+test.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x1d2): undefined reference to `boost::system::generic_category()'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `ros_util::point_cloud_merger::point_cloud_merger(double, double, double, int)':
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x8c): undefined reference to `ros::NodeHandle::NodeHandle(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > const&)'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x101): undefined reference to `ros::NodeHandle::NodeHandle(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > const&)'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x16c): undefined reference to `tf2_ros::Buffer::Buffer(ros::Duration, bool)'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x19d): undefined reference to `tf2_ros::TransformListener::TransformListener(tf2::BufferCore&, bool)'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x2f5): undefined reference to `ros::Publisher::~Publisher()'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x307): undefined reference to `ros::NodeHandle::~NodeHandle()'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerC2Edddi[_ZN8ros_util18point_cloud_mergerC5Edddi]+0x313): undefined reference to `ros::NodeHandle::~NodeHandle()'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `ros_util::point_cloud_merger::~point_cloud_merger()':
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerD2Ev[_ZN8ros_util18point_cloud_mergerD5Ev]+0x62): undefined reference to `tf2_ros::TransformListener::~TransformListener()'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerD2Ev[_ZN8ros_util18point_cloud_mergerD5Ev]+0x86): undefined reference to `ros::Publisher::~Publisher()'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerD2Ev[_ZN8ros_util18point_cloud_mergerD5Ev]+0x98): undefined reference to `ros::NodeHandle::~NodeHandle()'
+test.cpp:(.text._ZN8ros_util18point_cloud_mergerD2Ev[_ZN8ros_util18point_cloud_mergerD5Ev]+0xa4): undefined reference to `ros::NodeHandle::~NodeHandle()'
+CMakeFiles/ros-point-cloud-merger.dir/test/test.cpp.o: In function `tf2_ros::Buffer::~Buffer()':
+test.cpp:(.text._ZN7tf2_ros6BufferD2Ev[_ZN7tf2_ros6BufferD5Ev]+0xf): undefined reference to `vtable for tf2_ros::Buffer'
+test.cpp:(.text._ZN7tf2_ros6BufferD2Ev[_ZN7tf2_ros6BufferD5Ev]+0x1d): undefined reference to `vtable for tf2_ros::Buffer'
+test.cpp:(.text._ZN7tf2_ros6BufferD2Ev[_ZN7tf2_ros6BufferD5Ev]+0x37): undefined reference to `ros::ServiceServer::~ServiceServer()'
+test.cpp:(.text._ZN7tf2_ros6BufferD2Ev[_ZN7tf2_ros6BufferD5Ev]+0x47): undefined reference to `tf2::BufferCore::~BufferCore()'
+collect2: error: ld returned 1 exit status
+husky_sw/ros-point-cloud-merger/CMakeFiles/ros-point-cloud-merger.dir/build.make:95: recipe for target '/home/isera2/catkin_ws/devel/lib/ros-point-cloud-merger/ros-point-cloud-merger' failed
+make[3]: *** [/home/isera2/catkin_ws/devel/lib/ros-point-cloud-merger/ros-point-cloud-merger] Error 1
+CMakeFiles/Makefile2:10531: recipe for target 'husky_sw/ros-point-cloud-merger/CMakeFiles/ros-point-cloud-merger.dir/all' failed
+make[2]: *** [husky_sw/ros-point-cloud-merger/CMakeFiles/ros-point-cloud-merger.dir/all] Error 2
+CMakeFiles/Makefile2:115: recipe for target 'CMakeFiles/run_tests.dir/rule' failed
+make[1]: *** [CMakeFiles/run_tests.dir/rule] Error 2
+Makefile:188: recipe for target 'run_tests' failed
+make: *** [run_tests] Error 2
+ */
 
 TEST(TestCase01, testName01)
 {
