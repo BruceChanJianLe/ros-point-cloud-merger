@@ -21,6 +21,8 @@ find_package(PkgConfig REQUIRED)
 
 find_package(PCL REQUIRED)
 
+find_package(Boost 1.55.0 REQUIRED COMPONENTS system filesystem)
+
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES ros-point-cloud-merger
@@ -37,11 +39,13 @@ include_directories(
 
 link_directories(
   ${PCL_LIBRARY_DIRS}
+  ${Boost_LIBRARY_DIRS}
 )
 
 add_executable(point_cloud_merger_node
   src/point_cloud_merger_node.cpp
   src/point_cloud_merger.cpp
+  test/test.cpp
 )
 
 add_dependencies(point_cloud_merger_node
@@ -58,8 +62,10 @@ target_link_libraries(point_cloud_merger_node
   ${Boost_LIBRARIES}
 )
 
+## will cause the executable to be built during the main build (a simple make), and will put it in TBD
 catkin_add_gtest(${PROJECT_NAME} 
-  src/test.cpp
+  test/test_launch.test
+  test/test.cpp
 )
 
 install(
