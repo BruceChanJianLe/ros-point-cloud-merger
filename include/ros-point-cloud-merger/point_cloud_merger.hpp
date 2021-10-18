@@ -34,6 +34,8 @@
 #include <sensor_msgs/PointCloud2.h>
 
 #include <tf2_ros/transform_listener.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/message_filter.h>
 
 namespace ros_util
 {
@@ -51,24 +53,7 @@ namespace ros_util
             setYValue(y);
             setZValue(z);
             setInputSize(input);
-        }
-
-        std::string getInputTopics()
-        {
-            return input_topics_;
         }     
-
-        std::string checkInputSize()
-        {
-            std::string output = "Successful!";
-
-            if (input_size_ < 2 || input_size_ > 8)
-            {
-                output = "Rejected! Out of bound input size.";
-            }
-
-            return output;
-        }
 
         void setXValue(double pmin_range_x)
         {
@@ -110,7 +95,22 @@ namespace ros_util
             return input_size_;
         }
 
-        /* ~point_cloud_merger(); */
+        std::string printInputTopics()
+        {
+            return input_topics_;
+        }  
+
+        std::string checkInputSize()
+        {
+            std::string output = "Successful!";
+
+            if (input_size_ < 2 || input_size_ > 8)
+            {
+                output = "Rejected! Out of bound input size.";
+            }
+
+            return output;
+        }
 
     private:
         typedef pcl::PointXYZI PointT;
