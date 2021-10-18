@@ -1,9 +1,9 @@
 #include <iostream>
 #include <ros-gtest/AxisManager.hpp>
 
-int main()
+namespace ros_util
 {
-    AxisValue value(4, 5, 6, "/velodyne_point");
-
-    return 0;
+    AxisValue::AxisValue()
+    {
+    }
 }

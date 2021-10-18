@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
+
 <launch>
-    <node pkg="fake_ar_publisher" type="fake_ar_publisher_node" name="fake_ar_publisher"/>
-    <test test-name="unit_test_node" pkg="ros-point-cloud-merger" type="ros-point-cloud-merger"/>
+  <node pkg="ros-point-cloud-merger" type="mynode" name="mynode" />
+  <test test-name="test_mynode" pkg="ros-point-cloud-merger" type="test_mynode" />
 </launch>

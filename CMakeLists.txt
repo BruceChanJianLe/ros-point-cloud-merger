@@ -17,6 +17,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
 )
 
+find_package(rostest REQUIRED)
+
 find_package(PkgConfig REQUIRED)
 
 find_package(PCL REQUIRED)
@@ -64,11 +66,17 @@ target_link_libraries(point_cloud_merger_node
 
 ## will cause the executable to be built during the main build (a simple make), and will put it in TBD
 catkin_add_gtest(${PROJECT_NAME} 
-  test/test_launch.test
+#  test/test_launch.test
   test/test.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+
+#if(CATKIN_ENABLE_TESTING)
+#  find_package(rostest REQUIRED)
+#  add_rostest_gtest(test_mynode test/test_launch.test test/test.cpp)
+#  target_link_libraries(test_mynode ${catkin_LIBRARIES})
+#endif()
 
 install(
   TARGETS
