@@ -273,38 +273,6 @@ namespace ros_util
         cloud_publisher_.publish(cloud_concatenated);
     }
 
-    /* int point_cloud_merger::getInputSize()
-    {
-        return input_size;
-    }
-
-    std::string point_cloud_merger::checkInputSize(int input_size)
-    {
-        std::string output = "Successful!";
-
-        if (input_size < 2 || input_size > 8)
-        {
-            output = "Rejected! Out of bound input size.";
-        }
-
-        return output;
-    }
-
-    double point_cloud_merger::replaceXValue(double pmin_range_x_)
-    {
-        return pmin_range_x_;
-    }
-
-    double point_cloud_merger::replaceYValue(double pmin_range_y_)
-    {
-        return pmin_range_y_;
-    }
-
-    double point_cloud_merger::replaceZValue(double pmin_range_z_)
-    {
-        return pmin_range_z_;
-    } */
-
     /* point_cloud_merger::~point_cloud_merger()
     {
     } */

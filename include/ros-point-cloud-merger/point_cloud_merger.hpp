@@ -46,14 +46,13 @@ namespace ros_util
 
         /* For unit test purposes */
         /* HERE */
-
         point_cloud_merger(double x, double y, double z, int input) : tf2_listener_(tfBuffer)
         {
             setXValue(x);
             setYValue(y);
             setZValue(z);
             setInputSize(input);
-        }     
+        }
 
         void setXValue(double pmin_range_x)
         {
@@ -98,7 +97,7 @@ namespace ros_util
         std::string printInputTopics()
         {
             return input_topics_;
-        }  
+        }
 
         std::string checkInputSize()
         {

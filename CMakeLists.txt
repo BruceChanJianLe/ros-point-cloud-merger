@@ -45,7 +45,6 @@ link_directories(
 add_executable(point_cloud_merger_node
   src/point_cloud_merger_node.cpp
   src/point_cloud_merger.cpp
-  test/test.cpp
 )
 
 add_dependencies(point_cloud_merger_node
@@ -68,6 +67,8 @@ catkin_add_gtest(${PROJECT_NAME}
   test/test_launch.test
   test/test.cpp
 )
+
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 install(
   TARGETS

@@ -22,14 +22,15 @@ public:
     ~MyTestSuite() {}
 }; */
 
-TEST(MyTestSuite01, testName01)
+TEST(PointCloudMergerTestCase01, pointCloudMergerTestName01)
 {   
-    /* ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 2); */
-    ros_util::point_cloud_merger merge;
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 2);
+    /* ros_util::point_cloud_merger merge; */
 
     merge.setXValue(10.0);
     merge.setYValue(10.0);
-    merge.setZValue(10.0);
+    merge.setZValue(-1.0);
+    merge.setInputSize(2);
     
     double xValue = 10.0;
     EXPECT_EQ(xValue, merge.getXValue());
@@ -44,11 +45,11 @@ TEST(MyTestSuite01, testName01)
     EXPECT_EQ(inputSize, merge.getInputSize());  
 }
 
-TEST(MyTestSuite02, testName02)
+TEST(PointCloudMergerTestCase02, pointCloudMergerTestName02)
 {   
-    /* ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 1); */
+    ros_util::point_cloud_merger merge(10.0, 10.0, -1.0, 1);
 
-    ros_util::point_cloud_merger merge;
+    /* ros_util::point_cloud_merger merge; */
     
     std::string rejected = "Rejected! Out of bound input size.";
     std::string accepted = "Successful!";
@@ -83,12 +84,12 @@ TEST(MyTestSuite02, testName02)
 
 int main(int argc, char **argv)
 {
-    /* ros::init(argc, argv, "point_cloud_merger_node");
-    ros_util::point_cloud_merger node; */
+    ros::init(argc, argv, "point_cloud_merger_node");
+    /* ros_util::point_cloud_merger node; */
 
     ::testing::InitGoogleTest(&argc, argv);
 
-    /* ros::spin(); */
+    ros::spin();
 
     return RUN_ALL_TESTS();
 }
