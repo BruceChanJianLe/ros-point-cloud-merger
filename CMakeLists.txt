@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
 )
 
-find_package(rostest REQUIRED)
+#find_package(rostest REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 
