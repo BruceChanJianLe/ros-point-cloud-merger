@@ -58,87 +58,106 @@ namespace ros_util
             setInputSize(input);
         }
 
+        /* Set pmin_range_x_ and nmin_range_x_ */
         void setXMinValue(double x_min_value)
         {
             pmin_range_x_ = x_min_value;
             nmin_range_x_ = -x_min_value;
         }
 
+        /* Set pmax_range_x_ and nmax_range_x_ */
         void setXMaxValue(double x_max_value)
         {
             pmax_range_x_ = x_max_value;
             nmax_range_x_ = -x_max_value;
         }
 
+        /* Set pmin_range_y_ and nmin_range_y_ */
         void setYMinValue(double y_min_value)
         {
             pmin_range_y_ = y_min_value;
             nmin_range_y_ = -y_min_value;
         }
 
+        /* Set pmax_range_y_ and nmax_range_y_ */
         void setYMaxValue(double y_max_value)
         {
             pmax_range_y_ = y_max_value;
             nmax_range_y_ = -y_max_value;
         }
 
+        /* Sets pmin_range_z_ */
         void setZMinValue(double z_min_value)
         {
             pmin_range_z_ = z_min_value;
         }
 
+        /* Sets pmax_range_z_ */
         void setZMaxValue(double z_max_value)
         {
             pmax_range_z_ = z_max_value;
         }
 
+        /* Sets input_size_ */
         void setInputSize(int input)
         {
             input_size_ = input;
         }
 
+        /* Gets pmin_range_x_ */
         double getXMinValue()
         {
             return pmin_range_x_;
         }
 
+        /* Gets pmax_range_x_ */
         double getXMaxValue()
         {
             return pmax_range_x_;
         }
 
+        /* Gets pmin_range_y_ */
         double getYMinValue()
         {
             return pmin_range_y_;
         }
 
+        /* Gets pmax_range_y_ */
         double getYMaxValue()
         {
             return pmax_range_y_;
         }
 
+        /* Gets pmin_range_z_ */
         double getZMinValue()
         {
             return pmin_range_z_;
         }
 
+        /* Gets pmax_range_z_ */
         double getZMaxValue()
         {
             return pmax_range_z_;
         }
 
+        /* Gets pmin_range_x_ and nmin_range_x_ */
         int getInputSize()
         {
             return input_size_;
         }
 
+        /* Checks if input_size_ is within the accepted bound */
         std::string checkInputSize()
         {
             std::string output = "Successful!";
 
-            if (input_size_ < MIN_SIZE || input_size_ > MAX_SIZE)
+            if (input_size_ < MIN_SIZE)
             {
-                output = "Rejected! Out of bound input size.";
+                output = "Rejected! Input size is lesser than min size accepted, which is 2.";
+            }
+            else if (input_size_ > MAX_SIZE)
+            {
+                output = "Rejected! Input size is greater than max size accepted, which is 8.";
             }
 
             return output;

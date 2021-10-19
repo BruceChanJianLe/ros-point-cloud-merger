@@ -71,7 +71,7 @@ TEST(PointCloudMergerTestCase02, onePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string rejected = "Rejected! Out of bound input size.";
+    std::string rejected = "Rejected! Input size is lesser than min size accepted, which is 2.";
 
     merge.setInputSize(1);
 
@@ -159,7 +159,7 @@ TEST(PointCloudMergerTestCase02, ninePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string rejected = "Rejected! Out of bound input size.";
+    std::string rejected = "Rejected! Input size is greater than max size accepted, which is 8.";
 
     merge.setInputSize(9);
 
