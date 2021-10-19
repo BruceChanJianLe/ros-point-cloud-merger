@@ -6,15 +6,15 @@
   - [Launch package with maximum and minimum range enabled/disabled METHOD 1](#launch-package-with-maximum-and-minimum-range-enableddisabled-method-1)
   - [Launch package with maximum and minimum range enabled/disabled METHOD 2](#launch-package-with-maximum-and-minimum-range-enableddisabled-method-2)
 - [HOW TO CHANGE CONFIGURATION](#how-to-change-configuration)
-  - [Change input topics](#change-input-topics)
-  - [Change output topic](#change-output-topic)
-  - [Change output frame id](#change-output-frame-id)
-  - [Change minimum range in x axis](#change-minimum-range-in-x-axis)
-  - [Change minimum range in y axis](#change-minimum-range-in-y-axis)
-  - [Change maximum range in x axis](#change-maximum-range-in-x-axis)
-  - [Change maximum range in y axis](#change-maximum-range-in-y-axis)
-  - [Change minimum height in z axis](#change-minimum-height-in-z-axis)
-  - [Change maximum height in z axis](#change-maximum-height-in-z-axis)
+  - [Change input topics in husky.yaml](#change-input-topics-in-huskyyaml)
+  - [Change output topic in husky.yaml](#change-output-topic-in-huskyyaml)
+  - [Change output frame ID in husky.yaml](#change-output-frame-id-in-huskyyaml)
+  - [Change minimum range in x axis in husky_x.yaml](#change-minimum-range-in-x-axis-in-husky_xyaml)
+  - [Change minimum range in y axis in husky_y.yaml](#change-minimum-range-in-y-axis-in-husky_yyaml)
+  - [Change maximum range in x axis in husky_x.yaml](#change-maximum-range-in-x-axis-in-husky_xyaml)
+  - [Change maximum range in y axis in husky_y.yaml](#change-maximum-range-in-y-axis-in-husky_yyaml)
+  - [Change minimum height in z axis in husky_z.yaml](#change-minimum-height-in-z-axis-in-husky_zyaml)
+  - [Change maximum height in z axis in husky_z.yaml](#change-maximum-height-in-z-axis-in-husky_zyaml)
 - [WHAT EXISTING FILES TO CHANGE](#what-existing-files-to-change)
   - [What to add in to robot urdf](#what-to-add-in-to-robot-urdf)
   - [How package.xml should look like](#how-packagexml-should-look-like)
@@ -24,6 +24,7 @@
   - [New file point_cloud_merger_node.cpp](#new-file-point_cloud_merger_nodecpp)
   - [New file point_cloud_merger.hpp](#new-file-point_cloud_mergerhpp)
   - [New file point_cloud_merger.cpp](#new-file-point_cloud_mergercpp)
+- [GOOGLE TEST](#google-test)
 - [EXAMPLE IMPLEMENTATION](#example-implementation)
 - [REFERENCES](#references)
 
@@ -36,7 +37,12 @@
 ```
 roslaunch ros-point-cloud-merger point_cloud_merger.launch
 ```
->By default, configuration would be husky.yaml
+
+>By default, configuration would be 
+- ```husky_x.yaml``` for x axis range
+- ```husky_y.yaml``` for y axis range
+- ```husky_z.yaml``` for z axis range
+- ```husky.yaml``` for input topics, output topic and output frame ID
 
 >Configured files can be accessed in [here](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config)
 
@@ -46,12 +52,12 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch
 
 in **terminal**
 ```
-roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=husky
+roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=husky x_range:=husky_x y_range:=husky_y z_range:=husky_z
 ```
 >this will launch package with [husky](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/husky.yaml) configuration
 
 ```
-roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=kobuki
+roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=kobuki x_range:=kobuki_x y_range:=kobuki_y z_range:=kobuki_z
 ```
 >this will launch package with [kobuki](https://github.com/BruceChanJianLe/ros-point-cloud-merger/blob/branch-merge/config/kobuki.yaml) configuration
 
@@ -62,15 +68,18 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch robot_name:=kobuki
 in **point_cloud_merger.launch**
 ```
 <arg name="robot_name" default="husky" />
+<arg name="x_range" default="husky_x" />
+<arg name="y_range" default="husky_y" />
+<arg name="z_range" default="husky_z" />
 ```
 
->in this case, husky.yaml is configuration that you want
+>in this case, this takes in params from ```husky.yaml```, ```husky_x.yaml```, ```husky_y.yaml```, and ```husky_z.yaml```.
 
 <br>
 
 ## Launch package with maximum and minimum range enabled/disabled METHOD 1
 
-in **point_cloud_merger.launch**
+in **terminal**
 ```
 roslaunch ros-point-cloud-merger point_cloud_merger.launch enable_range_flag:=true
 ```
@@ -85,7 +94,7 @@ roslaunch ros-point-cloud-merger point_cloud_merger.launch enable_range_flag:=fa
 
 ## Launch package with maximum and minimum range enabled/disabled METHOD 2
 
-in **terminal**
+in **point_cloud_merger.launch**
 ```
 <arg name="enable_range_flag" default="true"/>
 ```
@@ -106,23 +115,21 @@ in **terminal**
 - With each robot configuration being modifiable
 - Adding new configuration files is available too!
 
-**the following change in configuration will be done on husky.yaml**
-
-## Change input topics
+## Change input topics in husky.yaml
 
 in this case, **/alpha** and **/beta** are the pointclouds that you want to merge
 ```
 input_topics: "[/alpha, /beta]"
 ```
 
-## Change output topic
+## Change output topic in husky.yaml
 
 in this case, **/husky_points_concat** is output topic name for the merged pointcloud
 ```
 output_topic: '/husky_points_concat'
 ```
 
-## Change output frame id
+## Change output frame ID in husky.yaml
 
 in this case, **velodyne_frame** is output frame id for the merged pointcloud
 ```
@@ -131,7 +138,7 @@ output_frame_id: 'velodyne_frame'
 
 **when modifying the value here, have to also modify at the robot urdf**
 
-## Change minimum range in x axis
+## Change minimum range in x axis in husky_x.yaml
 
 in this case, **0.5** and **-0.5** are desired minimum range in the positive x axis and negative x axis respectively
 ```
@@ -139,7 +146,7 @@ pmin_range_x: 0.5
 nmin_range_x: -0.5
 ```
 
-## Change minimum range in y axis
+## Change minimum range in y axis in husky_y.yaml
 
 in this case, **0.5** and **-0.5** are desired minimum range in the positive y axis and negative y axis respectively
 ```
@@ -147,7 +154,7 @@ pmin_range_y: 0.5
 nmin_range_y: -0.5
 ```
 
-## Change maximum range in x axis
+## Change maximum range in x axis in husky_x.yaml
 
 in this case, **5.0** and **-5.0** are desired maximum range in the positive x axis and negative x axis respectively
 ```
@@ -155,21 +162,21 @@ pmax_range_x: 5.0
 nmax_range_x: -5.0
 ```
 
-## Change maximum range in y axis
+## Change maximum range in y axis in husky_y.yaml
 
 in this case, **5.0** and **-5.0** are desired maximum range in the positive y axis and negative y axis respectively
 ```
 pmax_range_y: 5.0
 nmax_range_y: -5.0
 ```
-## Change minimum height in z axis
+## Change minimum height in z axis in husky_z.yaml
 
 in this case, **-1.0** is desired minimum height in the z axis 
 ```
 pmin_range_z: -1.0
 ```
 
-## Change maximum height in z axis
+## Change maximum height in z axis in husky_z.yaml
 
 in this case, **100.0** is desired maximum height in the z axis
 ```
@@ -200,7 +207,150 @@ in this case, the output fame id is velodyne_frame
 
 ## How package.xml should look like
 
+```
+<?xml version="1.0"?>
+<package format="2">
+  <name>ros-point-cloud-merger</name>
+  <version>0.1.0</version>
+  <description>The ros-point-cloud-merger package</description>
+
+  <author email="jianle001@e.ntu.edu.sg">Bruce Chan Jian Le</author>
+  <maintainer email="jianle001@e.ntu.edu.sg">Bruce Chan Jian Le</maintainer>
+  <maintainer email="e0425705@u.nus.edu">Puah Siew Wen</maintainer>
+  <license>MIT</license>
+  <license>BSD</license>
+  <url type="website">https://github.com/BruceChanJianLe/ros-point-cloud-merger</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>message_filters</build_depend>
+  <build_depend>pcl_conversions</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>message_filters</build_export_depend>
+  <build_export_depend>pcl_conversions</build_export_depend>
+  <build_export_depend>pcl_ros</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
+
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>message_filters</exec_depend>
+  <exec_depend>pcl_conversions</exec_depend>
+  <exec_depend>pcl_ros</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+
+  <export>
+  </export>
+</package>
+```
+
 ## How CMakeLists.txt should look like
+
+```
+cmake_minimum_required(VERSION 3.0.2)
+project(ros-point-cloud-merger)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(catkin REQUIRED COMPONENTS
+  geometry_msgs
+  message_filters
+  pcl_conversions
+  pcl_ros
+  roscpp
+  rospy
+  std_msgs
+  sensor_msgs
+  tf2
+  tf2_ros
+)
+
+find_package(rostest REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+
+find_package(PCL REQUIRED)
+
+find_package(Boost 1.55.0 REQUIRED COMPONENTS system filesystem)
+
+catkin_package(
+  INCLUDE_DIRS include
+#  LIBRARIES ros-point-cloud-merger
+#  CATKIN_DEPENDS geometry_msgs message_filters pcl_conversions pcl_ros roscpp rospy sensor_msgs tf tf2 tf2_ros
+#  DEPENDS system_lib
+)
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${PCL_LIBRARY_DIRS}
+  ${Boost_LIBRARY_DIRS}
+)
+
+add_executable(point_cloud_merger_node
+  src/point_cloud_merger_node.cpp
+  src/point_cloud_merger.cpp
+)
+
+add_dependencies(point_cloud_merger_node
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_include_directories(point_cloud_merger_node PRIVATE
+  ${PCL_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
+target_link_libraries(point_cloud_merger_node
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
+
+## will cause the executable to be built during the main build (a simple make), and will put it in TBD
+catkin_add_gtest(${PROJECT_NAME} 
+#  test/test_launch.test
+  test/test.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+
+#if(CATKIN_ENABLE_TESTING)
+#  find_package(rostest REQUIRED)
+#  add_rostest_gtest(test_mynode test/test_launch.test test/test.cpp)
+#  target_link_libraries(test_mynode ${catkin_LIBRARIES})
+#endif()
+
+install(
+  TARGETS
+    point_cloud_merger_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+```
 
 <br>
 
@@ -209,441 +359,39 @@ in this case, the output fame id is velodyne_frame
 ## New file point_cloud_merger.launch
 
 ```
-<?xml version="1.0"?>
 
-<launch>
-    <!-- Replace with the desired config file -->
-    <arg name="robot_name" default="husky" />
-
-    <!-- Replace with either true or false, 
-         false: enable raw merge pointcloud 
-         true: enable filtered pointcloud with maximum and minimum range enabled
-    -->
-    <arg name="enable_range_flag" default="true"/>
-
-    <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
-
-        <param name="enable_range_flag" type="string" value="$(arg enable_range_flag)"/>
-
-        <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg robot_name).yaml" />
-
-    </node>
-</launch>
 ```
 
 ## New file point_cloud_merger_node.cpp
 
 ```
-#include "ros-point-cloud-merger/point_cloud_merger.hpp"
 
-#include <ros/ros.h>
-
-const std::string ROSNodeName = "point_cloud_merger_node";
-
-int main(int argc, char **argv)
-{
-    ros::init(argc, argv, ROSNodeName);
-
-    ros_util::point_cloud_merger node;
-
-    ros::spin();
-
-    return 0;
-}
 ```
 
 ## New file point_cloud_merger.hpp
 
 ```
-/*
- * Copyright 2018-2019 Autoware Foundation. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-#ifndef ROS_POINT_CLOUD_MERGER_H__
-#define ROS_POINT_CLOUD_MERGER_H__
-
-#define MAX_SIZE 8
-
-#include <ros/ros.h>
-
-#include <string>
-
-#include <message_filters/subscriber.h>
-#include <message_filters/sync_policies/approximate_time.h>
-#include <message_filters/synchronizer.h>
-
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl_ros/transforms.h>
-
-#include <sensor_msgs/PointCloud2.h>
-
-#include <tf2_ros/transform_listener.h>
-
-namespace ros_util
-{
-    class point_cloud_merger
-    {
-    public:
-        point_cloud_merger();
-
-        ~point_cloud_merger();
-
-    private:
-        typedef pcl::PointXYZI PointT;
-        typedef pcl::PointCloud<PointT> PointCloudT;
-        typedef sensor_msgs::PointCloud2 PointCloudMsgT;
-
-        typedef message_filters::sync_policies::ApproximateTime<PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                                PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
-                                                                PointCloudMsgT, PointCloudMsgT>
-            SyncPolicyT;
-
-        ros::NodeHandle private_nh_;
-        ros::NodeHandle global_nh_;
-
-        /* ROS subscription filter. */
-        message_filters::Subscriber<PointCloudMsgT> *cloud_subscribers_[MAX_SIZE];
-        /* Synchronizes incoming channels */
-        message_filters::Synchronizer<SyncPolicyT> *cloud_synchronizer_;
-
-        /* Manages an advertisement on a specific topic.  */
-        ros::Publisher cloud_publisher_;
-
-        /* Subscribes to message and automatically stores incoming data */
-        /* Stores known frames and offers a ROS service, "tf_frames", */
-        tf2_ros::Buffer tfBuffer;
-        /* Request and receive coordinate frame transform information */
-        tf2_ros::TransformListener tf2_listener_;
-
-        /* Storage for the retrieved value for input_topics */
-        std::string input_topics_;
-        /* Storage for the retrieved value for output_topic */
-        std::string output_topic_;
-
-        /* Storage for the retrieved value for output_frame_id */
-        std::string output_frame_id_;
-
-        /* Storage for the retrieved value for whether to enable maximum and minimum range */
-        std::string enable_range_flag_;
-
-        /* Storage for the retrieved value for pmin_range_x */
-        double pmin_range_x_;
-        /* Storage for the retrieved value for pmax_range_x */
-        double pmax_range_x_;
-        /* Storage for the retrieved value for nmin_range_x */
-        double nmin_range_x_;
-        /* Storage for the retrieved value for nmax_range_x */
-        double nmax_range_x_;
-
-        /* Storage for the retrieved value for pmin_range_y */
-        double pmin_range_y_;
-        /* Storage for the retrieved value for pmax_range_y */
-        double pmax_range_y_;
-        /* Storage for the retrieved value for nmin_range_y */
-        double nmin_range_y_;
-        /* Storage for the retrieved value for nmax_range_y */
-        double nmax_range_y_;
-
-        /* Storage for the retrieved value for pmin_range_z */
-        double pmin_range_z_;
-        /* Storage for the retrieved value for pmax_range_z */
-        double pmax_range_z_;
-
-        void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                                 const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                                 const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                                 const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8);
-    };
-
-} // namespace ros_util
-
-#endif
 ```
 
 ## New file point_cloud_merger.cpp
 
 ```
-/*
- * Copyright 2018-2019 Autoware Foundation. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-#include "ros-point-cloud-merger/point_cloud_merger.hpp"
+```
 
-#define MIN_SIZE 2
-#define MAX_SIZE 8
-#define QUEUE_SIZE 1
+<br>
 
-static int input_size = 0;
+# GOOGLE TEST
 
-namespace ros_util
-{
-    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
-    {
-        private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
-        private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
-        private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
+terminal 1:
+```
+roscore
+```
 
-        private_nh_.param("enable_range_flag", enable_range_flag_, std::string("true"));
-
-        private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
-        private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
-        private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
-        private_nh_.param("nmax_range_x", nmax_range_x_, double(-2.0));
-
-        private_nh_.param("pmin_range_y", pmin_range_y_, double(0.9));
-        private_nh_.param("pmax_range_y", pmax_range_y_, double(2.0));
-        private_nh_.param("nmin_range_y", nmin_range_y_, double(-0.9));
-        private_nh_.param("nmax_range_y", nmax_range_y_, double(-2.0));
-
-        private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
-        private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
-
-        if (enable_range_flag_.compare("true") != 0)
-        {
-            pmin_range_x_ = 0.0;
-            pmax_range_x_ = DBL_MAX;
-            nmin_range_x_ = 0.0;
-            nmax_range_x_ = -DBL_MAX;
-
-            pmin_range_y_ = 0.0;
-            pmax_range_y_ = DBL_MAX;
-            nmin_range_y_ = 0.0;
-            nmax_range_y_ = -DBL_MAX;
-
-            pmin_range_z_ = -DBL_MAX;
-            pmax_range_z_ = DBL_MAX;
-        }
-
-        input_topics_ = input_topics_.substr(1);
-        std::stringstream ss(input_topics_);
-        std::string source;
-
-        /* Array that stores input topics */
-        std::string store_input_topics[MAX_SIZE];
-
-        /* Stores input into store_input_topics[] array */
-        while (ss >> source)
-        {
-            source = source.substr(0, source.length() - 1);
-            store_input_topics[input_size] = source;
-            input_size++;
-        }
-
-        // Check number of input topics accepted
-        if (input_size < MIN_SIZE)
-        {
-            ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
-
-            /* Disconnects everything and unregisters from the master. 
-            It is generally not necessary to call this function, as the 
-            node will automatically shutdown when all NodeHandles destruct. 
-            However, if you want to break out of a spin() loop explicitly, 
-            this function allows that. */
-            ros::shutdown();
-
-            return;
-        }
-        else if (input_size > MAX_SIZE)
-        {
-            ROS_ERROR("Maximum size accepted is 8 but size of input topics is more than 8. Exiting now...");
-
-            /* Disconnects everything and unregisters from the master. 
-            It is generally not necessary to call this function, as the 
-            node will automatically shutdown when all NodeHandles destruct. 
-            However, if you want to break out of a spin() loop explicitly, 
-            this function allows that. */
-            ros::shutdown();
-
-            return;
-        }
-
-        /* Replace input topics >= input size with 1st input topic */
-        for (int i = 0; i < MAX_SIZE; i++)
-        {
-            if (i >= input_size)
-            {
-                store_input_topics[i] = store_input_topics[0];
-            }
-        }
-
-        /* Steps: subscribe, sync, callback */
-
-        /* ROS subscription filter. */
-        /* Update cloud_subscriber with the PointClouds in the input_topics
-            for the one with nothing inside, update with the 1st PointCloud */
-        for (int i = 0; i < MAX_SIZE; i++)
-        {
-            if (i < input_size)
-            {
-                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
-            }
-            else
-            {
-                cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[0], QUEUE_SIZE);
-            }
-        }
-
-        /* Sychronise the cloud_subscribers */
-        cloud_synchronizer_ = new message_filters::Synchronizer<SyncPolicyT>(
-            SyncPolicyT(10), *cloud_subscribers_[0], *cloud_subscribers_[1], *cloud_subscribers_[2], *cloud_subscribers_[3],
-            *cloud_subscribers_[4], *cloud_subscribers_[5], *cloud_subscribers_[6], *cloud_subscribers_[7]);
-
-        /* Callback */
-        cloud_synchronizer_->registerCallback(
-            boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
-
-        /* Returns a Publisher that allows you to publish a message on this topic. */
-        cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
-    }
-
-    void point_cloud_merger::pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
-                                                 const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
-                                                 const PointCloudMsgT::ConstPtr &msg5, const PointCloudMsgT::ConstPtr &msg6,
-                                                 const PointCloudMsgT::ConstPtr &msg7, const PointCloudMsgT::ConstPtr &msg8)
-    {
-        /*  If the condition is true, the program continues normally and 
-        if the condition is false, the program is terminated and an error message is displayed.  */
-        assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
-
-        /* typedef boost::shared_ptr<const PointCloud<PointT> > ConstPtr */
-        PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-
-        PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
-
-        /* typedef boost::shared_ptr<PointCloud<PointT> > Ptr */
-        boost::shared_ptr<PointCloudT> cloud_sources[MAX_SIZE];
-
-        boost::shared_ptr<PointCloudT> cloud_source[MAX_SIZE];
-
-        boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
-
-        // Transform points
-        try
-        {
-            for (int i = 0; i < input_size; i++)
-            {
-                // Note: If you use kinetic, you can directly receive messages as PointCloutT.
-
-                /* Copy the cloud to the heap and return a smart pointer */
-                cloud_sources[i] = PointCloudT().makeShared();
-                cloud_source[i] = PointCloudT().makeShared();
-
-                /* Convert a PCLPointCloud2 binary data blob into a pcl::PointCloud<T> object using a field_map. */
-                pcl::fromROSMsg(*msgs[i], *cloud_sources[i]);
-                pcl::fromROSMsg(*msg[i], *cloud_source[i]);
-
-                int current_index = 0;
-
-                for (int j = 0; j < cloud_sources[i]->size(); j++)
-                {
-                    bool outofbound_flag = false;
-
-                    if ((cloud_sources[i]->points[j].x > pmax_range_x_) || (cloud_sources[i]->points[j].y > pmax_range_y_))
-                    {
-                        outofbound_flag = true;
-                    }
-                    else if ((cloud_sources[i]->points[j].x < nmax_range_x_) || (cloud_sources[i]->points[j].y < nmax_range_y_))
-                    {
-                        outofbound_flag = true;
-                    }
-                    else if (((cloud_sources[i]->points[j].x > nmin_range_x_) && (cloud_sources[i]->points[j].x < pmin_range_x_)) && ((cloud_sources[i]->points[j].y > nmin_range_y_) && (cloud_sources[i]->points[j].y < pmin_range_y_)))
-                    {
-                        outofbound_flag = true;
-                    }
-                    else if ((cloud_sources[i]->points[j].z < pmin_range_z_) || (cloud_sources[i]->points[j].z > pmax_range_z_))
-                    {
-                        outofbound_flag = true;
-                    }
-                    else if (outofbound_flag == false)
-                    {
-                        cloud_source[i]->points[current_index].x = cloud_sources[i]->points[j].x;
-                        cloud_source[i]->points[current_index].y = cloud_sources[i]->points[j].y;
-                        cloud_source[i]->points[current_index].z = cloud_sources[i]->points[j].z;
-
-                        current_index++;
-                    }
-                }
-
-                /* Resize pointcloud if current index is > 0 */
-                if (current_index > 0)
-                {
-                    cloud_source[i]->resize(--current_index);
-                }
-                else
-                {
-                    ROS_ERROR("PointCloud after filtering is 0. Exiting now...");
-
-                    /* Disconnects everything and unregisters from the master. 
-                       It is generally not necessary to call this function, as the 
-                       node will automatically shutdown when all NodeHandles destruct. 
-                       However, if you want to break out of a spin() loop explicitly, 
-                       this function allows that. */
-                    ros::shutdown();
-
-                    return;
-                }
-
-                /* Block until a transform is possible or it times out */
-                tfBuffer.lookupTransform(output_frame_id_, msgs[i]->header.frame_id, ros::Time(0), ros::Duration(1.0));
-
-                /* Transforms (maintain relationship between multiple coordinate frames overtime) a point cloud in a given target TF frame using a TransformListener. */
-                pcl_ros::transformPointCloud(output_frame_id_, ros::Time(0), *cloud_source[i], msgs[i]->header.frame_id, *cloud_source[i], tfBuffer);
-            }
-        }
-        catch (tf::TransformException &ex)
-        {
-            ROS_ERROR("%s", ex.what());
-
-            /* return 0; means program exited successful and atleast in (unix) 
-            while return just terminates the program regardles of it's state. */
-            return;
-        }
-
-        // Merge points
-        for (int i = 0; i < input_size; i++)
-        {
-            *cloud_concatenated += *cloud_source[i];
-        }
-
-        // Publish points
-        cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
-
-        cloud_concatenated->header.frame_id = output_frame_id_;
-
-        /* Publish a message on the topic associated with this Publisher. */
-        cloud_publisher_.publish(cloud_concatenated);
-    }
-
-    point_cloud_merger::~point_cloud_merger()
-    {
-    }
-
-} // namespace ros_util
+terminal 2
+```
+catkin_make run_tests
 ```
 
 <br>

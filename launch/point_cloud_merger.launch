@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-    <!-- Replace with the desired config file -->
+    <!-- Replace with the desired config file for input topics, output topic and output frame ID-->
     <arg name="robot_name" default="husky" />
 
     <!-- Replace with either true or false, 
