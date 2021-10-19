@@ -179,22 +179,3 @@ int main(int argc, char **argv)
 
     return ret;
 }
-
-/* TESTS TO DO
- * 
- * maybe have function?
- * replace value for x -> pass
- * replace value for y -> pass
- * replace value for z -> pass
- * 
- * use assert avilable of create a new function
- * merge of a single point cloud -> fail
- * merge of two point clouds -> pass
- * merge of three point clouds -> pass
- * merge of four point clouds -> pass
- * merge of five point clouds -> pass
- * merge of six point clouds -> pass
- * merge of seven point clouds -> pass
- * merge of eight point clouds -> pass
- * merge of nine point clouds ->fail 
- */
