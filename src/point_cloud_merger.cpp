@@ -20,8 +20,6 @@
 #define MAX_SIZE 8
 #define QUEUE_SIZE 1
 
-static int input_size = 0;
-
 namespace ros_util
 {
     point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
@@ -45,6 +43,9 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
+        private_nh_.param("input_size", input_size_, int(0));
+
+        /* If enable_range_flag is not enabled */
         if (enable_range_flag_.compare("true") != 0)
         {
             pmin_range_x_ = 0.0;
@@ -72,24 +73,12 @@ namespace ros_util
         while (ss >> source)
         {
             source = source.substr(0, source.length() - 1);
-            store_input_topics[input_size] = source;
-            input_size++;
+            store_input_topics[input_size_] = source;
+            input_size_++;
         }
 
-        /* For unit test purposes */
-        /* HERE */
-        /* double new_pmin_range_x = 0.5;
-        double new_pmin_range_y = 0.5;
-        double new_pmin_range_z = -1.0;
-
-        input_size = getInputSize();
-        std::string isValid = checkInputSize(input_size);
-        pmin_range_x_ = replaceXValue(new_pmin_range_x);
-        pmin_range_y_ = replaceYValue(new_pmin_range_y);
-        pmin_range_z_ = replaceZValue(new_pmin_range_z); */
-
         // Check number of input topics accepted
-        if (input_size < MIN_SIZE)
+        if (input_size_ < MIN_SIZE)
         {
             ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
 
@@ -102,7 +91,7 @@ namespace ros_util
 
             return;
         }
-        else if (input_size > MAX_SIZE)
+        else if (input_size_ > MAX_SIZE)
         {
             ROS_ERROR("Maximum size accepted is 8 but size of input topics is more than 8. Exiting now...");
 
@@ -119,7 +108,7 @@ namespace ros_util
         /* Replace input topics >= input size with 1st input topic */
         for (int i = 0; i < MAX_SIZE; i++)
         {
-            if (i >= input_size)
+            if (i >= input_size_)
             {
                 store_input_topics[i] = store_input_topics[0];
             }
@@ -132,7 +121,7 @@ namespace ros_util
             for the one with nothing inside, update with the 1st PointCloud */
         for (int i = 0; i < MAX_SIZE; i++)
         {
-            if (i < input_size)
+            if (i < input_size_)
             {
                 cloud_subscribers_[i] = new message_filters::Subscriber<PointCloudMsgT>(global_nh_, store_input_topics[i], QUEUE_SIZE);
             }
@@ -162,7 +151,7 @@ namespace ros_util
     {
         /*  If the condition is true, the program continues normally and 
         if the condition is false, the program is terminated and an error message is displayed.  */
-        assert(input_size >= MIN_SIZE && input_size <= MAX_SIZE);
+        assert(input_size_ >= MIN_SIZE && input_size_ <= MAX_SIZE);
 
         /* typedef boost::shared_ptr<const PointCloud<PointT> > ConstPtr */
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
@@ -179,7 +168,7 @@ namespace ros_util
         // Transform points
         try
         {
-            for (int i = 0; i < input_size; i++)
+            for (int i = 0; i < input_size_; i++)
             {
                 // Note: If you use kinetic, you can directly receive messages as PointCloutT.
 
@@ -259,7 +248,7 @@ namespace ros_util
         }
 
         // Merge points
-        for (int i = 0; i < input_size; i++)
+        for (int i = 0; i < input_size_; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
@@ -272,9 +261,5 @@ namespace ros_util
         /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
     }
-
-    /* point_cloud_merger::~point_cloud_merger()
-    {
-    } */
 
 } // namespace ros_util

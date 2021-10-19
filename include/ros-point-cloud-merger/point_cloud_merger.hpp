@@ -17,6 +17,7 @@
 #ifndef ROS_POINT_CLOUD_MERGER_H__
 #define ROS_POINT_CLOUD_MERGER_H__
 
+#define MIN_SIZE 2
 #define MAX_SIZE 8
 
 #include <ros/ros.h>
@@ -42,31 +43,53 @@ namespace ros_util
     class point_cloud_merger
     {
     public:
+        /* Constructor */
         point_cloud_merger();
 
         /* For unit test purposes */
-        /* HERE */
-        point_cloud_merger(double x, double y, double z, int input) : tf2_listener_(tfBuffer)
+        point_cloud_merger(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input) : tf2_listener_(tfBuffer)
         {
-            setXValue(x);
-            setYValue(y);
-            setZValue(z);
+            setXMinValue(x_min);
+            setXMaxValue(x_max);
+            setYMinValue(y_min);
+            setYMaxValue(y_max);
+            setZMinValue(z_min);
+            setZMaxValue(z_max);
             setInputSize(input);
         }
 
-        void setXValue(double pmin_range_x)
+        void setXMinValue(double x_min_value)
         {
-            pmin_range_x_ = pmin_range_x;
+            pmin_range_x_ = x_min_value;
+            nmin_range_x_ = -x_min_value;
         }
 
-        void setYValue(double pmin_range_y)
+        void setXMaxValue(double x_max_value)
         {
-            pmin_range_y_ = pmin_range_y;
+            pmax_range_x_ = x_max_value;
+            nmax_range_x_ = -x_max_value;
         }
 
-        void setZValue(double pmin_range_z)
+        void setYMinValue(double y_min_value)
         {
-            pmin_range_z_ = pmin_range_z;
+            pmin_range_y_ = y_min_value;
+            nmin_range_y_ = -y_min_value;
+        }
+
+        void setYMaxValue(double y_max_value)
+        {
+            pmax_range_y_ = y_max_value;
+            nmax_range_y_ = -y_max_value;
+        }
+
+        void setZMinValue(double z_min_value)
+        {
+            pmin_range_z_ = z_min_value;
+        }
+
+        void setZMaxValue(double z_max_value)
+        {
+            pmax_range_z_ = z_max_value;
         }
 
         void setInputSize(int input)
@@ -74,19 +97,34 @@ namespace ros_util
             input_size_ = input;
         }
 
-        double getXValue()
+        double getXMinValue()
         {
             return pmin_range_x_;
         }
 
-        double getYValue()
+        double getXMaxValue()
+        {
+            return pmax_range_x_;
+        }
+
+        double getYMinValue()
         {
             return pmin_range_y_;
         }
 
-        double getZValue()
+        double getYMaxValue()
+        {
+            return pmax_range_y_;
+        }
+
+        double getZMinValue()
         {
             return pmin_range_z_;
+        }
+
+        double getZMaxValue()
+        {
+            return pmax_range_z_;
         }
 
         int getInputSize()
@@ -94,22 +132,20 @@ namespace ros_util
             return input_size_;
         }
 
-        std::string printInputTopics()
-        {
-            return input_topics_;
-        }
-
         std::string checkInputSize()
         {
             std::string output = "Successful!";
 
-            if (input_size_ < 2 || input_size_ > 8)
+            if (input_size_ < MIN_SIZE || input_size_ > MAX_SIZE)
             {
                 output = "Rejected! Out of bound input size.";
             }
 
             return output;
         }
+
+        /* Destructor */
+        ~point_cloud_merger(){};
 
     private:
         typedef pcl::PointXYZI PointT;
@@ -172,6 +208,7 @@ namespace ros_util
         /* Storage for the retrieved value for pmax_range_z */
         double pmax_range_z_;
 
+        /* Storage for input size, used in testing */
         int input_size_;
 
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
