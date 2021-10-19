@@ -360,33 +360,17 @@ install(
 
 this is the launch file of point_cloud_merger
 
-```
-
-```
-
 ## New file point_cloud_merger_node.cpp
 
 this is the cpp file that launches the point_cloud_merger node
-
-```
-
-```
 
 ## New file point_cloud_merger.hpp
 
 this is the hpp file for point_cloud_merger
 
-```
-
-```
-
 ## New file point_cloud_merger.cpp
 
 this is the cpp file for point_cloud_merger
-
-```
-
-```
 
 <br>
 
