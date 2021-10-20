@@ -42,6 +42,8 @@ namespace ros_util
     {
     public:
         /* Constructor */
+        /* point_cloud_merger(std::string input_topics, std::string output_frame_id, std::string output_topic, double pmin_range_x, double pmax_range_x, double pmin_range_y, double pmax_range_y, double pmin_range_z, double pmax_range_z, int input); */
+
         point_cloud_merger();
 
         /* For unit test purposes */
@@ -99,7 +101,7 @@ namespace ros_util
         /* Sets input_size_ */
         void setInputSize(int input)
         {
-            input_size_ = input;
+            set_input_size_ = input;
         }
 
         /* Gets pmin_range_x_ */
@@ -141,24 +143,23 @@ namespace ros_util
         /* Gets pmin_range_x_ and nmin_range_x_ */
         int getInputSize()
         {
-            return input_size_;
+            return set_input_size_;
         }
 
         /* Checks if input_size_ is within the accepted bound */
-        std::string checkInputSize()
+        bool checkInputSize()
         {
-            std::string output = "Successful!";
+            bool isValid = true;
 
-            if (input_size_ < MIN_SIZE)
+            if (set_input_size_ < MIN_SIZE)
             {
-                output = "Rejected! Input size is lesser than min size accepted, which is 2.";
+                isValid = false;
             }
-            else if (input_size_ > MAX_SIZE)
+            else if (set_input_size_ > MAX_SIZE)
             {
-                output = "Rejected! Input size is greater than max size accepted, which is 8.";
+                isValid= false;
             }
-
-            return output;
+            return isValid;
         }
 
         /* Destructor */
@@ -200,7 +201,7 @@ namespace ros_util
         std::string output_frame_id_;
 
         /* Storage for the retrieved value for whether to enable maximum and minimum range */
-        std::string enable_range_flag_;
+        bool enable_range_flag_;
 
         /* Storage for the retrieved value for pmin_range_x */
         double pmin_range_x_;
@@ -225,7 +226,10 @@ namespace ros_util
         /* Storage for the retrieved value for pmax_range_z */
         double pmax_range_z_;
 
-        /* Storage for input size, used in testing */
+        /* Storage for input size, used in testing, given by users */
+        int set_input_size_;
+
+        /* Storage for input size calcualated from input_topics_ */
         int input_size_;
 
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,

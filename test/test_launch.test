@@ -1,0 +1,5 @@
+<launch>
+  <!-- <node pkg="ros-point-cloud-merger" type="mynode" name="mynode" /> -->
+
+  <test test-name="test_mynode" pkg="ros-point-cloud-merger" type="test_mynode" />
+</launch>

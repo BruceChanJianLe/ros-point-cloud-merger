@@ -22,13 +22,17 @@
 
 namespace ros_util
 {
+    /* point_cloud_merger::point_cloud_merger(std::string inputs, std::string output_frame_id, std::string output, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_size) 
+    : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer),
+    input_topics_(inputs), output_frame_id_(output_frame_id), output_topic_(output),
+    pmin_range_x_(x_min), nmin_range_x_(-x_min), pmin_range_y_(y_min), nmin_range_y_(-y_min),
+    pmax_range_x_(x_max), nmax_range_x_(-x_max), pmax_range_y_(y_max), nmax_range_y_(-y_max), 
+    pmin_range_z_(z_min), pmax_range_z_(z_max), set_input_size_(input_size) */
     point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
         private_nh_.param("output_topic", output_topic_, std::string("/points_concat"));
-
-        private_nh_.param("enable_range_flag", enable_range_flag_, std::string("true"));
 
         private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
         private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
@@ -43,10 +47,12 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
+        private_nh_.param("enable_range_flag", enable_range_flag_, false);
         private_nh_.param("input_size", input_size_, int(0));
 
         /* If enable_range_flag is not enabled */
-        if (enable_range_flag_.compare("true") != 0)
+        /* if (enable_range_flag_.compare("true") != 0) */
+        if (enable_range_flag_ == false)
         {
             pmin_range_x_ = 0.0;
             pmax_range_x_ = DBL_MAX;
@@ -226,7 +232,6 @@ namespace ros_util
                        node will automatically shutdown when all NodeHandles destruct. 
                        However, if you want to break out of a spin() loop explicitly, 
                        this function allows that. */
-                    ros::shutdown();
 
                     return;
                 }

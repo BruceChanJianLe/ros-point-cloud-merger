@@ -25,6 +25,9 @@
  * merge of nine point clouds ->fail 
  */
 
+/* use boolean to validate instead */
+/* make rosbag for 8 pointclouds */
+
 TEST(PointCloudMergerTestCase01, replaceValuesForX)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
@@ -71,99 +74,116 @@ TEST(PointCloudMergerTestCase02, onePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string rejected = "Rejected! Input size is lesser than min size accepted, which is 2.";
+    bool isPointCloudNumberValid = false;
 
     merge.setInputSize(1);
 
-    EXPECT_EQ(rejected, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, twoPointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(2);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, threePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(3);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, fourPointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(4);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, fivePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(5);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, sixPointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(6);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, sevenPointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(7);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, eightPointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string accepted = "Successful!";
+    bool isPointCloudNumberValid = true;
 
     merge.setInputSize(8);
 
-    EXPECT_EQ(accepted, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 TEST(PointCloudMergerTestCase02, ninePointCloud)
 {
     ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
 
-    std::string rejected = "Rejected! Input size is greater than max size accepted, which is 8.";
+    bool isPointCloudNumberValid = false;
 
     merge.setInputSize(9);
 
-    EXPECT_EQ(rejected, merge.checkInputSize());
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
+}
+
+TEST(PointCloudMergerTestCase03, newReplaceValuesForX)
+{
+    /* ros_util::point_cloud_merger merge; */
+}
+
+TEST(PointCloudMergerTestCase03, newReplaceValuesForY)
+{
+}
+
+TEST(PointCloudMergerTestCase03, newReplaceValuesForZ)
+{
+}
+
+TEST(PointCloudMergerTestCase04, newOnePointCloud)
+{
 }
 
 int main(int argc, char **argv)
