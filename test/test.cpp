@@ -169,13 +169,34 @@ TEST(PointCloudMergerTestCase02, ninePointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
+/* 
+CMakeFiles/test_mynode.dir/test/test.cpp.o: In function `PointCloudMergerTestCase03_newReplaceValuesForX_Test::TestBody()':
+test.cpp:(.text+0x1d7d): undefined reference to `ros_util::point_cloud_merger::point_cloud_merger(double, double)'
+
+CMakeFiles/test_mynode.dir/test/test.cpp.o: In function `PointCloudMergerTestCase03_newReplaceValuesForY_Test::TestBody()':
+test.cpp:(.text+0x207d): undefined reference to `ros_util::point_cloud_merger::point_cloud_merger(double, double)'
+ */
+
 TEST(PointCloudMergerTestCase03, newReplaceValuesForX)
 {
-    /* ros_util::point_cloud_merger merge; */
+    ros_util::point_cloud_merger merge(true, 0.0, 1.0);
+
+    double x_min_value = 0.5;
+    double x_max_value = 5.0;
+
+    EXPECT_NE(x_min_value, merge.getXMinValue());
+    EXPECT_NE(x_max_value, merge.getXMaxValue());
 }
 
 TEST(PointCloudMergerTestCase03, newReplaceValuesForY)
 {
+    ros_util::point_cloud_merger merge(true, 0.0, 1.0);
+
+    double x_min_value = 0.0;
+    double x_max_value = 1.0;
+
+    EXPECT_NE(x_min_value, merge.getXMinValue());
+    EXPECT_NE(x_max_value, merge.getXMaxValue());
 }
 
 TEST(PointCloudMergerTestCase03, newReplaceValuesForZ)

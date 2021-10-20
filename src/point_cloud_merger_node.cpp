@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, ROSNodeName);
 
     /* no default constructor exists for class "ros_util::point_cloud_merger" */
-    ros_util::point_cloud_merger node;
+    /* ros_util::point_cloud_merger node; */
 
     /* std::string input_topics = "[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]";
     std::string output_topic = "/husky_points_concat";
@@ -27,6 +27,11 @@ int main(int argc, char **argv)
     int set_input_size = 2; 
 
     ros_util::point_cloud_merger(input_topics, output_frame_id, output_topic, x_min, x_max, y_min, y_max, z_min, z_max, set_input_size); */
+
+    bool test_flag = false;
+    double x_min = 0.5;
+    double x_max = 2.0;
+    ros_util::point_cloud_merger node(test_flag, x_min, x_max);
 
     ros::spin();
 
