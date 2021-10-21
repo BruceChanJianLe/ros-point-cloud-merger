@@ -28,7 +28,8 @@ namespace ros_util
     pmin_range_x_(x_min), nmin_range_x_(-x_min), pmin_range_y_(y_min), nmin_range_y_(-y_min),
     pmax_range_x_(x_max), nmax_range_x_(-x_max), pmax_range_y_(y_max), nmax_range_y_(-y_max), 
     pmin_range_z_(z_min), pmax_range_z_(z_max), set_input_size_(input_size) */
-    point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max) : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
+    point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s) 
+        : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
         private_nh_.param("output_frame_id", output_frame_id_, std::string("/velodyne_frame"));
@@ -54,6 +55,11 @@ namespace ros_util
         {
             setXMinValue(x_min);
             setXMaxValue(x_max);
+            setYMinValue(y_min);
+            setYMaxValue(y_max);
+            setZMinValue(z_min);
+            setZMaxValue(z_max);
+            setInputSize(input_s);
         }
 
         /* If enable_range_flag is not enabled */

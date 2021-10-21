@@ -179,32 +179,44 @@ test.cpp:(.text+0x207d): undefined reference to `ros_util::point_cloud_merger::p
 
 TEST(PointCloudMergerTestCase03, newReplaceValuesForX)
 {
-    ros_util::point_cloud_merger merge(true, 0.0, 1.0);
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 0.5, 2.0, 0.0, 100.0, 2);
 
-    double x_min_value = 0.5;
-    double x_max_value = 5.0;
+    double x_min_value = 1.0;
+    double x_max_value = 3.0;
 
-    EXPECT_NE(x_min_value, merge.getXMinValue());
-    EXPECT_NE(x_max_value, merge.getXMaxValue());
+    EXPECT_EQ(x_min_value, merge.getXMinValue());
+    EXPECT_EQ(x_max_value, merge.getXMaxValue());
 }
 
 TEST(PointCloudMergerTestCase03, newReplaceValuesForY)
 {
-    ros_util::point_cloud_merger merge(true, 0.0, 1.0);
+    ros_util::point_cloud_merger merge(true, 0.5, 2.0, 1.0, 3.0, 0.0, 100.0, 2);
 
-    double x_min_value = 0.0;
-    double x_max_value = 1.0;
+    double y_min_value = 1.0;
+    double y_max_value = 3.0;
 
-    EXPECT_NE(x_min_value, merge.getXMinValue());
-    EXPECT_NE(x_max_value, merge.getXMaxValue());
+    EXPECT_EQ(y_min_value, merge.getYMinValue());
+    EXPECT_EQ(y_max_value, merge.getYMaxValue());
 }
 
 TEST(PointCloudMergerTestCase03, newReplaceValuesForZ)
 {
+    ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 2);
+
+    double z_min_value = -10.0;
+    double z_max_value = 10.0;
+
+    EXPECT_EQ(z_min_value, merge.getZMinValue());
+    EXPECT_EQ(z_max_value, merge.getZMaxValue());
 }
 
 TEST(PointCloudMergerTestCase04, newOnePointCloud)
 {
+    ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 1);
+
+    bool isPointCloudNumberValid = false;
+
+    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
 int main(int argc, char **argv)

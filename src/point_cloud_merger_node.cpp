@@ -28,10 +28,16 @@ int main(int argc, char **argv)
 
     ros_util::point_cloud_merger(input_topics, output_frame_id, output_topic, x_min, x_max, y_min, y_max, z_min, z_max, set_input_size); */
 
+    /* For completion, will be overwritten in gtest */
     bool test_flag = false;
-    double x_min = 0.5;
-    double x_max = 2.0;
-    ros_util::point_cloud_merger node(test_flag, x_min, x_max);
+    double x_min = 0.1;
+    double x_max = 1.0;
+    double y_min = 0.1;
+    double y_max = 1.0;
+    double z_min = 0.1;
+    double z_max = 1.0;
+    double input_s = 0;
+    ros_util::point_cloud_merger node(test_flag, x_min, x_max, y_min, y_max, z_min, z_max, input_s);
 
     ros::spin();
 
