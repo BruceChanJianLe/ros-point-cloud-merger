@@ -1,5 +1,20 @@
 <launch>
   <!-- <node pkg="ros-point-cloud-merger" type="mynode" name="mynode" /> -->
 
+  <!-- <arg name="robot_name" default="husky" />
+  <arg name="enable_range_flag" default="true"/>
+  <arg name="x_range" default="husky_x" />
+  <arg name="y_range" default="husky_y" />
+  <arg name="z_range" default="husky_z" />
+
+  <node name="point_cloud_merger_node" output="screen" pkg="ros-point-cloud-merger" type="point_cloud_merger_node">
+    <param name="enable_range_flag" value="$(arg enable_range_flag)"/>
+
+    <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg robot_name).yaml" />
+    <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg x_range).yaml" />
+    <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg y_range).yaml" />
+    <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg z_range).yaml" />
+  </node> -->
+
   <test test-name="test_mynode" pkg="ros-point-cloud-merger" type="test_mynode" />
 </launch>

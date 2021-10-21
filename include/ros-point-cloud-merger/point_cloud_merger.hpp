@@ -44,7 +44,8 @@ namespace ros_util
         /* Constructor */
         /* point_cloud_merger(std::string input_topics, std::string output_frame_id, std::string output_topic, double pmin_range_x, double pmax_range_x, double pmin_range_y, double pmax_range_y, double pmin_range_z, double pmax_range_z, int input); */
 
-        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s) : tf2_listener_(tfBuffer)
+        /* enable commented out one when running gtest */
+        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s): tf2_listener_(tfBuffer)/* {} */
         {
             if (test_flag == true)
             {
@@ -59,7 +60,7 @@ namespace ros_util
 
                 setInputSize(input_s);
             }
-        };
+        }
 
         /* For unit test purposes */
         point_cloud_merger(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input) : tf2_listener_(tfBuffer)
@@ -178,7 +179,7 @@ namespace ros_util
         }
 
         /* Destructor */
-        ~point_cloud_merger(){};
+        ~point_cloud_merger(){}
 
     private:
         typedef pcl::PointXYZI PointT;

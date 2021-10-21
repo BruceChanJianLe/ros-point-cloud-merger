@@ -13,30 +13,20 @@ int main(int argc, char **argv)
     /* no default constructor exists for class "ros_util::point_cloud_merger" */
     /* ros_util::point_cloud_merger node; */
 
-    /* std::string input_topics = "[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]";
-    std::string output_topic = "/husky_points_concat";
-    std::string output_frame_id = "velodyne_frame";
-
-    double x_min = 0.5;
-    double x_max = 2.0;
-    double y_min = 0.5;
-    double y_max = 2.0;
-    double z_min = -1.0;
-    double z_max = 50.0;
-
-    int set_input_size = 2; 
-
-    ros_util::point_cloud_merger(input_topics, output_frame_id, output_topic, x_min, x_max, y_min, y_max, z_min, z_max, set_input_size); */
-
     /* For completion, will be overwritten in gtest */
     bool test_flag = false;
+
     double x_min = 0.1;
-    double x_max = 1.0;
+    double x_max = 100.0;
+
     double y_min = 0.1;
-    double y_max = 1.0;
+    double y_max = 100.0;
+
     double z_min = 0.1;
-    double z_max = 1.0;
+    double z_max = 100.0;
+
     double input_s = 0;
+    
     ros_util::point_cloud_merger node(test_flag, x_min, x_max, y_min, y_max, z_min, z_max, input_s);
 
     ros::spin();

@@ -50,9 +50,10 @@ namespace ros_util
 
         private_nh_.param("enable_range_flag", enable_range_flag_, false);
         private_nh_.param("input_size", input_size_, int(0));
+        private_nh_.param("set_input_size_", set_input_size_, int(0));
 
         /* if gtest enabled */
-        /* if (test_flag == true)
+        if (test_flag == true)
         {
             setXMinValue(x_min);
             setXMaxValue(x_max);
@@ -64,7 +65,7 @@ namespace ros_util
             setZMaxValue(z_max);
 
             setInputSize(input_s);
-        } */
+        }
 
         /* If enable_range_flag is not enabled */
         /* if (enable_range_flag_.compare("true") != 0) */
@@ -83,6 +84,21 @@ namespace ros_util
             pmin_range_z_ = -DBL_MAX;
             pmax_range_z_ = DBL_MAX;
         }
+
+        ROS_INFO_STREAM("Current value of pmin_range_x_ is " << pmin_range_x_);
+        ROS_INFO_STREAM("Current value of pmax_range_x_ is " << pmax_range_x_);
+        ROS_INFO_STREAM("Current value of nmin_range_x_ is " << nmin_range_x_);
+        ROS_INFO_STREAM("Current value of nmax_range_x_ is " << nmax_range_x_);
+
+        ROS_INFO_STREAM("Current value of pmin_range_y_ is " << pmin_range_y_);
+        ROS_INFO_STREAM("Current value of pmax_range_y_ is " << pmax_range_y_);
+        ROS_INFO_STREAM("Current value of nmin_range_y_ is " << nmin_range_y_);
+        ROS_INFO_STREAM("Current value of nmax_range_y_ is " << nmax_range_y_);
+
+        ROS_INFO_STREAM("Current value of pmin_range_z_ is " << pmin_range_z_);
+        ROS_INFO_STREAM("Current value of pmax_range_z_ is " << pmax_range_z_);
+
+        ROS_INFO_STREAM("Current value of set_input_size_ is " << set_input_size_);
 
         input_topics_ = input_topics_.substr(1);
         std::stringstream ss(input_topics_);
