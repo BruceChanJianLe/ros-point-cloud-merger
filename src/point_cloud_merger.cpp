@@ -51,16 +51,20 @@ namespace ros_util
         private_nh_.param("enable_range_flag", enable_range_flag_, false);
         private_nh_.param("input_size", input_size_, int(0));
 
-        if (test_flag == true)
+        /* if gtest enabled */
+        /* if (test_flag == true)
         {
             setXMinValue(x_min);
             setXMaxValue(x_max);
+
             setYMinValue(y_min);
             setYMaxValue(y_max);
+
             setZMinValue(z_min);
             setZMaxValue(z_max);
+
             setInputSize(input_s);
-        }
+        } */
 
         /* If enable_range_flag is not enabled */
         /* if (enable_range_flag_.compare("true") != 0) */
