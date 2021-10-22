@@ -27,6 +27,46 @@
 
 /* make rosbag for 8 pointclouds */
 
+#include "rosbag/bag.h"
+#include "rosbag/chunked_file.h"
+#include "rosbag/view.h"
+
+#include <boost/foreach.hpp>
+#include "std_msgs/String.h"
+#include "std_msgs/Int32.h"
+
+TEST(PointCloudMergerTestCase01, rosbagTesting)
+{
+    /* 17 messages */
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/test/test_bag.cpp";
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Read);
+
+    int message_count = 0;
+
+    rosbag::View view(bag);
+    /* NOT SURE WHAT IS GOING ON */
+    BOOST_FOREACH (rosbag::MessageInstance m, view)
+    {
+        std_msgs::String::ConstPtr s = m.instantiate<std_msgs::String>();
+        if (s != NULL)
+        {
+            ASSERT_EQ(s->data, std::string("foo"));
+            message_count++;
+        }
+        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
+        if (i != NULL)
+        {
+            ASSERT_EQ(i->data, 42);
+            message_count++;
+        }
+    }
+    ASSERT_EQ(message_count, 0);
+
+    bag.close();
+}
+
 TEST(PointCloudMergerTestCase01, replaceValuesForX)
 {
     ros_util::point_cloud_merger merge(true, 1.0, 3.0, 0.5, 2.0, 0.0, 100.0, 2);

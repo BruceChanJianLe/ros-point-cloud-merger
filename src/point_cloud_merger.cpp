@@ -112,7 +112,7 @@ namespace ros_util
         // Check number of input topics accepted
         if (input_size_ < MIN_SIZE)
         {
-            ROS_ERROR("Minimum size accepted is 2 but size of input topics is less than 2. Exiting now...");
+            ROS_ERROR("Minimum size accepted is 2, but size of input topics is less than 2. Exiting now...");
 
             /* Disconnects everything and unregisters from the master. 
             It is generally not necessary to call this function, as the 
@@ -125,7 +125,7 @@ namespace ros_util
         }
         else if (input_size_ > MAX_SIZE)
         {
-            ROS_ERROR("Maximum size accepted is 8 but size of input topics is more than 8. Exiting now...");
+            ROS_ERROR("Maximum size accepted is 8, but size of input topics is more than 8. Exiting now...");
 
             ros::shutdown();
 
