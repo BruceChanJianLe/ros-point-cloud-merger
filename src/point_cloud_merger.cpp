@@ -48,7 +48,7 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
-        private_nh_.param("enable_range_flag", enable_range_flag_, false);
+        private_nh_.param("enable_range_flag", enable_range_flag_, true);
         private_nh_.param("input_size", input_size_, int(0));
         private_nh_.param("set_input_size_", set_input_size_, int(0));
 
