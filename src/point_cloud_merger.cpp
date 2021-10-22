@@ -28,7 +28,7 @@ namespace ros_util
     pmin_range_x_(x_min), nmin_range_x_(-x_min), pmin_range_y_(y_min), nmin_range_y_(-y_min),
     pmax_range_x_(x_max), nmax_range_x_(-x_max), pmax_range_y_(y_max), nmax_range_y_(-y_max), 
     pmin_range_z_(z_min), pmax_range_z_(z_max), set_input_size_(input_size) */
-    point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s) 
+    point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s)
         : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
         private_nh_.param("input_topics", input_topics_, std::string("[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]"));
@@ -297,6 +297,21 @@ namespace ros_util
 
         /* Publish a message on the topic associated with this Publisher. */
         cloud_publisher_.publish(cloud_concatenated);
+    }
+
+    bool point_cloud_merger::checkInputSize()
+    {
+        bool isValid = true;
+
+        if (set_input_size_ < MIN_SIZE)
+        {
+            isValid = false;
+        }
+        else if (set_input_size_ > MAX_SIZE)
+        {
+            isValid = false;
+        }
+        return isValid;
     }
 
 } // namespace ros_util

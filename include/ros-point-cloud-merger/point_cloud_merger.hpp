@@ -44,8 +44,8 @@ namespace ros_util
         /* Constructor */
         /* point_cloud_merger(std::string input_topics, std::string output_frame_id, std::string output_topic, double pmin_range_x, double pmax_range_x, double pmin_range_y, double pmax_range_y, double pmin_range_z, double pmax_range_z, int input); */
 
-        /* enable commented out one when running gtest */
-        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s): tf2_listener_(tfBuffer)/* {} */
+        /* have to make modifications for gtest */
+        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s); /* : tf2_listener_(tfBuffer)
         {
             if (test_flag == true)
             {
@@ -60,7 +60,7 @@ namespace ros_util
 
                 setInputSize(input_s);
             }
-        }
+        } */
 
         /* For unit test purposes */
         point_cloud_merger(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input) : tf2_listener_(tfBuffer)
@@ -114,7 +114,7 @@ namespace ros_util
             pmax_range_z_ = z_max_value;
         }
 
-        /* Sets input_size_ */
+        /* Sets set_input_size_ */
         void setInputSize(int input)
         {
             set_input_size_ = input;
@@ -156,15 +156,15 @@ namespace ros_util
             return pmax_range_z_;
         }
 
-        /* Gets pmin_range_x_ and nmin_range_x_ */
+        /* Gets set_input_size_ */
         int getInputSize()
         {
             return set_input_size_;
         }
 
         /* Checks if input_size_ is within the accepted bound */
-        bool checkInputSize()
-        {
+        bool checkInputSize();
+        /* {
             bool isValid = true;
 
             if (set_input_size_ < MIN_SIZE)
@@ -176,7 +176,7 @@ namespace ros_util
                 isValid = false;
             }
             return isValid;
-        }
+        } */
 
         /* Destructor */
         ~point_cloud_merger(){}
