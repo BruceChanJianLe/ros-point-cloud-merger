@@ -17,11 +17,9 @@
 #ifndef ROS_POINT_CLOUD_MERGER_H__
 #define ROS_POINT_CLOUD_MERGER_H__
 
-#define MIN_SIZE 2
 #define MAX_SIZE 8
 
 #include <ros/ros.h>
-
 #include <string>
 
 #include <message_filters/subscriber.h>
@@ -42,37 +40,7 @@ namespace ros_util
     {
     public:
         /* Constructor */
-        /* point_cloud_merger(std::string input_topics, std::string output_frame_id, std::string output_topic, double pmin_range_x, double pmax_range_x, double pmin_range_y, double pmax_range_y, double pmin_range_z, double pmax_range_z, int input); */
-
-        /* have to make modifications for gtest */
-        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s); /* : tf2_listener_(tfBuffer)
-        {
-            if (test_flag == true)
-            {
-                setXMinValue(x_min);
-                setXMaxValue(x_max);
-
-                setYMinValue(y_min);
-                setYMaxValue(y_max);
-
-                setZMinValue(z_min);
-                setZMaxValue(z_max);
-
-                setInputSize(input_s);
-            }
-        } */
-
-        /* For unit test purposes */
-        point_cloud_merger(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input) : tf2_listener_(tfBuffer)
-        {
-            setXMinValue(x_min);
-            setXMaxValue(x_max);
-            setYMinValue(y_min);
-            setYMaxValue(y_max);
-            setZMinValue(z_min);
-            setZMaxValue(z_max);
-            setInputSize(input);
-        }
+        point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s);
 
         /* Set pmin_range_x_ and nmin_range_x_ */
         void setXMinValue(double x_min_value)
@@ -162,21 +130,8 @@ namespace ros_util
             return set_input_size_;
         }
 
-        /* Checks if input_size_ is within the accepted bound */
+        /* Checks if set_input_size_ is within the accepted bound */
         bool checkInputSize();
-        /* {
-            bool isValid = true;
-
-            if (set_input_size_ < MIN_SIZE)
-            {
-                isValid = false;
-            }
-            else if (set_input_size_ > MAX_SIZE)
-            {
-                isValid = false;
-            }
-            return isValid;
-        } */
 
         /* Destructor */
         ~point_cloud_merger(){}

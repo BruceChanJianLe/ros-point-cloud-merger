@@ -22,12 +22,6 @@
 
 namespace ros_util
 {
-    /* point_cloud_merger::point_cloud_merger(std::string inputs, std::string output_frame_id, std::string output, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_size) 
-    : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer),
-    input_topics_(inputs), output_frame_id_(output_frame_id), output_topic_(output),
-    pmin_range_x_(x_min), nmin_range_x_(-x_min), pmin_range_y_(y_min), nmin_range_y_(-y_min),
-    pmax_range_x_(x_max), nmax_range_x_(-x_max), pmax_range_y_(y_max), nmax_range_y_(-y_max), 
-    pmin_range_z_(z_min), pmax_range_z_(z_max), set_input_size_(input_size) */
     point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s)
         : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
@@ -52,7 +46,7 @@ namespace ros_util
         private_nh_.param("input_size", input_size_, int(0));
         private_nh_.param("set_input_size_", set_input_size_, int(0));
 
-        /* if gtest enabled */
+        /* if gtest flag is enabled */
         if (test_flag == true)
         {
             setXMinValue(x_min);
@@ -67,8 +61,7 @@ namespace ros_util
             setInputSize(input_s);
         }
 
-        /* If enable_range_flag is not enabled */
-        /* if (enable_range_flag_.compare("true") != 0) */
+        /* if range flag is disabled */
         if (enable_range_flag_ == false)
         {
             pmin_range_x_ = 0.0;
@@ -85,6 +78,7 @@ namespace ros_util
             pmax_range_z_ = DBL_MAX;
         }
 
+        /* For checking purposes */
         ROS_INFO_STREAM("Current value of pmin_range_x_ is " << pmin_range_x_);
         ROS_INFO_STREAM("Current value of pmax_range_x_ is " << pmax_range_x_);
         ROS_INFO_STREAM("Current value of nmin_range_x_ is " << nmin_range_x_);
@@ -133,17 +127,12 @@ namespace ros_util
         {
             ROS_ERROR("Maximum size accepted is 8 but size of input topics is more than 8. Exiting now...");
 
-            /* Disconnects everything and unregisters from the master. 
-            It is generally not necessary to call this function, as the 
-            node will automatically shutdown when all NodeHandles destruct. 
-            However, if you want to break out of a spin() loop explicitly, 
-            this function allows that. */
             ros::shutdown();
 
             return;
         }
 
-        /* Replace input topics >= input size with 1st input topic */
+        /* Replace store_input_topics >= input size with store_input_topics[0] */
         for (int i = 0; i < MAX_SIZE; i++)
         {
             if (i >= input_size_)
@@ -191,12 +180,10 @@ namespace ros_util
         if the condition is false, the program is terminated and an error message is displayed.  */
         assert(input_size_ >= MIN_SIZE && input_size_ <= MAX_SIZE);
 
-        /* typedef boost::shared_ptr<const PointCloud<PointT> > ConstPtr */
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
         PointCloudMsgT::ConstPtr msg[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
-        /* typedef boost::shared_ptr<PointCloud<PointT> > Ptr */
         boost::shared_ptr<PointCloudT> cloud_sources[MAX_SIZE];
 
         boost::shared_ptr<PointCloudT> cloud_source[MAX_SIZE];
@@ -258,12 +245,6 @@ namespace ros_util
                 else
                 {
                     ROS_ERROR("PointCloud after filtering is 0. Exiting now...");
-
-                    /* Disconnects everything and unregisters from the master. 
-                       It is generally not necessary to call this function, as the 
-                       node will automatically shutdown when all NodeHandles destruct. 
-                       However, if you want to break out of a spin() loop explicitly, 
-                       this function allows that. */
 
                     return;
                 }

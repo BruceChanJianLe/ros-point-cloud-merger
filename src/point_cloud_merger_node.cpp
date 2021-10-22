@@ -10,10 +10,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, ROSNodeName);
 
-    /* no default constructor exists for class "ros_util::point_cloud_merger" */
-    /* ros_util::point_cloud_merger node; */
-
     /* For completion, will be overwritten in gtest */
+
     /* enabled if running tests */
     bool test_flag = false;
 

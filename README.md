@@ -24,7 +24,9 @@
   - [New file point_cloud_merger_node.cpp](#new-file-point_cloud_merger_nodecpp)
   - [New file point_cloud_merger.hpp](#new-file-point_cloud_mergerhpp)
   - [New file point_cloud_merger.cpp](#new-file-point_cloud_mergercpp)
-- [GOOGLE TEST](#google-test)
+  - [New file test_launch.test](#new-file-test_launchtest)
+  - [New file test.cpp](#new-file-testcpp)
+- [HOW TO RUN TESTING](#how-to-run-testing)
 - [EXAMPLE IMPLEMENTATION](#example-implementation)
 - [REFERENCES](#references)
 
@@ -255,6 +257,8 @@ in this case, the output fame id is velodyne_frame
   <exec_depend>tf2</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
 
+  <test_depend>rostest</test_depend>
+
   <export>
   </export>
 </package>
@@ -268,6 +272,8 @@ project(ros-point-cloud-merger)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
@@ -330,18 +336,16 @@ target_link_libraries(point_cloud_merger_node
 )
 
 ## will cause the executable to be built during the main build (a simple make), and will put it in TBD
-catkin_add_gtest(${PROJECT_NAME} 
+#catkin_add_gtest(${PROJECT_NAME} 
 #  test/test_launch.test
-  test/test.cpp
-)
+#  test/test.cpp
+#)
 
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
-
-#if(CATKIN_ENABLE_TESTING)
-#  find_package(rostest REQUIRED)
-#  add_rostest_gtest(test_mynode test/test_launch.test test/test.cpp)
-#  target_link_libraries(test_mynode ${catkin_LIBRARIES})
-#endif()
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(test_mynode test/test_launch.test test/test.cpp src/point_cloud_merger.cpp)
+  target_link_libraries(test_mynode ${catkin_LIBRARIES})
+endif()
 
 install(
   TARGETS
@@ -372,16 +376,20 @@ this is the hpp file for point_cloud_merger
 
 this is the cpp file for point_cloud_merger
 
+## New file test_launch.test
+
+this is the test file 
+
+## New file test.cpp
+
+this is the file that contains the tests
+
 <br>
 
-# GOOGLE TEST
+# HOW TO RUN TESTING
 
 terminal 1:
-```
-roscore
-```
 
-terminal 2
 ```
 catkin_make run_tests
 ```
@@ -389,7 +397,9 @@ catkin_make run_tests
 <br>
 
 # EXAMPLE IMPLEMENTATION
-[example](https://github.com/e0425705/husky_sw/tree/branch-package)
+- [example - package](https://github.com/e0425705/husky_sw/tree/branch-package)
+- [example - shared pointer](https://github.com/BruceChanJianLe/ros-point-cloud-merger/tree/branch-shared-pointer)
+- [example - test](https://github.com/BruceChanJianLe/ros-point-cloud-merger/tree/branch-unit-testing)
 
 <br>
 

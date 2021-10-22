@@ -25,10 +25,9 @@
  * merge of nine point clouds ->fail 
  */
 
-/* use boolean to validate instead */
 /* make rosbag for 8 pointclouds */
 
-TEST(PointCloudMergerTestCase01, newReplaceValuesForX)
+TEST(PointCloudMergerTestCase01, replaceValuesForX)
 {
     ros_util::point_cloud_merger merge(true, 1.0, 3.0, 0.5, 2.0, 0.0, 100.0, 2);
 
@@ -39,7 +38,7 @@ TEST(PointCloudMergerTestCase01, newReplaceValuesForX)
     EXPECT_EQ(x_max_value, merge.getXMaxValue());
 }
 
-TEST(PointCloudMergerTestCase01, newReplaceValuesForY)
+TEST(PointCloudMergerTestCase01, replaceValuesForY)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 1.0, 3.0, 0.0, 100.0, 2);
 
@@ -50,7 +49,7 @@ TEST(PointCloudMergerTestCase01, newReplaceValuesForY)
     EXPECT_EQ(y_max_value, merge.getYMaxValue());
 }
 
-TEST(PointCloudMergerTestCase01, newReplaceValuesForZ)
+TEST(PointCloudMergerTestCase01, replaceValuesForZ)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 2);
 
@@ -61,7 +60,7 @@ TEST(PointCloudMergerTestCase01, newReplaceValuesForZ)
     EXPECT_EQ(z_max_value, merge.getZMaxValue());
 }
 
-TEST(PointCloudMergerTestCase02, newOnePointCloud)
+TEST(PointCloudMergerTestCase02, onePointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 1);
 
@@ -70,7 +69,7 @@ TEST(PointCloudMergerTestCase02, newOnePointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newTwoPointCloud)
+TEST(PointCloudMergerTestCase02, twoPointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 2);
 
@@ -79,7 +78,7 @@ TEST(PointCloudMergerTestCase02, newTwoPointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newThreePointCloud)
+TEST(PointCloudMergerTestCase02, threePointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 3);
 
@@ -88,7 +87,7 @@ TEST(PointCloudMergerTestCase02, newThreePointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newFourPointCloud)
+TEST(PointCloudMergerTestCase02, fourPointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 4);
 
@@ -97,7 +96,7 @@ TEST(PointCloudMergerTestCase02, newFourPointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newFivePointCloud)
+TEST(PointCloudMergerTestCase02, fivePointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 5);
 
@@ -106,7 +105,7 @@ TEST(PointCloudMergerTestCase02, newFivePointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newSixPointCloud)
+TEST(PointCloudMergerTestCase02, sixPointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 6);
 
@@ -115,7 +114,7 @@ TEST(PointCloudMergerTestCase02, newSixPointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newSevenPointCloud)
+TEST(PointCloudMergerTestCase02, sevenPointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 7);
 
@@ -124,7 +123,7 @@ TEST(PointCloudMergerTestCase02, newSevenPointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newEightPointCloud)
+TEST(PointCloudMergerTestCase02, eightPointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 8);
 
@@ -133,7 +132,7 @@ TEST(PointCloudMergerTestCase02, newEightPointCloud)
     EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
 }
 
-TEST(PointCloudMergerTestCase02, newNinePointCloud)
+TEST(PointCloudMergerTestCase02, ninePointCloud)
 {
     ros_util::point_cloud_merger merge(true, 0.5, 2.0, 0.5, 2.0, -10.0, 10.0, 9);
 
@@ -155,146 +154,3 @@ int main(int argc, char **argv)
 
     return ret;
 }
-
-/* OLD TESTS */
-
-/* TEST(PointCloudMergerTestCase01, replaceValuesForX)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    double x_min_value = 0.5;
-    double x_max_value = 5.0;
-
-    merge.setXMinValue(0.5);
-    merge.setXMaxValue(5.0);
-
-    EXPECT_EQ(x_min_value, merge.getXMinValue());
-    EXPECT_EQ(x_max_value, merge.getXMaxValue());
-}
-
-TEST(PointCloudMergerTestCase01, replaceValuesForY)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    double y_min_value = 0.5;
-    double y_max_value = 5.0;
-
-    merge.setYMinValue(0.5);
-    merge.setYMaxValue(5.0);
-
-    EXPECT_EQ(y_min_value, merge.getYMinValue());
-    EXPECT_EQ(y_max_value, merge.getYMaxValue());
-}
-
-TEST(PointCloudMergerTestCase01, replaceValuesForZ)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    double z_min_value = -10.0;
-    double z_max_value = 100.0;
-
-    merge.setZMinValue(-10.0);
-    merge.setZMaxValue(100.0);
-
-    EXPECT_EQ(z_min_value, merge.getZMinValue());
-    EXPECT_EQ(z_max_value, merge.getZMaxValue());
-}
-
-TEST(PointCloudMergerTestCase02, onePointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = false;
-
-    merge.setInputSize(1);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, twoPointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(2);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, threePointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(3);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, fourPointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(4);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, fivePointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(5);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, sixPointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(6);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, sevenPointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(7);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, eightPointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = true;
-
-    merge.setInputSize(8);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-}
-
-TEST(PointCloudMergerTestCase02, ninePointCloud)
-{
-    ros_util::point_cloud_merger merge(10.0, 20.0, 10.0, 20.0, -1.0, 10.0, 2);
-
-    bool isPointCloudNumberValid = false;
-
-    merge.setInputSize(9);
-
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
-} */
