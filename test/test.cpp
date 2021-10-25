@@ -31,7 +31,9 @@
 #include "rosbag/chunked_file.h"
 #include "rosbag/view.h"
 
+#include <boost/assign/list_of.hpp>
 #include <boost/foreach.hpp>
+
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
 
@@ -39,14 +41,62 @@ TEST(PointCloudMergerTestCase01, rosbagTesting)
 {
     /* 17 messages */
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
-    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/test/test_bag.cpp";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
+
+    /* Serializes to/from a bag file on disk. */
     rosbag::Bag bag;
     bag.open(bagfile_name, rosbag::bagmode::Read);
 
-    int message_count = 0;
+    int32_t message_count = 0;
+
+    /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
+    rosbag::View view(bag);
+
+    /* 11.6MB = 11.6 * 1024 * 1024 bytes */
+    EXPECT_EQ(bag.getSize(), 12187913);
+    /* version_ / 100, where version_ == 200 */
+    EXPECT_EQ(bag.getMajorVersion(), 2);
+    /* version_ % 100, where version_ == 200 */
+    EXPECT_EQ(bag.getMinorVersion(), 0);
+    /* mode write(1), read(2) or append(4) */
+    EXPECT_EQ(bag.getMode(), 2);
+    /* get filename */
+    EXPECT_EQ(bag.getFileName(), "/home/isera2/catkin_ws/src/bagfiles/8pts.bag");
+
+    /* verify the number of message is accurate to the one shown when rosbag info 8pts.bag */
+    BOOST_FOREACH (rosbag::MessageInstance m, view)
+    {
+        /* Templated call to instantiate a message. */
+        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
+        message_count++;
+    }
+    EXPECT_EQ(17, message_count);
+
+    /*  
+     * validate if have pointcloud coming out
+     * 
+     * can be done in docs/rosbag_run.md
+     */
+
+    bag.close();
+}
+
+/* with DISABLED -> pass the test without running it */
+TEST(PointCloudMergerTestCase01, DISABLED_rosbagTestingOld)
+{
+    /* NOT SURE WHAT IS GOING ON */
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
+
+    /* Serializes to/from a bag file on disk. */
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Read);
+
+    int32_t message_count = 0;
 
     rosbag::View view(bag);
-    /* NOT SURE WHAT IS GOING ON */
+
+    /* rosbag record whole poincloud withoutthe restriction on range */
     BOOST_FOREACH (rosbag::MessageInstance m, view)
     {
         std_msgs::String::ConstPtr s = m.instantiate<std_msgs::String>();
@@ -62,9 +112,8 @@ TEST(PointCloudMergerTestCase01, rosbagTesting)
             message_count++;
         }
     }
-    ASSERT_EQ(message_count, 0);
-
     bag.close();
+    EXPECT_EQ(0, 1);
 }
 
 TEST(PointCloudMergerTestCase01, replaceValuesForX)

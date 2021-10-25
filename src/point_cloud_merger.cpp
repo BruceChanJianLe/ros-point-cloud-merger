@@ -16,6 +16,8 @@
 
 #include "ros-point-cloud-merger/point_cloud_merger.hpp"
 
+/* #include <QMetaType> */
+
 #define MIN_SIZE 2
 #define MAX_SIZE 8
 #define QUEUE_SIZE 1
@@ -168,6 +170,7 @@ namespace ros_util
             boost::bind(&point_cloud_merger::pointcloud_callback, this, _1, _2, _3, _4, _5, _6, _7, _8));
 
         /* Returns a Publisher that allows you to publish a message on this topic. */
+        /* should only keep track of the latest message */
         cloud_publisher_ = global_nh_.advertise<PointCloudMsgT>(output_topic_, QUEUE_SIZE);
     }
 
@@ -179,6 +182,8 @@ namespace ros_util
         /*  If the condition is true, the program continues normally and 
         if the condition is false, the program is terminated and an error message is displayed.  */
         assert(input_size_ >= MIN_SIZE && input_size_ <= MAX_SIZE);
+
+        /* qRegisterMetaType<QVector<int>>("QVector<int>"); */
 
         PointCloudMsgT::ConstPtr msgs[MAX_SIZE] = {msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8};
 
