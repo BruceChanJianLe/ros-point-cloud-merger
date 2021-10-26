@@ -37,10 +37,10 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
 
-TEST(PointCloudMergerTestCase01, rosbagTesting)
+/* check have pointcloud when messages exist */
+TEST(PointCloudMergerTestCase01, rosbagTesting1)
 {
-    /* 17 messages */
-    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag";
     std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
 
     /* Serializes to/from a bag file on disk. */
@@ -52,8 +52,7 @@ TEST(PointCloudMergerTestCase01, rosbagTesting)
     /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
     rosbag::View view(bag);
 
-    /* 11.6MB = 11.6 * 1024 * 1024 bytes */
-    EXPECT_EQ(bag.getSize(), 12187913);
+    EXPECT_EQ(bag.getSize(), 15781303);
     /* version_ / 100, where version_ == 200 */
     EXPECT_EQ(bag.getMajorVersion(), 2);
     /* version_ % 100, where version_ == 200 */
@@ -61,7 +60,7 @@ TEST(PointCloudMergerTestCase01, rosbagTesting)
     /* mode write(1), read(2) or append(4) */
     EXPECT_EQ(bag.getMode(), 2);
     /* get filename */
-    EXPECT_EQ(bag.getFileName(), "/home/isera2/catkin_ws/src/bagfiles/8pts.bag");
+    EXPECT_EQ(bag.getFileName(), "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag");
 
     /* verify the number of message is accurate to the one shown when rosbag info 8pts.bag */
     BOOST_FOREACH (rosbag::MessageInstance m, view)
@@ -70,13 +69,74 @@ TEST(PointCloudMergerTestCase01, rosbagTesting)
         std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
         message_count++;
     }
-    EXPECT_EQ(17, message_count);
+    EXPECT_EQ(22, message_count);
 
-    /*  
-     * validate if have pointcloud coming out
-     * 
-     * can be done in docs/rosbag_run.md
-     */
+    bag.close();
+}
+
+/* check have pointcloud when messages exist */
+TEST(PointCloudMergerTestCase01, rosbagTesting2)
+{
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
+
+    /* Serializes to/from a bag file on disk. */
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Read);
+
+    int32_t message_count = 0;
+
+    /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
+    rosbag::View view(bag);
+
+    EXPECT_EQ(bag.getSize(), 193221351);
+    /* version_ / 100, where version_ == 200 */
+    EXPECT_EQ(bag.getMajorVersion(), 2);
+    /* version_ % 100, where version_ == 200 */
+    EXPECT_EQ(bag.getMinorVersion(), 0);
+    /* mode write(1), read(2) or append(4) */
+    EXPECT_EQ(bag.getMode(), 2);
+    /* get filename */
+    EXPECT_EQ(bag.getFileName(), "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag");
+
+    /* verify the number of message is accurate to the one shown when rosbag info 8pts.bag */
+    BOOST_FOREACH (rosbag::MessageInstance m, view)
+    {
+        /* Templated call to instantiate a message. */
+        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
+        message_count++;
+    }
+    EXPECT_EQ(298, message_count);
+
+    bag.close();
+}
+
+/* check if filtered 
+   cannot check as the merged pointcloud in rosbag is the merged, unfiltered */
+
+/* record pointcloud topics and play back in a loop so that whole testing have pointcloud topic */
+/* set up static tf */
+/* what can i test? */
+/* 
+ * 1. check if have pointcloud [X]
+ * 2. check if filtered [X]
+ * 3. check if correct topic
+ */
+
+/* check if correct output topic, run rostopic list */
+TEST(PointCloudMergerTestCase01, rosbagTesting3)
+{
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
+
+    /* Serializes to/from a bag file on disk. */
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Read);
+
+    int32_t message_count = 0;
+
+    /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
+    rosbag::View view(bag);
 
     bag.close();
 }

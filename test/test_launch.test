@@ -16,5 +16,11 @@
     <rosparam command="load" file="$(find ros-point-cloud-merger)/config/$(arg z_range).yaml" />
   </node> -->
 
+  <!-- publish static tf -->
+  <!-- for tf frame of sensor and base link, without frame, cannot do tf transformation -->
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="1 0 0 0 0 0 1 link1_parent link1" /> -->
+
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ros-point-cloud-merger)/rviz/8ptcouds_run.rviz" output="screen"/> -->
+
   <test test-name="test_mynode" pkg="ros-point-cloud-merger" type="test_mynode" />
 </launch>
