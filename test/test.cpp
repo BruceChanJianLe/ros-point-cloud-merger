@@ -106,21 +106,19 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
 }
 
 /* XXX check if correct output topic, run rostopic list XXX */
-TEST(PointCloudMergerTestCase01, rosbagTesting3)
+/* TEST(PointCloudMergerTestCase01, rosbagTesting3)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
 
-    /* Serializes to/from a bag file on disk. */
     rosbag::Bag bag;
     bag.open(bagfile_name, rosbag::bagmode::Read);
 
     int32_t message_count = 0;
 
-    /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
     rosbag::View view(bag);
 
     bag.close();
-}
+} */
 
 /* append to a specific rosbag */
 TEST(PointCloudMergerTestCase01, rosbagTesting4)
