@@ -40,7 +40,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
 
-/* accurate number of messages */
+/* accurate number of messages, size. mode and filename for 8ptclouds.bag */
 TEST(PointCloudMergerTestCase01, rosbagTesting1)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag";
@@ -73,11 +73,10 @@ TEST(PointCloudMergerTestCase01, rosbagTesting1)
     bag.close();
 }
 
-/* accurate number of messages */
+/* accurate number of messages, size. mode and filename for 8ptclouds_run.bag*/
 TEST(PointCloudMergerTestCase01, rosbagTesting2)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
-    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
 
     /* Serializes to/from a bag file on disk. */
     rosbag::Bag bag;
@@ -106,11 +105,10 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
     bag.close();
 }
 
-/* check if correct output topic, run rostopic list */
+/* XXX check if correct output topic, run rostopic list XXX */
 TEST(PointCloudMergerTestCase01, rosbagTesting3)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
-    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
 
     /* Serializes to/from a bag file on disk. */
     rosbag::Bag bag;
@@ -124,31 +122,37 @@ TEST(PointCloudMergerTestCase01, rosbagTesting3)
     bag.close();
 }
 
-/* write another rosbag to one rosbag */
+/* append to a specific rosbag */
 TEST(PointCloudMergerTestCase01, rosbagTesting4)
 {
+    /* rosbag to append to */
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/extra.bag";
-    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
-
-    /* Append, dont use this, else need keep updating the other tests */
-    rosbag::Bag bag;
+ 
+     rosbag::Bag bag;
+    /* change Append to Write if want to write instead */
     bag.open(bagfile_name, rosbag::bagmode::Append);
+
     std_msgs::Int32 i;
     i.data = 42;
+
+    /* numbers: topic, i: message to be added */
     bag.write("numbers", ros::Time::now(), i);
     bag.close();
 
     /* Read */
     rosbag::Bag bag2;
     bag2.open(bagfile_name, rosbag::bagmode::Read);
+
     int32_t mess = 0;
     rosbag::View view(bag2);
+
+    /* strightforward way of checking, check that messages have increse by 1 */
     BOOST_FOREACH (rosbag::MessageInstance m, view)
     {
         std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
         mess++;
     }
-    EXPECT_EQ(mess, mess);
+    EXPECT_EQ(44, mess);
     bag2.close();
 }
 
