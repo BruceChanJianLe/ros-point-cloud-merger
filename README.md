@@ -398,6 +398,12 @@ terminal 1:
 catkin_make run_tests_ros-point-cloud-merger
 ```
 
+OR
+
+```
+rostest ros-point-cloud-merger test_launch.test
+```
+
 ## Testing rosbag
 
 terminal 1

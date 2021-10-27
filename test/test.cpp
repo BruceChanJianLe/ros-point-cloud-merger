@@ -22,10 +22,13 @@
  * merge of six point clouds -> pass
  * merge of seven point clouds -> pass
  * merge of eight point clouds -> pass
- * merge of nine point clouds ->fail 
+ * merge of nine point clouds ->fail
+ * 
+ * check messages number in rosbag 
+ * check correct topic
  */
 
-/* make rosbag for 8 pointclouds */
+/* Cannot check if filtered as the merged pointcloud in rosbag is the merged, unfiltered */
 
 #include "rosbag/bag.h"
 #include "rosbag/chunked_file.h"
@@ -37,7 +40,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
 
-/* check have pointcloud when messages exist */
+/* accurate number of messages */
 TEST(PointCloudMergerTestCase01, rosbagTesting1)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag";
@@ -52,11 +55,7 @@ TEST(PointCloudMergerTestCase01, rosbagTesting1)
     /* Specifies a view into a bag file to allow for querying for messages on specific connections withn a time range. */
     rosbag::View view(bag);
 
-    EXPECT_EQ(bag.getSize(), 15781303);
-    /* version_ / 100, where version_ == 200 */
-    EXPECT_EQ(bag.getMajorVersion(), 2);
-    /* version_ % 100, where version_ == 200 */
-    EXPECT_EQ(bag.getMinorVersion(), 0);
+    EXPECT_EQ(bag.getSize(), 32960919);
     /* mode write(1), read(2) or append(4) */
     EXPECT_EQ(bag.getMode(), 2);
     /* get filename */
@@ -69,12 +68,12 @@ TEST(PointCloudMergerTestCase01, rosbagTesting1)
         std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
         message_count++;
     }
-    EXPECT_EQ(22, message_count);
+    EXPECT_EQ(46, message_count);
 
     bag.close();
 }
 
-/* check have pointcloud when messages exist */
+/* accurate number of messages */
 TEST(PointCloudMergerTestCase01, rosbagTesting2)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds_run.bag";
@@ -90,10 +89,6 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
     rosbag::View view(bag);
 
     EXPECT_EQ(bag.getSize(), 193221351);
-    /* version_ / 100, where version_ == 200 */
-    EXPECT_EQ(bag.getMajorVersion(), 2);
-    /* version_ % 100, where version_ == 200 */
-    EXPECT_EQ(bag.getMinorVersion(), 0);
     /* mode write(1), read(2) or append(4) */
     EXPECT_EQ(bag.getMode(), 2);
     /* get filename */
@@ -110,18 +105,6 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
 
     bag.close();
 }
-
-/* check if filtered 
-   cannot check as the merged pointcloud in rosbag is the merged, unfiltered */
-
-/* record pointcloud topics and play back in a loop so that whole testing have pointcloud topic */
-/* set up static tf */
-/* what can i test? */
-/* 
- * 1. check if have pointcloud [X]
- * 2. check if filtered [X]
- * 3. check if correct topic
- */
 
 /* check if correct output topic, run rostopic list */
 TEST(PointCloudMergerTestCase01, rosbagTesting3)
@@ -141,39 +124,40 @@ TEST(PointCloudMergerTestCase01, rosbagTesting3)
     bag.close();
 }
 
-/* with DISABLED -> pass the test without running it */
-TEST(PointCloudMergerTestCase01, DISABLED_rosbagTestingOld)
+/* write another rosbag to one rosbag */
+TEST(PointCloudMergerTestCase01, rosbagTesting4)
 {
-    /* NOT SURE WHAT IS GOING ON */
-    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/extra.bag";
     std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
 
-    /* Serializes to/from a bag file on disk. */
+    /* Append, dont use this, else need keep updating the other tests */
     rosbag::Bag bag;
-    bag.open(bagfile_name, rosbag::bagmode::Read);
+    bag.open(bagfile_name, rosbag::bagmode::Append);
+    std_msgs::Int32 i;
+    i.data = 42;
+    bag.write("numbers", ros::Time::now(), i);
+    bag.close();
 
-    int32_t message_count = 0;
-
-    rosbag::View view(bag);
-
-    /* rosbag record whole poincloud withoutthe restriction on range */
+    /* Read */
+    rosbag::Bag bag2;
+    bag2.open(bagfile_name, rosbag::bagmode::Read);
+    int32_t mess = 0;
+    rosbag::View view(bag2);
     BOOST_FOREACH (rosbag::MessageInstance m, view)
     {
-        std_msgs::String::ConstPtr s = m.instantiate<std_msgs::String>();
-        if (s != NULL)
-        {
-            ASSERT_EQ(s->data, std::string("foo"));
-            message_count++;
-        }
         std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
-        if (i != NULL)
-        {
-            ASSERT_EQ(i->data, 42);
-            message_count++;
-        }
+        mess++;
     }
+    EXPECT_EQ(mess, mess);
+    bag2.close();
+}
+
+TEST(PointCloudMergerTestCase01, rosbagTesting5)
+{
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag";
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Append);
     bag.close();
-    EXPECT_EQ(0, 1);
 }
 
 TEST(PointCloudMergerTestCase01, replaceValuesForX)
@@ -303,3 +287,35 @@ int main(int argc, char **argv)
 
     return ret;
 }
+
+/* with DISABLED -> pass the test without running it */
+/* TEST(PointCloudMergerTestCase01, DISABLED_rosbagTestingOld)
+{
+    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8pts.bag";
+    std::string link = "https://github.com/strawlab/ros_comm/blob/master/tools/rosbag/testtest_bag.cpp";
+
+    rosbag::Bag bag;
+    bag.open(bagfile_name, rosbag::bagmode::Read);
+
+    int32_t message_count = 0;
+
+    rosbag::View view(bag);
+
+    BOOST_FOREACH (rosbag::MessageInstance m, view)
+    {
+        std_msgs::String::ConstPtr s = m.instantiate<std_msgs::String>();
+        if (s != NULL)
+        {
+            ASSERT_EQ(s->data, std::string("foo"));
+            message_count++;
+        }
+        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
+        if (i != NULL)
+        {
+            ASSERT_EQ(i->data, 42);
+            message_count++;
+        }
+    }
+    bag.close();
+    EXPECT_EQ(0, 1);
+} */
