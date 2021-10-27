@@ -28,7 +28,7 @@
   - [New file test.cpp](#new-file-testcpp)
 - [HOW TO RUN TESTING](#how-to-run-testing)
   - [Testing google tests](#testing-google-tests)
-  - [Testing rosbag](#testing-rosbag)
+  - [Running rosbag](#running-rosbag)
 - [EXAMPLE IMPLEMENTATION](#example-implementation)
 - [REFERENCES](#references)
 
@@ -404,7 +404,7 @@ OR
 rostest ros-point-cloud-merger test_launch.test
 ```
 
-## Testing rosbag
+## Running rosbag
 
 terminal 1
 

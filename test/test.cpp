@@ -120,6 +120,11 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
     bag.close();
 } */
 
+/* testing for rosbag */
+/* rosbag is such that we dont have to run trial */
+/* see if output has set and applied to the pointcloud, line 282 */
+/* check if pointcloud has successfully merged for the onePOintCloud, ... */
+
 /* append to a specific rosbag */
 TEST(PointCloudMergerTestCase01, rosbagTesting4)
 {
