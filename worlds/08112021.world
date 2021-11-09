@@ -2698,7 +2698,7 @@
     <include>
       <name>OpenRobotics/AdjTable_59</name>
       <uri>model://AdjTable</uri>
-      <pose>25.01545950495834 -23.77857995301558 0.0 0 0 -1.8623</pose>
+      <pose>24.978073565882646 -23.755003234679556 0.0 0 0 -1.9294</pose>
       <static>True</static>
     </include>
     <include>
@@ -2710,7 +2710,7 @@
     <include>
       <name>OpenRobotics/AdjTable_61</name>
       <uri>model://AdjTable</uri>
-      <pose>24.309505195925386 -26.839623883642734 0.0 0 0 -1.7242</pose>
+      <pose>24.309505195925386 -26.839623883642734 0.0 0 0 -1.7462</pose>
       <static>True</static>
     </include>
     <include>
