@@ -154,8 +154,6 @@
           <model name="OpenRobotics/OfficeChairBlue_81" />
           <model name="OpenRobotics/OfficeChairBlue_82" />
           <model name="OpenRobotics/OfficeChairBlue_83" />
-          <model name="OpenRobotics/Cafe table" />
-          <model name="OpenRobotics/Cafe table_2" />
           <model name="OpenRobotics/OfficeChairBlue_84" />
           <model name="OpenRobotics/OfficeChairBlue_85" />
           <model name="OpenRobotics/OfficeChairBlue_86" />
@@ -245,9 +243,9 @@
           <model name="OpenRobotics/OfficeChairBlue_153" />
           <model name="OpenRobotics/OfficeChairBlue_154" />
           <model name="OpenRobotics/OfficeChairBlue_155" />
+          <model name="OpenRobotics/Cafe table" />
+          <model name="OpenRobotics/Cafe table_2" />
           <model name="OpenRobotics/Cafe table_3" />
-          <model name="OpenRobotics/Cafe table_4" />
-          <model name="OpenRobotics/Cafe table_5" />
           <model name="OpenRobotics/Chair_15" />
           <model name="OpenRobotics/Chair_16" />
           <model name="OpenRobotics/Chair_17" />
@@ -1876,18 +1874,6 @@
       <static>True</static>
     </include>
     <include>
-      <name>OpenRobotics/Cafe table</name>
-      <uri>model://Cafe table</uri>
-      <pose>34.35600624984663 -56.715518913059306 0.0 0 0 0.9828</pose>
-      <static>True</static>
-    </include>
-    <include>
-      <name>OpenRobotics/Cafe table_2</name>
-      <uri>model://Cafe table</uri>
-      <pose>36.547896615684145 -53.56797026651495 0.0 0 0 0.9408</pose>
-      <static>True</static>
-    </include>
-    <include>
       <name>OpenRobotics/OfficeChairBlue_84</name>
       <uri>model://OfficeChairBlue</uri>
       <pose>33.43483635159026 -50.31126532039962 0.0 0 0 -1.0399</pose>
@@ -2422,19 +2408,19 @@
       <static>True</static>
     </include>
     <include>
-      <name>OpenRobotics/Cafe table_3</name>
+      <name>OpenRobotics/Cafe table</name>
       <uri>model://Cafe table</uri>
       <pose>30.01843767419436 -14.1855383763617 0.0 0 0 -1.0637</pose>
       <static>True</static>
     </include>
     <include>
-      <name>OpenRobotics/Cafe table_4</name>
+      <name>OpenRobotics/Cafe table_2</name>
       <uri>model://Cafe table</uri>
       <pose>30.844792976473027 -13.74572613283487 0.0 0 0 2.0701</pose>
       <static>True</static>
     </include>
     <include>
-      <name>OpenRobotics/Cafe table_5</name>
+      <name>OpenRobotics/Cafe table_3</name>
       <uri>model://Cafe table</uri>
       <pose>31.65783098255795 -13.279279296920548 0.0 0 0 2.1058</pose>
       <static>True</static>
