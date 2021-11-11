@@ -10542,7 +10542,7 @@
         </axis>
         <pose>0.3794291184774021 0 0 0 0 0</pose>
       </joint>
-      <plugin name="door_D58" filename="libdoor.so">
+      <plugin name="doo_D58" filename="libdoor.so">
         <v_max_door>0.5</v_max_door>
         <a_max_door>0.3</a_max_door>
         <a_nom_door>0.15</a_nom_door>
@@ -11340,7 +11340,7 @@
         </axis>
         <pose>0.2918913135071143 0 0 0 0 0</pose>
       </joint>
-      <plugin name="door_D72" filename="libdoor.so">
+      <plugin name="door_D72 filename="libdoor.so">
         <v_max_door>0.5</v_max_door>
         <a_max_door>0.3</a_max_door>
         <a_nom_door>0.15</a_nom_door>

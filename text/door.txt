@@ -1,0 +1,103 @@
+<model name="DH1">
+      <pose>36.14462156940682 -42.83422953435475 0.0 0 0 -2.823996757295248</pose>
+      <link name="right">
+        <pose>0.3941917703005741 0 1.11 0 0 0</pose>
+        <visual name="right_visual">
+          <geometry>
+            <box>
+              <size>0.7783835406011482 0.03 2.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.25 0 0.6</ambient>
+            <diffuse>0.5 0.25 0 0.6</diffuse>
+          </material>
+        </visual>
+        <collision name="right_collision">
+          <geometry>
+            <box>
+              <size>0.7783835406011482 0.03 2.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+        <inertial>
+          <mass>50.0</mass>
+          <inertia>
+            <ixx>20.17041666666667</ixx>
+            <iyy>22.69117056782825</iyy>
+            <izz>2.5282539011615808</izz>
+          </inertia>
+        </inertial>
+      </link>
+      <joint name="right_joint" type="revolute">
+        <parent>world</parent>
+        <child>right</child>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>1.57</upper>
+          </limit>
+        </axis>
+        <pose>0.3941917703005741 0 0 0 0 0</pose>
+      </joint>
+      <link name="left">
+        <pose>-0.3941917703005741 0 1.11 0 0 0</pose>
+        <visual name="left_visual">
+          <geometry>
+            <box>
+              <size>0.7783835406011482 0.03 2.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.25 0 0.6</ambient>
+            <diffuse>0.5 0.25 0 0.6</diffuse>
+          </material>
+        </visual>
+        <collision name="left_collision">
+          <geometry>
+            <box>
+              <size>0.7783835406011482 0.03 2.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+        <inertial>
+          <mass>50.0</mass>
+          <inertia>
+            <ixx>20.17041666666667</ixx>
+            <iyy>22.69117056782825</iyy>
+            <izz>2.5282539011615808</izz>
+          </inertia>
+        </inertial>
+      </link>
+      <joint name="left_joint" type="revolute">
+        <parent>world</parent>
+        <child>left</child>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-1.57</lower>
+            <upper>0</upper>
+          </limit>
+        </axis>
+        <pose>-0.3941917703005741 0 0 0 0 0</pose>
+      </joint>
+      <plugin name="door" filename="libdoor.so">
+        <v_max_door>0.5</v_max_door>
+        <a_max_door>0.3</a_max_door>
+        <a_nom_door>0.15</a_nom_door>
+        <dx_min_door>0.01</dx_min_door>
+        <f_max_door>500.0</f_max_door>
+        <door name="DH1" type="DoubleSwingDoor" left_joint_name="left_joint" right_joint_name="right_joint" />
+      </plugin>
+    </model>
