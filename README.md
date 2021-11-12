@@ -24,12 +24,6 @@
   - [New file point_cloud_merger_node.cpp](#new-file-point_cloud_merger_nodecpp)
   - [New file point_cloud_merger.hpp](#new-file-point_cloud_mergerhpp)
   - [New file point_cloud_merger.cpp](#new-file-point_cloud_mergercpp)
-  - [New file test_launch.test](#new-file-test_launchtest)
-  - [New file test.cpp](#new-file-testcpp)
-- [HOW TO RUN TESTING](#how-to-run-testing)
-  - [Testing google tests](#testing-google-tests)
-  - [Running rosbag](#running-rosbag)
-- [EXAMPLE IMPLEMENTATION](#example-implementation)
 - [OTHERS](#others)
 - [REFERENCES](#references)
 
@@ -379,86 +373,10 @@ this is the hpp file for point_cloud_merger
 
 this is the cpp file for point_cloud_merger
 
-## New file test_launch.test
-
-this is the test file 
-
-## New file test.cpp
-
-this is the file that contains the tests
-
-<br>
-
-# HOW TO RUN TESTING
-
-## Testing google tests
-
-terminal 1:
-
-```
-catkin_make run_tests_ros-point-cloud-merger
-```
-
-OR
-
-```
-rostest ros-point-cloud-merger test_launch.test
-```
-
-## Running rosbag
-
-terminal 1
-
-```
-roscore
-```
-
-terminal 2
-
-```
-rosbag play 8pts.bag -l
-```
-
-```
-rosbag play 8pts.bag -l -r 10
-```
-
-- speed X10
-
-get fixed frame for rviz
-
-```
-rostopic echo /kobuki_points_colncat | grep frame_id
-```
-
-terminal 3
-- get the point clouds data
-
-```
-rostopic echo /kobuki_points_concat
-```
-
-terminal 4
-- launch rviz
-
-```
-rviz
-```
-
-- ```Fixed Frame``` == ```rostopic echo /kobuki_points_colncat | grep frame_id```
-- ```PointCloud2``` ```Topic``` == ```husky_points_concat```
-- topic name varies depending on what topics are recorded in rosbag 
-
-<br>
-
-# EXAMPLE IMPLEMENTATION
-- [example - package](https://github.com/e0425705/husky_sw/tree/branch-package)
-- [example - shared pointer](https://github.com/BruceChanJianLe/ros-point-cloud-merger/tree/branch-shared-pointer)
-- [example - test](https://github.com/BruceChanJianLe/ros-point-cloud-merger/tree/branch-unit-testing)
-
 <br>
 
 # OTHERS
+- [testing](docs/testing.md)
 - [traffic editor](docs/usage.md)
 
 <br>
