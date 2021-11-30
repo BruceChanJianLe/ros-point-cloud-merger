@@ -10,8 +10,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, ROSNodeName);
 
-    /* For completion, will be overwritten in gtest */
-
+    /* For completion, will be overwritten in unit testing */
+    
     /* enabled if running tests */
     bool test_flag = false;
 

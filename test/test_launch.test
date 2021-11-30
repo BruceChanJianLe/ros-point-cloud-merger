@@ -1,10 +1,10 @@
 <launch>
 
     <!-- ensures that Global Status & Fixed Frame == OK -->
-    <include file="$(find ros-point-cloud-merger)/launch/gmapping_package.launch" />
+    <!-- <include file="$(find ros-point-cloud-merger)/launch/gmapping_package.launch" /> -->
 
     <!-- launches rviz -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ros-point-cloud-merger)/rviz/8ptclouds_run.rviz" output="screen"/>
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ros-point-cloud-merger)/rviz/8ptclouds_run.rviz" output="screen"/> -->
 
     <!-- launches test cases -->
     <test test-name="test_mynode" pkg="ros-point-cloud-merger" type="test_mynode" />

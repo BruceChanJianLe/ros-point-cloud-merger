@@ -69,12 +69,12 @@ target_link_libraries(point_cloud_merger_node
 ## will cause the executable to be built during the main build (a simple make), and will put it in TBD
 #catkin_add_gtest(${PROJECT_NAME} 
 #  test/test_launch.test
-#  test/test.cpp
+#  src/test.cpp
 #)
 
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest_gtest(test_mynode test/test_launch.test test/test.cpp src/point_cloud_merger.cpp)
+  add_rostest_gtest(test_mynode test/test_launch.test src/test.cpp src/point_cloud_merger.cpp)
   target_link_libraries(test_mynode ${catkin_LIBRARIES})
 endif()
 

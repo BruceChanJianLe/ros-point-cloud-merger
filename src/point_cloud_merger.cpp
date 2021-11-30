@@ -44,11 +44,20 @@ namespace ros_util
         private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
         private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
 
-        private_nh_.param("enable_range_flag", enable_range_flag_, true);
+        private_nh_.param("enable_range_flag", enable_range_flag_, false);
+        private_nh_.param("test_flag", test_flag_, false);
+
+        /* 
+         * input_size is calculated by system
+         * set_input_size_ is given by users in unit testing
+         */
         private_nh_.param("input_size", input_size_, int(0));
         private_nh_.param("set_input_size_", set_input_size_, int(0));
 
-        /* if gtest flag is enabled */
+        /* 
+         * test_flag == true implies that testing flag is enabled 
+         * 
+         */
         if (test_flag == true)
         {
             setXMinValue(x_min);
@@ -63,8 +72,12 @@ namespace ros_util
             setInputSize(input_s);
         }
 
-        /* if range flag is disabled */
-        if (enable_range_flag_ == false)
+        /* if range flag is disabled 
+         * means range is not set by the user
+         * thus set as default of min 0 and max DBL_MAX
+         * for all 3 axis (x, y and z)
+         */
+        if (enable_range_flag_ == false && test_flag == false)
         {
             pmin_range_x_ = 0.0;
             pmax_range_x_ = DBL_MAX;
@@ -80,7 +93,10 @@ namespace ros_util
             pmax_range_z_ = DBL_MAX;
         }
 
-        /* For checking purposes */
+        /* 
+         * For checking purposes 
+         * to check value of x y and z implemented
+         */
         ROS_INFO_STREAM("Current value of pmin_range_x_ is " << pmin_range_x_);
         ROS_INFO_STREAM("Current value of pmax_range_x_ is " << pmax_range_x_);
         ROS_INFO_STREAM("Current value of nmin_range_x_ is " << nmin_range_x_);

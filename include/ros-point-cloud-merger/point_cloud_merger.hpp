@@ -42,6 +42,11 @@ namespace ros_util
         /* Constructor */
         point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s);
 
+        /* void setTestFlag(bool test_flag)
+        {
+            test_flag_ = test_flag;
+        } */
+
         /* Set pmin_range_x_ and nmin_range_x_ */
         void setXMinValue(double x_min_value)
         {
@@ -202,6 +207,9 @@ namespace ros_util
 
         /* Storage for input size calcualated from input_topics_ */
         int input_size_;
+
+        /* Storage for whether unit test is enabled */
+        bool test_flag_;
 
         void pointcloud_callback(const PointCloudMsgT::ConstPtr &msg1, const PointCloudMsgT::ConstPtr &msg2,
                                  const PointCloudMsgT::ConstPtr &msg3, const PointCloudMsgT::ConstPtr &msg4,
