@@ -125,40 +125,6 @@ TEST(PointCloudMergerTestCase01, rosbagTesting2)
 /* see if output has set and applied to the pointcloud, line 282 */
 /* check if pointcloud has successfully merged for the onePOintCloud, ... */
 
-/* append to a specific rosbag */
-TEST(PointCloudMergerTestCase01, rosbagTesting4)
-{
-    /* rosbag to append to */
-    std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/extra.bag";
- 
-     rosbag::Bag bag;
-    /* change Append to Write if want to write instead */
-    bag.open(bagfile_name, rosbag::bagmode::Append);
-
-    std_msgs::Int32 i;
-    i.data = 42;
-
-    /* numbers: topic, i: message to be added */
-    bag.write("numbers", ros::Time::now(), i);
-    bag.close();
-
-    /* Read */
-    rosbag::Bag bag2;
-    bag2.open(bagfile_name, rosbag::bagmode::Read);
-
-    int32_t mess = 0;
-    rosbag::View view(bag2);
-
-    /* strightforward way of checking, check that messages have increse by 1 */
-    BOOST_FOREACH (rosbag::MessageInstance m, view)
-    {
-        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
-        mess++;
-    }
-    EXPECT_EQ(44, mess);
-    bag2.close();
-}
-
 TEST(PointCloudMergerTestCase01, rosbagTesting5)
 {
     std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/8ptclouds.bag";
@@ -325,4 +291,38 @@ int main(int argc, char **argv)
     }
     bag.close();
     EXPECT_EQ(0, 1);
+} */
+
+/* APPEND to a specific rosbag */
+/* TEST(PointCloudMergerTestCase01, rosbagTesting4)
+{ */
+    /* rosbag to append to */
+    /* std::string bagfile_name = "/home/isera2/catkin_ws/src/bagfiles/extra.bag";
+ 
+     rosbag::Bag bag; */
+    /* change Append to Write if want to write instead */
+    /* bag.open(bagfile_name, rosbag::bagmode::Append);
+
+    std_msgs::Int32 i;
+    i.data = 42; */
+
+    /* numbers: topic, i: message to be added */
+    /* bag.write("numbers", ros::Time::now(), i);
+    bag.close(); */
+
+    /* Read */
+    /* rosbag::Bag bag2;
+    bag2.open(bagfile_name, rosbag::bagmode::Read);
+
+    int32_t mess = 0;
+    rosbag::View view(bag2); */
+
+    /* strightforward way of checking, check that messages have increse by 1 */
+    /* BOOST_FOREACH (rosbag::MessageInstance m, view)
+    {
+        std_msgs::Int32::ConstPtr i = m.instantiate<std_msgs::Int32>();
+        mess++;
+    }
+    EXPECT_EQ(44, mess);
+    bag2.close();
 } */
