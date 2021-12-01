@@ -42,6 +42,8 @@ namespace ros_util
         /* Constructor */
         point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s);
 
+        point_cloud_merger();
+
         /* void setTestFlag(bool test_flag)
         {
             test_flag_ = test_flag;

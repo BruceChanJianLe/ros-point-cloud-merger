@@ -24,6 +24,26 @@
 
 namespace ros_util
 {
+    point_cloud_merger::point_cloud_merger() : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
+    {
+        /* private_nh_.setParam("pmin_range_x", )
+
+        private_nh_.param("pmin_range_x", pmin_range_x_, double(0.9));
+        private_nh_.param("pmax_range_x", pmax_range_x_, double(2.0));
+        private_nh_.param("nmin_range_x", nmin_range_x_, double(-0.9));
+        private_nh_.param("nmax_range_x", nmax_range_x_, double(-2.0));
+
+        private_nh_.param("pmin_range_y", pmin_range_y_, double(0.9));
+        private_nh_.param("pmax_range_y", pmax_range_y_, double(2.0));
+        private_nh_.param("nmin_range_y", nmin_range_y_, double(-0.9));
+        private_nh_.param("nmax_range_y", nmax_range_y_, double(-2.0));
+
+        private_nh_.param("pmin_range_z", pmin_range_z_, double(-1.0));
+        private_nh_.param("pmax_range_z", pmax_range_z_, double(100.0));
+
+        private_nh_.param("set_input_size_", set_input_size_, int(0)); */
+    }
+
     point_cloud_merger::point_cloud_merger(bool test_flag, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, int input_s)
         : private_nh_("~"), global_nh_(), tf2_listener_(tfBuffer)
     {
@@ -54,24 +74,6 @@ namespace ros_util
         private_nh_.param("input_size", input_size_, int(0));
         private_nh_.param("set_input_size_", set_input_size_, int(0));
 
-        /* 
-         * test_flag == true implies that testing flag is enabled 
-         * 
-         */
-        if (test_flag == true)
-        {
-            setXMinValue(x_min);
-            setXMaxValue(x_max);
-
-            setYMinValue(y_min);
-            setYMaxValue(y_max);
-
-            setZMinValue(z_min);
-            setZMaxValue(z_max);
-
-            setInputSize(input_s);
-        }
-
         /* if range flag is disabled 
          * means range is not set by the user
          * thus set as default of min 0 and max DBL_MAX
@@ -91,6 +93,24 @@ namespace ros_util
 
             pmin_range_z_ = -DBL_MAX;
             pmax_range_z_ = DBL_MAX;
+        }
+
+        /* 
+         * test_flag == true implies that testing flag is enabled 
+         * 
+         */
+        if (test_flag == true)
+        {
+            setXMinValue(x_min);
+            setXMaxValue(x_max);
+
+            setYMinValue(y_min);
+            setYMaxValue(y_max);
+
+            setZMinValue(z_min);
+            setZMaxValue(z_max);
+
+            setInputSize(input_s);
         }
 
         /* 
