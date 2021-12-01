@@ -74,7 +74,8 @@ namespace ros_util
         private_nh_.param("input_size", input_size_, int(0));
         private_nh_.param("set_input_size_", set_input_size_, int(0));
 
-        /* if range flag is disabled 
+        /* 
+         * if range flag is disabled 
          * means range is not set by the user
          * thus set as default of min 0 and max DBL_MAX
          * for all 3 axis (x, y and z)
@@ -98,6 +99,7 @@ namespace ros_util
         /* 
          * test_flag == true implies that testing flag is enabled 
          * 
+         * this is such that the values in test will be updated to the current implementation
          */
         if (test_flag == true)
         {
@@ -115,7 +117,7 @@ namespace ros_util
 
         /* 
          * For checking purposes 
-         * to check value of x y and z implemented
+         * to check values of the variables that changable in unit test
          */
         ROS_INFO_STREAM("Current value of pmin_range_x_ is " << pmin_range_x_);
         ROS_INFO_STREAM("Current value of pmax_range_x_ is " << pmax_range_x_);
@@ -132,6 +134,7 @@ namespace ros_util
 
         ROS_INFO_STREAM("Current value of set_input_size_ is " << set_input_size_);
 
+        /* store input_topics to a stringstream */
         input_topics_ = input_topics_.substr(1);
         std::stringstream ss(input_topics_);
         std::string source;
@@ -147,7 +150,7 @@ namespace ros_util
             input_size_++;
         }
 
-        // Check number of input topics accepted
+        /* Check number of input topics accepted */
         if (input_size_ < MIN_SIZE)
         {
             ROS_ERROR("Minimum size accepted is 2, but size of input topics is less than 2. Exiting now...");
@@ -171,6 +174,8 @@ namespace ros_util
         }
 
         /* Replace store_input_topics >= input size with store_input_topics[0] */
+        
+
         for (int i = 0; i < MAX_SIZE; i++)
         {
             if (i >= input_size_)
@@ -231,7 +236,7 @@ namespace ros_util
 
         boost::shared_ptr<PointCloudT> cloud_concatenated(new PointCloudT);
 
-        // Transform points
+        /* Transform points */
         try
         {
             for (int i = 0; i < input_size_; i++)
@@ -306,13 +311,15 @@ namespace ros_util
             return;
         }
 
-        // Merge points
+        /* Merge points */
         for (int i = 0; i < input_size_; i++)
         {
             *cloud_concatenated += *cloud_source[i];
         }
 
-        // Publish points
+        /* Method to check whether pointcloud correctly merged */
+
+        /* Publish points */
         cloud_concatenated->header = pcl_conversions::toPCL(msgs[0]->header);
 
         cloud_concatenated->header.frame_id = output_frame_id_;
@@ -321,6 +328,7 @@ namespace ros_util
         cloud_publisher_.publish(cloud_concatenated);
     }
 
+    /* check if input size provided by user is valid */
     bool point_cloud_merger::checkInputSize()
     {
         bool isValid = true;

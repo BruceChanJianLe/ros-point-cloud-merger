@@ -4,47 +4,215 @@
 #include <boost/filesystem.hpp>
 
 #include <ros-point-cloud-merger/point_cloud_merger.hpp>
-#include <ros-point-cloud-merger/AxisManager.hpp>
 
 #include "rosbag/bag.h"
 #include "rosbag/chunked_file.h"
 #include "rosbag/view.h"
 
-#include <boost/assign/list_of.hpp>
-#include <boost/foreach.hpp>
+#include <string>
 
-#include "std_msgs/String.h"
-#include "std_msgs/Int32.h"
+#define MAX_SIZE 8
+#define MIN_SIZE 2
 
-/* TESTS TO DO (alter actual code)
- * 
- * maybe have function?
- * replace value for x -> pass
- * replace value for y -> pass
- * replace value for z -> pass
- * 
- * use assert avilable of create a new function
- * merge of a single point cloud -> fail
- * merge of two point clouds -> pass
- * merge of three point clouds -> pass
- * merge of four point clouds -> pass
- * merge of five point clouds -> pass
- * merge of six point clouds -> pass
- * merge of seven point clouds -> pass
- * merge of eight point clouds -> pass
- * merge of nine point clouds ->fail
- * 
- */
+/* class PointCloudFixture : public ::testing::Test
+{
+protected:
+    PointCloudFixture fixture();
 
-/* Cannot check if filtered as the merged pointcloud in rosbag is the merged, unfiltered */
+public:
+    typedef pcl::PointXYZI PointT;
+    typedef pcl::PointCloud<PointT> PointCloudT;
+    typedef sensor_msgs::PointCloud2 PointCloudMsgT;
+
+    typedef message_filters::sync_policies::ApproximateTime<PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
+                                                            PointCloudMsgT, PointCloudMsgT, PointCloudMsgT,
+                                                            PointCloudMsgT, PointCloudMsgT>
+        SyncPolicyT;
+
+    std::string input_topics[MAX_SIZE]; */
+
+/* check if the pointcloud size is valid */
+/* bool checkValid(int size)
+    {
+        if (size > MAX_SIZE || size < MIN_SIZE)
+            return false;
+
+        return true;
+    } */
+
+/* gives the pointclouds standardized naming */
+/* std::string namePointClouds()
+    {
+        std::string input_topics[MAX_SIZE];
+        int num = 0;
+
+        for (int i = 0; i < MAX_SIZE; i++)
+        {
+            input_topics[i] = "/velodyne_points" + std::to_string(++num);
+        }
+
+        return input_topics[MAX_SIZE];
+    } */
+
+/* filter out unused pointcloud naming */
+/* std::string filterPointClouds(int size)
+    {
+        std::string input_topics[MAX_SIZE] = namePointClouds();
+
+        for (int i = 0; i < MAX_SIZE; i++)
+        {
+            if (i >= size)
+                input_topics[i] = input_topics[0];
+        }
+
+        return input_topics[MAX_SIZE];
+    } */
+
+/* merge pointclouds */
+/* void mergePointClouds()
+    { */
+/* roslaunch husky_gazebo husky_playpen.launch to get the topics and the respective pointclouds */
+/* link to point_cloud_merger.cpp */
+/* } */
+
+/* check if merged pointcloud is valid */
+/* bool isPointCloudValid()
+    { */
+/* run through to check if got exceed any other the points */
+/* can copy from original code */
+/*     }
+}; */
 
 /* 
- * testing for rosbag 
- * 1. dont have to run trial
- * 2. output has set and applied to the pointcloud
- * 3. check if pointcloud has successfully merged for the onePointCloud, twoPointCloud, etc...
- * 
+ * 1. generate at least 9 pointclouds
+ * 2. filter pointcloud depending on the input given by the user (starting with 1)
+ * 3. merge the pointclouds
+ * 4. check if merged pointclouds valid/correct
+ * 5. repeat 1-4 for 2 to 9 pointclouds
  */
+
+std::string getInputs(int size)
+{
+    std::string input_topics[MAX_SIZE];
+
+    for (int i = 0; i < size; i++)
+    {
+        input_topics[i] = "/velodyne_points" + std::to_string(size);
+    }
+
+    for (int j = size; j < MAX_SIZE; j++)
+    {
+        input_topics[j] = "/velodyne_points0";
+    }
+
+    return input_topics[MAX_SIZE];
+}
+
+TEST(TestCaseForMergePointCloud, mergeOnePointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 1);
+    ASSERT_FALSE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeTwoPointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 2);
+    ASSERT_TRUE(merge.checkInputSize());
+
+    /* std::string input_topics[MAX_SIZE];
+    int num = 0;
+
+    for (int i = 0; i < merge.getInputSize(); i++)
+    {
+        input_topics[i] = "/velodyne_points" + std::to_string(num);
+    }
+
+    for (int j = merge.getInputSize(); j < MAX_SIZE; j++)
+    {
+        input_topics[j] = "/velodyne_points0";
+    } */
+    std::string input_topics[MAX_SIZE] = getInputs(merge.getInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeThreePointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 3);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeFourPointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 4);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeFivePointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 5);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeSixPointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 6);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeSevenPointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 7);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeEightPointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 8);
+    ASSERT_TRUE(merge.checkInputSize());
+}
+
+TEST(TestCaseForMergePointCloud, mergeNinePointCloud)
+{
+    ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 9);
+    ASSERT_FALSE(merge.checkInputSize());
+}
+
+/* output set and applied to pointcloud */
+TEST(TestForMergePointCloud, setOutput)
+{
+    ros_util::point_cloud_merger merge(true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0);
+
+    double x_min_value = 1.0;
+    double x_max_value = 3.0;
+    merge.setXMinValue(1.0);
+    merge.setXMaxValue(3.0);
+    EXPECT_EQ(x_min_value, merge.getXMinValue());
+    EXPECT_EQ(x_max_value, merge.getXMaxValue());
+
+    double y_min_value = 1.0;
+    double y_max_value = 3.0;
+    merge.setYMinValue(1.0);
+    merge.setYMaxValue(3.0);
+    EXPECT_EQ(x_min_value, merge.getYMinValue());
+    EXPECT_EQ(x_max_value, merge.getYMaxValue());
+
+    double z_min_value = -10.0;
+    double z_max_value = 10.0;
+    merge.setZMinValue(-10.0);
+    merge.setZMaxValue(10.0);
+    EXPECT_EQ(z_min_value, merge.getZMinValue());
+    EXPECT_EQ(z_max_value, merge.getZMaxValue());
+
+    merge.setInputSize(2);
+    EXPECT_TRUE(merge.checkInputSize());
+
+    /* check output set and applied to pointcloud */
+    /* merge.pointcloud_callback(); */
+}
+
+/* check if pointcloud successfully merged */
+TEST(TestPointCloud, testOnePointCloudSuccessfulMerged)
+{
+}
 
 TEST(TestCaseForAxis, replaceValues)
 {
@@ -77,11 +245,13 @@ TEST(TestCaseForAxis, replaceValues)
     EXPECT_EQ(z_min_value, merge.getZMinValue());
     EXPECT_EQ(z_max_value, merge.getZMaxValue());
 
-    bool isPointCloudNumberValid = true;
-
     merge.setInputSize(2);
 
-    EXPECT_EQ(isPointCloudNumberValid, merge.checkInputSize());
+    EXPECT_TRUE(merge.checkInputSize());
+
+    /* 
+     * value of merge == (true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 2)
+     */
 
     /* launch point_cloud_merger with the values set by test */
 }
@@ -99,6 +269,11 @@ TEST(TestCaseForAxis, replaceValuesForX)
     EXPECT_EQ(x_min_value, merge.getXMinValue());
     EXPECT_EQ(x_max_value, merge.getXMaxValue());
 
+    /* ROS_INFO_STREAM("Current value of min x value is " << merge.getXMinValue());
+    ROS_INFO_STREAM("Current value of max x value is " << merge.getXMaxValue()); */
+
+    /* std::cout << "x min value " << merge.getXMinValue() << std::endl; */
+
     /* launch point_cloud_merger with the values set by test */
 }
 
@@ -114,6 +289,9 @@ TEST(TestCaseForAxis, replaceValuesForY)
 
     EXPECT_EQ(y_min_value, merge.getYMinValue());
     EXPECT_EQ(y_max_value, merge.getYMaxValue());
+
+    /* ROS_INFO_STREAM("Current value of min y value is " << merge.getYMinValue());
+    ROS_INFO_STREAM("Current value of max y value is " << merge.getYMaxValue()); */
 }
 
 TEST(TestCaseForAxis, replaceValuesForZ)
@@ -128,6 +306,9 @@ TEST(TestCaseForAxis, replaceValuesForZ)
 
     EXPECT_EQ(z_min_value, merge.getZMinValue());
     EXPECT_EQ(z_max_value, merge.getZMaxValue());
+
+    /* ROS_INFO_STREAM("Current value of min z value is " << merge.getZMinValue());
+    ROS_INFO_STREAM("Current value of max z value is " << merge.getZMaxValue()); */
 }
 
 TEST(TestCaseForPointCloud, onePointCloud)

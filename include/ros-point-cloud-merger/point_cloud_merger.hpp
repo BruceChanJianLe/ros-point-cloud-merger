@@ -140,6 +140,10 @@ namespace ros_util
         /* Checks if set_input_size_ is within the accepted bound */
         bool checkInputSize();
 
+        /* void getPointcloudCallback() {
+            pointcloud_callback();
+        } */
+
         /* Destructor */
         ~point_cloud_merger(){}
 

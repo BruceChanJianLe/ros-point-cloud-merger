@@ -43,7 +43,6 @@
  * 1. dont have to run trial
  * 2. output has set and applied to the pointcloud
  * 3. check if pointcloud has successfully merged for the onePointCloud, twoPointCloud, etc...
- * 
  */
 
 class PointCloudFixture : public ::testing::Test

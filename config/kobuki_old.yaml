@@ -1,5 +1,5 @@
 # Replace with the desired input topics
-input_topics: '[velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]'
+input_topics: '[/velodyne_points, /velodyne_points1, /velodyne_points2, /velodyne_points3, /velodyne_points4, /velodyne_points5, /velodyne_points6, /velodyne_points7]'
 # Replace with the desired output topic
 output_topic: '/kobuki_points_concat'
 
