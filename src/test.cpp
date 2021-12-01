@@ -91,13 +91,13 @@ public:
  * 5. repeat 1-4 for 2 to 9 pointclouds
  */
 
-std::string getInputs(int size)
+/* std::string getInputs(int size)
 {
     std::string input_topics[MAX_SIZE];
 
     for (int i = 0; i < size; i++)
     {
-        input_topics[i] = "/velodyne_points" + std::to_string(size);
+        input_topics[i] = "/velodyne_points" + std::to_string(i);
     }
 
     for (int j = size; j < MAX_SIZE; j++)
@@ -106,7 +106,7 @@ std::string getInputs(int size)
     }
 
     return input_topics[MAX_SIZE];
-}
+} */
 
 TEST(TestCaseForMergePointCloud, mergeOnePointCloud)
 {
@@ -116,22 +116,30 @@ TEST(TestCaseForMergePointCloud, mergeOnePointCloud)
 
 TEST(TestCaseForMergePointCloud, mergeTwoPointCloud)
 {
+    /* 1. check is input size valid */
     ros_util::point_cloud_merger merge(true, 1.0, 3.0, 1.0, 3.0, -10.0, 10.0, 2);
     ASSERT_TRUE(merge.checkInputSize());
 
-    /* std::string input_topics[MAX_SIZE];
-    int num = 0;
+    /* 2. generate topics */
+    std::string input_topics[MAX_SIZE];
 
     for (int i = 0; i < merge.getInputSize(); i++)
     {
-        input_topics[i] = "/velodyne_points" + std::to_string(num);
+        input_topics[i] = "/velodyne_points" + std::to_string(i);
     }
 
     for (int j = merge.getInputSize(); j < MAX_SIZE; j++)
     {
         input_topics[j] = "/velodyne_points0";
-    } */
-    std::string input_topics[MAX_SIZE] = getInputs(merge.getInputSize());
+    }
+    /* std::string input_topics[MAX_SIZE];
+    input_topics[MAX_SIZE] = getInputs(merge.getInputSize()); */
+
+    /* 3. generate pointcloud for topics */
+
+    /* 4. generate merged pointcloud */
+
+    /* 5. check if any values out of range */
 }
 
 TEST(TestCaseForMergePointCloud, mergeThreePointCloud)
