@@ -132,14 +132,22 @@ TEST(TestCaseForMergePointCloud, mergeTwoPointCloud)
     {
         input_topics[j] = "/velodyne_points0";
     }
+
     /* std::string input_topics[MAX_SIZE];
     input_topics[MAX_SIZE] = getInputs(merge.getInputSize()); */
 
     /* 3. generate pointcloud for topics */
 
+    /* random generator for pointcloud */
+
     /* 4. generate merged pointcloud */
 
+    /* filter out points */
+    /* add all points together */
+
     /* 5. check if any values out of range */
+
+    /* to double check */
 }
 
 TEST(TestCaseForMergePointCloud, mergeThreePointCloud)
