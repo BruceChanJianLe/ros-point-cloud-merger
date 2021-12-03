@@ -31,15 +31,6 @@ public:
 
     std::string input_topics[MAX_SIZE]; */
 
-/* check if the pointcloud size is valid */
-/* bool checkValid(int size)
-    {
-        if (size > MAX_SIZE || size < MIN_SIZE)
-            return false;
-
-        return true;
-    } */
-
 /* gives the pointclouds standardized naming */
 /* std::string namePointClouds()
     {
@@ -54,35 +45,6 @@ public:
         return input_topics[MAX_SIZE];
     } */
 
-/* filter out unused pointcloud naming */
-/* std::string filterPointClouds(int size)
-    {
-        std::string input_topics[MAX_SIZE] = namePointClouds();
-
-        for (int i = 0; i < MAX_SIZE; i++)
-        {
-            if (i >= size)
-                input_topics[i] = input_topics[0];
-        }
-
-        return input_topics[MAX_SIZE];
-    } */
-
-/* merge pointclouds */
-/* void mergePointClouds()
-    { */
-/* roslaunch husky_gazebo husky_playpen.launch to get the topics and the respective pointclouds */
-/* link to point_cloud_merger.cpp */
-/* } */
-
-/* check if merged pointcloud is valid */
-/* bool isPointCloudValid()
-    { */
-/* run through to check if got exceed any other the points */
-/* can copy from original code */
-/*     }
-}; */
-
 /* 
  * 1. generate at least 9 pointclouds
  * 2. filter pointcloud depending on the input given by the user (starting with 1)
@@ -90,23 +52,6 @@ public:
  * 4. check if merged pointclouds valid/correct
  * 5. repeat 1-4 for 2 to 9 pointclouds
  */
-
-/* std::string getInputs(int size)
-{
-    std::string input_topics[MAX_SIZE];
-
-    for (int i = 0; i < size; i++)
-    {
-        input_topics[i] = "/velodyne_points" + std::to_string(i);
-    }
-
-    for (int j = size; j < MAX_SIZE; j++)
-    {
-        input_topics[j] = "/velodyne_points0";
-    }
-
-    return input_topics[MAX_SIZE];
-} */
 
 TEST(TestCaseForMergePointCloud, mergeOnePointCloud)
 {
@@ -121,20 +66,19 @@ TEST(TestCaseForMergePointCloud, mergeTwoPointCloud)
     ASSERT_TRUE(merge.checkInputSize());
 
     /* 2. generate topics */
-    std::string input_topics[MAX_SIZE];
+    /* std::string input_topics[MAX_SIZE]; */
 
-    for (int i = 0; i < merge.getInputSize(); i++)
+    /* input_topics[0] = "/velodyne_points";
+
+    for (int i = 1; i < merge.getInputSize(); i++)
     {
         input_topics[i] = "/velodyne_points" + std::to_string(i);
     }
 
     for (int j = merge.getInputSize(); j < MAX_SIZE; j++)
     {
-        input_topics[j] = "/velodyne_points0";
-    }
-
-    /* std::string input_topics[MAX_SIZE];
-    input_topics[MAX_SIZE] = getInputs(merge.getInputSize()); */
+        input_topics[j] = "/velodyne_points";
+    } */
 
     /* 3. generate pointcloud for topics */
 
